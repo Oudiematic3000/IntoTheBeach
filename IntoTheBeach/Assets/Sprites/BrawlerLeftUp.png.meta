@@ -103,9 +103,9 @@ TextureImporter:
       name: BrawlerLeftUp_0
       rect:
         serializedVersion: 2
-        x: 1
+        x: 0
         y: 0
-        width: 41
+        width: 43
         height: 64
       alignment: 0
       pivot: {x: 0, y: 0}
