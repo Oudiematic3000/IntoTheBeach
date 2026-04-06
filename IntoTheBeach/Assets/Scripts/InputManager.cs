@@ -90,6 +90,8 @@ public class InputManager : MonoBehaviour
            
             if (ray.collider.TryGetComponent<Iinteractable>(out var hoverObject))
             {
+                if (hoverObject==null) return;
+
                 hoverObject.OnPress(ray.point);
             }
         
