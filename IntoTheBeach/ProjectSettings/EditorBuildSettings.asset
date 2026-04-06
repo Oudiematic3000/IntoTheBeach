@@ -11,6 +11,9 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Level.unity
     guid: f4ad8342da7711444ab5fce9e7db853f
+  - enabled: 1
+    path: Assets/Scenes/SpriteTesting.unity
+    guid: 5cef8cdc661e6a34c87ec4947caf261f
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
   m_UseUCBPForAssetBundles: 0
