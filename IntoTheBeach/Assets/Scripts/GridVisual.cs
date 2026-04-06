@@ -1,19 +1,30 @@
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
-public class GridVisual : MonoBehaviour
+public class GridVisual : MonoBehaviour, Iinteractable
 {
     public Tilemap saloonTiles;
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
+    public void OnHover(Vector2 mousePos)
+    {
+        Vector3Int tilePos = saloonTiles.WorldToCell(mousePos);
+        print(tilePos);
+    }
+
+    public void OnPress(Vector2 mousePos)
+    {
+        throw new System.NotImplementedException();
+    }
+
     void Start()
     {
         
     }
 
-    // Update is called once per frame
     void Update()
     {
         
     }
+
+
 }
