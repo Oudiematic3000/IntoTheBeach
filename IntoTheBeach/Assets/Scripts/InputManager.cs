@@ -1,13 +1,15 @@
 using System;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 public class InputManager : MonoBehaviour
 {
     public static InputManager Instance;
-    private CharacterVisual CurrentSelection;
+    [SerializeField] private CharacterVisual CurrentSelection;
 
+    public static event Action OnClickNothing;
 
-    private TurnState currentState = TurnState.None;
+    [SerializeField] private TurnState currentState = TurnState.None;
     public enum TurnState
     {
         None,
@@ -86,7 +88,17 @@ public class InputManager : MonoBehaviour
     public void PressInteract() 
     { 
         RaycastHit2D ray = InteractMouse();
-      
+
+
+            if (EventSystem.current.IsPointerOverGameObject())
+            { 
+                 return;
+            }
+        if (ray.collider == null)
+            {
+                OnClickNothing?.Invoke(); 
+                return;
+            }
            
             if (ray.collider.TryGetComponent<Iinteractable>(out var hoverObject))
             {

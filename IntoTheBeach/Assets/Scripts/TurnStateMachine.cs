@@ -4,11 +4,16 @@ using UnityEngine;
 
 public class TurnStateMachine : MonoBehaviour
 {
+    public static TurnStateMachine Instance;
     public TurnState currentState;
     public TurnInfo currentTurnInfo;
+    private void Awake()
+    {
+        Instance = this;
+    }
     void Start()
     {
-        
+        currentState = new MovePlanTurnState(this);
     }
 
     // Update is called once per frame

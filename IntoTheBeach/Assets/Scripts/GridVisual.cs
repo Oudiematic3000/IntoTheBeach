@@ -1,10 +1,11 @@
+using System;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
 public class GridVisual : MonoBehaviour, Iinteractable
 {
     public Tilemap saloonTiles;
-   
+    public static event Action OnUnitMoved;
     public void OnHover(Vector2 mousePos)
     {
         Vector3Int tilePos = saloonTiles.WorldToCell(mousePos);
@@ -26,12 +27,13 @@ public class GridVisual : MonoBehaviour, Iinteractable
     }
     public void MoveUnit(Vector3Int TargetPos) 
     {
-        var currentState = InputManager.Instance.GetCurrentSelection();
-        if (currentState == null) return;
+        var currentSelection = InputManager.Instance.GetCurrentSelection();
+        if (currentSelection == null) return;
 
-        currentState.transform.position = saloonTiles.CellToWorld(TargetPos);
-
+        currentSelection.transform.position = saloonTiles.CellToWorld(TargetPos);
+        currentSelection.hasMoved = true;
         InputManager.Instance.SetState(InputManager.TurnState.None);
+        OnUnitMoved?.Invoke();
     }
 
 

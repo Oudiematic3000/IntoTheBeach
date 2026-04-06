@@ -1,30 +1,27 @@
+using System;
 using UnityEngine;
 
 public class BoardSyncTurnState : TurnState
 {
+    public static event Action OnSyncStart, OnSyncEnd;
+
     public BoardSyncTurnState(TurnStateMachine turnStateMachine) : base(turnStateMachine)
     {
+
     }
 
     public override void StartState()
     {
-        throw new System.NotImplementedException();
+        OnSyncStart?.Invoke();
+        //TEMP
+        UpdateState();
+        //TEMP
     }
 
     public override void UpdateState()
     {
-        throw new System.NotImplementedException();
+        OnSyncEnd?.Invoke();
+        turnStateMachine.currentState = new MovePlanTurnState(turnStateMachine);
     }
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
 }

@@ -5,6 +5,7 @@ using UnityEngine;
 public class CharacterVisual : MonoBehaviour, Iinteractable
 {
     public static event Action<CharacterVisual> OnClick;
+    public bool hasMoved, hasAttacked;
    
     public void OnHover(Vector2 mousePos)
     {
