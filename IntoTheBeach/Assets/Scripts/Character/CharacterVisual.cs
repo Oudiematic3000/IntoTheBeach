@@ -16,15 +16,7 @@ public class CharacterVisual : MonoBehaviour, Iinteractable
         OnClick?.Invoke(this);
     }
 
-    void Start()
-    {
-        
-    }
-
-    void Update()
-    {
-        
-    }
+   
 
 
 }
