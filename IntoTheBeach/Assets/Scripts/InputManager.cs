@@ -1,22 +1,49 @@
+using System;
 using UnityEngine;
 
 public class InputManager : MonoBehaviour
 {
     public static InputManager Instance;
+    private CharacterVisual CurrentSelection;
 
+
+    private TurnState currentState = TurnState.None;
+    public enum TurnState
+    {
+        None,
+        Moving,
+        Attacking,
+    }
+    public TurnState GetState() 
+    {
+        return currentState;
+    }
+    public void SetState(TurnState state) 
+    {
+        this.currentState = state;
+    }
     private void Awake()
     {
         InputManager.Instance = this;
     }
-    private CharacterVisual CurrentSelection;
+   
     private void OnEnable()
     {
         CharacterVisual.OnClick += SetCurrentSelection;
+        UIActions.OnMovement += enterMoveMode;
+      
     }
     private void OnDisable()
     {
         CharacterVisual.OnClick -= SetCurrentSelection;
+        UIActions.OnMovement -= enterMoveMode;
     }
+    private void enterMoveMode()
+    {
+        if (CurrentSelection == null) return;
+        currentState = TurnState.Moving;
+    }
+
     //Update method
     void Update()
     {
