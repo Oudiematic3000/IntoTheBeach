@@ -385,6 +385,7 @@ GameObject:
   - component: {fileID: 952375204}
   - component: {fileID: 952375206}
   - component: {fileID: 952375205}
+  - component: {fileID: 952375208}
   - component: {fileID: 952375207}
   m_Layer: 0
   m_Name: FloorVisual
@@ -1576,6 +1577,19 @@ TilemapCollider2D:
   m_MaximumTileChangeCount: 1000
   m_ExtrusionFactor: 0
   m_UseDelaunayMesh: 0
+--- !u!114 &952375208
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 952375203}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ac44da08d039320489dac36806b84634, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::GridVisual
+  saloonTiles: {fileID: 952375206}
 --- !u!1 &1244717414
 GameObject:
   m_ObjectHideFlags: 0
@@ -1692,6 +1706,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1349769814}
+  - component: {fileID: 1349769815}
   m_Layer: 0
   m_Name: InputHandler
   m_TagString: Untagged
@@ -1714,6 +1729,18 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1349769815
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1349769813}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3cf2200b7551f3f4487b6363d9aca693, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::InputManager
 --- !u!1 &1457449734
 GameObject:
   m_ObjectHideFlags: 0
@@ -1751,8 +1778,8 @@ Camera:
   m_GameObject: {fileID: 1457449734}
   m_Enabled: 1
   serializedVersion: 2
-  m_ClearFlags: 1
-  m_BackGroundColor: {r: 0.19215687, g: 0.3019608, b: 0.4745098, a: 0}
+  m_ClearFlags: 2
+  m_BackGroundColor: {r: 0.03137255, g: 0.078431375, b: 0.11764706, a: 0}
   m_projectionMatrixMode: 1
   m_GateFitMode: 2
   m_FOVAxisMode: 0
@@ -1769,15 +1796,15 @@ Camera:
   m_LensShift: {x: 0, y: 0}
   m_NormalizedViewPortRect:
     serializedVersion: 2
-    x: 0
-    y: 0
-    width: 1
-    height: 1
+    x: 0.09933222
+    y: 0.099406525
+    width: 0.8013355
+    height: 0.8011869
   near clip plane: 0.3
   far clip plane: 1000
   field of view: 60
   orthographic: 1
-  orthographic size: 4.1328125
+  orthographic size: 2.109375
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
@@ -1868,9 +1895,9 @@ MonoBehaviour:
   m_AssetsPPU: 64
   m_RefResolutionX: 480
   m_RefResolutionY: 270
-  m_CropFrame: 0
+  m_CropFrame: 3
   m_GridSnapping: 2
-  m_FilterMode: 0
+  m_FilterMode: 1
   m_UpscaleRT: 0
   m_PixelSnapping: 0
   m_CropFrameX: 0
@@ -1887,6 +1914,7 @@ GameObject:
   - component: {fileID: 1697876575}
   - component: {fileID: 1697876574}
   - component: {fileID: 1697876576}
+  - component: {fileID: 1697876577}
   m_Layer: 0
   m_Name: BrawlerLeftUp
   m_TagString: Untagged
@@ -2002,9 +2030,21 @@ CapsuleCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: 0, y: 0}
+  m_Offset: {x: 0, y: 0.72}
   m_Size: {x: 0.44, y: 1}
   m_Direction: 0
+--- !u!114 &1697876577
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1697876573}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c35a045e139f2e44a89e6c6706f8b073, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::CharacterVisual
 --- !u!1 &1752458301
 GameObject:
   m_ObjectHideFlags: 0

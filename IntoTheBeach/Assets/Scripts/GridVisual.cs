@@ -1,19 +1,39 @@
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
-public class GridVisual : MonoBehaviour
+public class GridVisual : MonoBehaviour, Iinteractable
 {
     public Tilemap saloonTiles;
-
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    private TurnState currentState = TurnState.Moving;
+    public enum TurnState
     {
-        
+        None,
+        Moving,
+        Attacking,
+    }
+    public void OnHover(Vector2 mousePos)
+    {
+        Vector3Int tilePos = saloonTiles.WorldToCell(mousePos);
+        print(tilePos);
     }
 
-    // Update is called once per frame
+    public void OnPress(Vector2 mousePos)
+    {
+        Vector3Int tilePos = saloonTiles.WorldToCell(mousePos);
+        print("pressed " + tilePos);
+        if (currentState == TurnState.Moving) 
+        {
+            MoveUnit(tilePos);
+        }
+    }
     void Update()
     {
         
     }
+    public void MoveUnit(Vector3Int TargetPos) 
+    {
+        InputManager.Instance.GetCurrentSelection().transform.position = saloonTiles.CellToWorld(TargetPos);
+    }
+
+
 }
