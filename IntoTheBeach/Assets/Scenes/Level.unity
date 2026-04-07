@@ -2325,6 +2325,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GridVisual
   saloonTiles: {fileID: 952375206}
+  obstacles: {fileID: 883389233}
   HighlightedTiles: []
 --- !u!1 &960331286
 GameObject:
@@ -2936,10 +2937,10 @@ Camera:
   m_LensShift: {x: 0, y: 0}
   m_NormalizedViewPortRect:
     serializedVersion: 2
-    x: 0.08188153
-    y: 0.08204334
-    width: 0.83623695
-    height: 0.8359133
+    x: 0.083333336
+    y: 0.083333336
+    width: 0.8333333
+    height: 0.8333333
   near clip plane: 0.3
   far clip plane: 1000
   field of view: 60
@@ -3185,8 +3186,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c35a045e139f2e44a89e6c6706f8b073, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CharacterVisual
-  moveRange: 1
-  attackRange: 3
+  unitClass: {fileID: 11400000, guid: 8a5493b0338086849b021bdacd550faa, type: 2}
   hasMoved: 0
   hasAttacked: 0
 --- !u!1 &1751974100
