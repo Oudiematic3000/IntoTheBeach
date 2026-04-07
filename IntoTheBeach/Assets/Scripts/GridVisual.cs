@@ -6,7 +6,7 @@ using UnityEngine.Tilemaps;
 
 public class GridVisual : MonoBehaviour, Iinteractable
 {
-    public Tilemap saloonTiles;
+    public Tilemap saloonTiles, obstacles;
     public static event Action OnUnitMoved;
     public List<Vector3Int> HighlightedTiles = new List<Vector3Int>();
 
@@ -76,22 +76,13 @@ public class GridVisual : MonoBehaviour, Iinteractable
         if (currentSelection == null) return;
         Vector3Int pos = currentSelection.GetTilePos(saloonTiles);
 
-            for (int y = pos.y; y <= pos.y + currentSelection.attackRange; y++)
-            {
-            if (y == pos.y) continue;
-            highlightedTiles.Add(new Vector3Int(pos.x, y, 0));
-                saloonTiles.SetColor(new Vector3Int(pos.x, y, 0), Color.indianRed);
-
-            }
-
-        for (int y = pos.y; y >= pos.y - currentSelection.attackRange; y--)
+        List<Vector3Int> tilesToHighlight = AttackPattern.GetAllAttackHighlightTiles(currentSelection.unitClass.attackPattern.AttackTilesVisual(saloonTiles, obstacles, pos), pos, obstacles);
+        foreach (var tile in tilesToHighlight)
         {
-            if (y == pos.y) continue;
-            highlightedTiles.Add(new Vector3Int(pos.x, y, 0));
-            saloonTiles.SetColor(new Vector3Int(pos.x, y, 0), Color.indianRed);
+            saloonTiles.SetColor(tile, Color.darkGreen);
 
         }
-        
+
 
     }
     public void HighlightMovableTiles()
@@ -101,12 +92,12 @@ public class GridVisual : MonoBehaviour, Iinteractable
         if (currentSelection == null) return;
         Vector3Int pos = currentSelection.GetTilePos(saloonTiles);
 
-        for(int x=pos.x-currentSelection.moveRange; x <= pos.x + currentSelection.moveRange; x++)
+        for(int x=pos.x-currentSelection.unitClass.moveRange; x <= pos.x + currentSelection.unitClass.moveRange; x++)
         {
 
-            for (int y=pos.y-currentSelection.moveRange;y<=pos.y + currentSelection.moveRange; y++)
+            for (int y=pos.y-currentSelection.unitClass.moveRange;y<=pos.y + currentSelection.unitClass.moveRange; y++)
             {
-                if(Math.Abs(x-pos.x)+Math.Abs(y-pos.y)>currentSelection.moveRange) continue;
+                if(Math.Abs(x-pos.x)+Math.Abs(y-pos.y)>currentSelection.unitClass.moveRange) continue;
                 if (Math.Abs(x - pos.x) + Math.Abs(y - pos.y) ==0) continue;
                 highlightedTiles.Add(new Vector3Int(x, y, 0));
                 saloonTiles.SetColor(new Vector3Int(x, y, 0), Color.darkGreen);

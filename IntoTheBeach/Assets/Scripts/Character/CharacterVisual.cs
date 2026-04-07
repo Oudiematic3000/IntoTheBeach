@@ -6,13 +6,12 @@ using UnityEngine.Tilemaps;
 public class CharacterVisual : MonoBehaviour, Iinteractable
 {
     public static event Action<CharacterVisual> OnClick;
-    public int moveRange=1;
-    public int attackRange = 3;
+    public UnitClass unitClass;
     public bool hasMoved, hasAttacked;
 
     private void OnEnable()
     {
-       // MovePlanTurnState.OnMovePlanStart += InitTile;
+       //MovePlanTurnState.OnMovePlanStart += InitTile;
     }
     public void OnHover(Vector2 mousePos)
     {
@@ -27,6 +26,11 @@ public class CharacterVisual : MonoBehaviour, Iinteractable
    public Vector3Int GetTilePos(Tilemap tilemap)
     {
         return tilemap.WorldToCell(transform.position);
+    }
+
+    public void GenerateMoveGhost()
+    {
+
     }
 
     //public void InitTile()
