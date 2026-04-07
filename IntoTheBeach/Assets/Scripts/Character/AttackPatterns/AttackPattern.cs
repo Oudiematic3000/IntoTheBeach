@@ -20,10 +20,7 @@ public abstract class AttackPattern
         return rotated + pivot;
     }
 
-    public static List<Vector3Int> GetRotatedAttackTiles(
-        List<Vector3Int> absoluteTiles,
-        Vector3Int unitPosition,
-        int rotation)
+    public static List<Vector3Int> GetRotatedAttackTiles(List<Vector3Int> absoluteTiles, Vector3Int unitPosition, int rotation)
     {
         var tiles = new List<Vector3Int>();
         foreach (var tile in absoluteTiles)
@@ -33,10 +30,7 @@ public abstract class AttackPattern
         return tiles;
     }
 
-    public static List<Vector3Int> GetAllAttackHighlightTiles(
-        List<Vector3Int> absoluteTiles,  
-        Vector3Int unitPosition,
-        Tilemap obstacles)               
+    public static List<Vector3Int> GetAllAttackHighlightTiles(List<Vector3Int> absoluteTiles, Vector3Int unitPosition, Tilemap obstacles)               
     {
         var allTiles = new HashSet<Vector3Int>();
         for (int r = 0; r < 4; r++)
