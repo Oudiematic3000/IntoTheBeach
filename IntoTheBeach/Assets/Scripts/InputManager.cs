@@ -33,17 +33,24 @@ public class InputManager : MonoBehaviour
     {
         CharacterVisual.OnClick += SetCurrentSelection;
         UIActions.OnMovement += enterMoveMode;
+        UIActions.OnAttack += enterAttackMode;
       
     }
     private void OnDisable()
     {
         CharacterVisual.OnClick -= SetCurrentSelection;
         UIActions.OnMovement -= enterMoveMode;
+        UIActions.OnAttack -= enterAttackMode;
     }
     private void enterMoveMode()
     {
         if (CurrentSelection == null) return;
         currentState = TurnState.Moving;
+    }
+    private void enterAttackMode() 
+    { 
+      if(CurrentSelection == null) return;
+      currentState = TurnState.Attacking;
     }
 
     //Update method

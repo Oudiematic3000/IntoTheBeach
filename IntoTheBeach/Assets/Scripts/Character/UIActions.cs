@@ -10,7 +10,7 @@ public class UIActions : MonoBehaviour
     [SerializeField] CharacterVisual selectedCharacter;
 
     [SerializeField] GameObject classUIHolder, buttonsUIHolder;
-    [SerializeField] Button moveButton, attackButton;
+    [SerializeField] Button moveButton, attackButton, endTurn;
     [SerializeField] Sprite[] classIcons;
     private void OnEnable()
     {
@@ -29,10 +29,22 @@ public class UIActions : MonoBehaviour
         this.selectedCharacter = selectedCharacter;
         ShowUnitInfo();
     }
+    public void EndTurn() 
+    { 
+        HideAll();
+        TurnStateMachine.Instance.UpdateState();
+       
+       
+    }
 
     public void MoveButtonPressed() 
     {
         OnMovement?.Invoke();
+    }
+
+    public void AttackButtonPressed() 
+    {
+        OnAttack?.Invoke();
     }
 
     public void ShowUnitInfo()

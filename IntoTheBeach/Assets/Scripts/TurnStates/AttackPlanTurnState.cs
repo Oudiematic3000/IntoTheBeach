@@ -11,6 +11,7 @@ public class AttackPlanTurnState : TurnState
     public override void StartState()
     {
         OnAttackPlanStart?.Invoke();
+        Debug.Log("Start of attack");
     }
 
     public override void UpdateState()

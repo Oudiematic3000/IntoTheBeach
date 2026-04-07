@@ -21,6 +21,11 @@ public class TurnStateMachine : MonoBehaviour
     {
         
     }
+
+    public void UpdateState() 
+    {
+        currentState.UpdateState();
+    }
 }
 
 public abstract class TurnState
