@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: 489904df2b722e1448e5346d30260057
+guid: 2a8e9a366acd99c459e7fee1d4c750df
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -6706735319587471634
-    second: Menu_MoveButton_0
+      213: 6116307003710935138
+    second: Menu_MoveButton_selected 1_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -75,7 +75,7 @@ TextureImporter:
     maxTextureSize: 2048
     resizeAlgorithm: 0
     textureFormat: -1
-    textureCompression: 1
+    textureCompression: 0
     compressionQuality: 50
     crunchedCompression: 0
     allowsAlphaSplitting: 0
@@ -100,13 +100,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Menu_MoveButton_0
+      name: Menu_MoveButton_selected 1_0
       rect:
         serializedVersion: 2
-        x: 1
-        y: 2
-        width: 29
-        height: 29
+        x: 0
+        y: 0
+        width: 32
+        height: 32
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -115,8 +115,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: eee3c69b2c3ece2a0800000000000000
-      internalID: -6706735319587471634
+      spriteID: 2609c6570dc71e450800000000000000
+      internalID: 6116307003710935138
       vertices: []
       indices: 
       edges: []
@@ -135,7 +135,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      Menu_MoveButton_0: -6706735319587471634
+      Menu_MoveButton_selected 1_0: 6116307003710935138
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
