@@ -17,6 +17,7 @@ MonoBehaviour:
   damage: 1
   attackPattern:
     rid: 351225969909432578
+  unitGhost: {fileID: 9012563408507327037, guid: 455f3842a6dde624d9eb166e082d5bb4, type: 3}
   references:
     version: 2
     RefIds:

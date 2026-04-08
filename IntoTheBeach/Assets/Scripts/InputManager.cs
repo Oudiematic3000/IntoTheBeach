@@ -68,7 +68,7 @@ public class InputManager : MonoBehaviour
     }
     public void SetCurrentSelection(CharacterVisual current) 
     {
-        this.CurrentSelection = current;
+        CurrentSelection = current;
         
     }
    
@@ -104,6 +104,7 @@ public class InputManager : MonoBehaviour
         if (ray.collider == null)
             {
                 OnClickNothing?.Invoke(); 
+            CurrentSelection = null;
                 return;
             }
            
