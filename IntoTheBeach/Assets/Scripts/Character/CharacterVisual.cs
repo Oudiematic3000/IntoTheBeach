@@ -7,6 +7,7 @@ public class CharacterVisual : MonoBehaviour, Iinteractable
 {
     public static event Action<CharacterVisual> OnClick;
     public UnitClass unitClass;
+    public UnitGhost ghost;
     public bool hasMoved, hasAttacked;
 
     private void OnEnable()
@@ -28,9 +29,10 @@ public class CharacterVisual : MonoBehaviour, Iinteractable
         return tilemap.WorldToCell(transform.position);
     }
 
-    public void GenerateMoveGhost()
+    public UnitGhost GenerateMoveGhost(Vector3 pos)
     {
-
+        var moveGhost = Instantiate(unitClass.unitGhost,pos,Quaternion.identity);
+        return moveGhost.GetComponent<UnitGhost>();
     }
 
     //public void InitTile()
