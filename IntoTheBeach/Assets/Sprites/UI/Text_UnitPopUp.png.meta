@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: d1bfba8046250ce43a37eb511400694c
+guid: 6878e448927c671428128a67765fb835
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 322502125644925505
-    second: Menu_UndoButton_0
+      213: -6364345519680112709
+    second: Text_UnitPopUp_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -100,12 +100,12 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Menu_UndoButton_0
+      name: Text_UnitPopUp_0
       rect:
         serializedVersion: 2
-        x: 11
-        y: 19
-        width: 42
+        x: 30
+        y: 51
+        width: 68
         height: 26
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
@@ -115,8 +115,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 14acf5e79f1c97400800000000000000
-      internalID: 322502125644925505
+      spriteID: bb73e97387d4da7a0800000000000000
+      internalID: -6364345519680112709
       vertices: []
       indices: 
       edges: []
@@ -135,7 +135,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      Menu_UndoButton_0: 322502125644925505
+      Text_UnitPopUp_0: -6364345519680112709
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
