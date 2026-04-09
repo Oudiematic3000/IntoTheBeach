@@ -10,5 +10,6 @@ public class UnitClass : ScriptableObject
     public int health=5;
     public int damage = 1;
     [SerializeReference, SubclassSelector] public AttackPattern attackPattern;
+    public GameObject unitGhost;
 
 }

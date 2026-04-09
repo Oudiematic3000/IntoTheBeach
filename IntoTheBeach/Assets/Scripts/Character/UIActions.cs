@@ -56,6 +56,7 @@ public class UIActions : MonoBehaviour
             buttonsUIHolder.SetActive(true);
             moveButton.gameObject.SetActive(true);
             if (selectedCharacter.hasMoved) moveButton.interactable = false;
+            else moveButton.interactable = true;
         }
 
         if(TurnStateMachine.Instance.currentState is AttackPlanTurnState)
@@ -63,6 +64,8 @@ public class UIActions : MonoBehaviour
             buttonsUIHolder.SetActive(true);
             attackButton.gameObject.SetActive(true);
             if(selectedCharacter.hasAttacked) attackButton.interactable = false;
+            else attackButton.interactable = true;
+
         }
 
     }
