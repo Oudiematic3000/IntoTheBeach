@@ -67,7 +67,9 @@ public class GridVisual : MonoBehaviour, Iinteractable
 
        // currentSelection.transform.position = saloonTiles.CellToWorld(TargetPos);
         currentSelection.ghost=ghost;
+        TurnStateMachine.Instance.currentTurnInfo.ghosts.Add(ghost);
         currentSelection.hasMoved = true;
+        TurnStateMachine.Instance.currentTurnInfo.IncrementMoveCount(1);
         InputManager.Instance.SetState(InputManager.TurnState.None);
         
         OnUnitMoved?.Invoke();
@@ -109,7 +111,7 @@ public class GridVisual : MonoBehaviour, Iinteractable
 
     }
     public void HighlightMovableTiles()
-    {
+    {   
 
         List<Vector3Int> highlightedTiles = new List<Vector3Int>();
         var currentSelection = InputManager.Instance.GetCurrentSelection();

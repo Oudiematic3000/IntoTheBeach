@@ -1,4 +1,5 @@
 using NUnit.Framework;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -11,15 +12,28 @@ public class TurnStateMachine : MonoBehaviour
     {
         Instance = this;
     }
+    private void OnEnable()
+    {
+        BoardSyncTurnState.OnSyncStart += CreateTurnInfo;
+    }
+    private void OnDisable()
+    {
+        BoardSyncTurnState.OnSyncStart -= CreateTurnInfo;
+    }
     void Start()
     {
-        currentState = new MovePlanTurnState(this);
+        currentState = new BoardSyncTurnState(this);
     }
 
     // Update is called once per frame
     void Update()
     {
         
+    }
+
+    public void CreateTurnInfo()
+    {
+        currentTurnInfo = new TurnInfo();
     }
 
     public void UpdateState() 
@@ -46,8 +60,16 @@ public class TurnInfo
 {
     int moveActionCount = 0;
     int attackActionCount = 0;
-    public List<GameObject> ghosts = new();
-
+    public List<UnitGhost> ghosts = new();
+    
+    public int GetMoveCount()
+    {
+        return moveActionCount;
+    }
+    public int GetAttackCount()
+    {
+        return attackActionCount;
+    }
     public bool CanMove()
     {
         return moveActionCount < 2;

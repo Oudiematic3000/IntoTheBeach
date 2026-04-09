@@ -12,6 +12,8 @@ public class MovePlanTurnState : TurnState
     public override void StartState()
     {
         OnMovePlanStart?.Invoke();
+        Debug.Log("MovePlan");
+
     }
 
     public override void UpdateState()
