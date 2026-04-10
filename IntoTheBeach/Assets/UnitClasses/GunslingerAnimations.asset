@@ -12,14 +12,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a58a4bfadc06f0844adec9a760a6d097, type: 3}
   m_Name: GunslingerAnimations
   m_EditorClassIdentifier: Assembly-CSharp::UnitAnimations
-  idleLeft: {fileID: 0}
-  idleRight: {fileID: 0}
-  idleTop: {fileID: 0}
-  idleBottom: {fileID: 0}
-  walkLeft: {fileID: 0}
-  walkRight: {fileID: 0}
-  walkTop: {fileID: 0}
-  walkBottom: {fileID: 0}
+  idleLeft: {fileID: 21300000, guid: 9b4b846e33501af44891e6f8b7387cc0, type: 3}
+  idleRight: {fileID: 21300000, guid: 66de2e75db27ce440954c5773d9d12df, type: 3}
+  idleTop: {fileID: 21300000, guid: 0c697e01456689a48a560fcbe63e15e4, type: 3}
+  idleBottom: {fileID: 21300000, guid: c84bfc9d53d6aad4c847162e4d7f1756, type: 3}
+  walkLeft: {fileID: 21300000, guid: 9b4b846e33501af44891e6f8b7387cc0, type: 3}
+  walkRight: {fileID: 21300000, guid: 66de2e75db27ce440954c5773d9d12df, type: 3}
+  walkTop: {fileID: 21300000, guid: 0c697e01456689a48a560fcbe63e15e4, type: 3}
+  walkBottom: {fileID: 21300000, guid: c84bfc9d53d6aad4c847162e4d7f1756, type: 3}
   attackLeft: {fileID: 0}
   attackRight: {fileID: 0}
   attackTop: {fileID: 0}

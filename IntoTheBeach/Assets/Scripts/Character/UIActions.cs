@@ -15,8 +15,10 @@ public class UIActions : MonoBehaviour
     [SerializeField] GameObject[] pips;
     private void OnEnable()
     {
+       
         CharacterVisual.OnClick += SetSelectedCharacter;
         InputManager.OnClickNothing += HideAll;
+        
         GridVisual.OnUnitMoved += ShowUnitInfo;
         GridVisual.OnUnitMoved += HidePip;
     }
@@ -95,6 +97,8 @@ public class UIActions : MonoBehaviour
     }
     public void HideAll()
     {
+        var currentselection = InputManager.Instance.GetCurrentSelection();
+        currentselection.RemoveOutline();
         moveButton.gameObject.SetActive(false);
         attackButton.gameObject.SetActive(false);
         classUIHolder.SetActive(false);

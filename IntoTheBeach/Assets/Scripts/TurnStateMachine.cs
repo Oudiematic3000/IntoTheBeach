@@ -2,6 +2,7 @@ using NUnit.Framework;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using static UnitAnimations;
 
 public class TurnStateMachine : MonoBehaviour
 {
@@ -30,7 +31,16 @@ public class TurnStateMachine : MonoBehaviour
     {
         
     }
+    public AnimState GetAnimState()
+    {
+        if (currentState is MovePlanTurnState)
+            return AnimState.Move;
 
+        if (currentState is AttackPlanTurnState)
+            return AnimState.Attack;
+
+        return AnimState.None;
+    }
     public void CreateTurnInfo()
     {
         currentTurnInfo = new TurnInfo();

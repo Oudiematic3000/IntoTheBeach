@@ -34,13 +34,14 @@ public class InputManager : MonoBehaviour
         CharacterVisual.OnClick += SetCurrentSelection;
         UIActions.OnMovement += enterMoveMode;
         UIActions.OnAttack += enterAttackMode;
-      
+       
     }
     private void OnDisable()
     {
         CharacterVisual.OnClick -= SetCurrentSelection;
         UIActions.OnMovement -= enterMoveMode;
         UIActions.OnAttack -= enterAttackMode;
+        
     }
     private void enterMoveMode()
     {
@@ -112,7 +113,7 @@ public class InputManager : MonoBehaviour
             {
                 if (hoverObject==null) return;
 
-                hoverObject.OnPress(ray.point);
+            hoverObject.OnPress(ray.point);
             }
         
     }

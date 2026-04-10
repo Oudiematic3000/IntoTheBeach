@@ -13,6 +13,8 @@ public class UnitClass : ScriptableObject
     public int direction = 0;
     [SerializeReference, SubclassSelector] public AttackPattern attackPattern;
     public GameObject unitGhost;
-    public UnitAnimations animations;
+  public UnitAnimations animations;
+
+   
 
 }
