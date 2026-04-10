@@ -12,17 +12,21 @@ public class UIActions : MonoBehaviour
     [SerializeField] GameObject classUIHolder, buttonsUIHolder;
     [SerializeField] Button moveButton, attackButton, endTurn;
     [SerializeField] Sprite[] classIcons;
+    [SerializeField] GameObject[] pips;
     private void OnEnable()
     {
         CharacterVisual.OnClick += SetSelectedCharacter;
         InputManager.OnClickNothing += HideAll;
         GridVisual.OnUnitMoved += ShowUnitInfo;
+        GridVisual.OnUnitMoved += HidePip;
     }
     private void OnDisable()
     {
         CharacterVisual.OnClick -= SetSelectedCharacter;
         InputManager.OnClickNothing -= HideAll;
         GridVisual.OnUnitMoved -= ShowUnitInfo;
+        GridVisual.OnUnitMoved -= HidePip;
+
     }
     public void SetSelectedCharacter(CharacterVisual selectedCharacter)
     {    
@@ -55,7 +59,11 @@ public class UIActions : MonoBehaviour
         {
             buttonsUIHolder.SetActive(true);
             moveButton.gameObject.SetActive(true);
-            if (selectedCharacter.hasMoved) moveButton.interactable = false;
+
+            if (!TurnStateMachine.Instance.currentTurnInfo.CanMove() || selectedCharacter.hasMoved)
+            {
+                moveButton.interactable = false;
+            }
             else moveButton.interactable = true;
         }
 
@@ -63,9 +71,25 @@ public class UIActions : MonoBehaviour
         {
             buttonsUIHolder.SetActive(true);
             attackButton.gameObject.SetActive(true);
-            if(selectedCharacter.hasAttacked) attackButton.interactable = false;
+            if(!TurnStateMachine.Instance.currentTurnInfo.CanAttack() || selectedCharacter.hasAttacked) attackButton.interactable = false;
             else attackButton.interactable = true;
 
+        }
+
+    }
+    public void ShowAllPips()
+    {
+        foreach(var pip in pips)pip.SetActive(true);
+    }
+    public void HidePip()
+    {
+        if (TurnStateMachine.Instance.currentState is MovePlanTurnState)
+        {
+            if (TurnStateMachine.Instance.currentTurnInfo.GetMoveCount() > 2) return;
+            pips[(pips.Length-1)-TurnStateMachine.Instance.currentTurnInfo.GetMoveCount()].SetActive(false);
+        }else if(TurnStateMachine.Instance.currentState is AttackPlanTurnState)
+        {
+            pips[(pips.Length - 1) - TurnStateMachine.Instance.currentTurnInfo.GetAttackCount()].SetActive(false);
         }
 
     }

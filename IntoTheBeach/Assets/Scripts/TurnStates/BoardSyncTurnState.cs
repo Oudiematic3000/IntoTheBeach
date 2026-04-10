@@ -12,10 +12,17 @@ public class BoardSyncTurnState : TurnState
 
     public override void StartState()
     {
+        Debug.Log("Syncing");
+
         OnSyncStart?.Invoke();
         //TEMP
-        UpdateState();
+        LeanTween.delayedCall(0f, () =>
+        {
+            UpdateState();
+
+        });
         //TEMP
+        
     }
 
     public override void UpdateState()
