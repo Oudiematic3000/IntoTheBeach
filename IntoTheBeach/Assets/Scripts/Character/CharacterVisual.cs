@@ -9,6 +9,11 @@ public class CharacterVisual : MonoBehaviour, Iinteractable
     public UnitClass unitClass;
     public UnitGhost ghost;
     public bool hasMoved, hasAttacked;
+    Renderer objRenderer;
+    private void Start()
+    {
+        objRenderer = GetComponent<Renderer>();
+    }
 
     private void OnEnable()
     {
@@ -34,17 +39,10 @@ public class CharacterVisual : MonoBehaviour, Iinteractable
         return moveGhost.GetComponent<UnitGhost>();
     }
 
-    //public void InitTile()
-    //{
-
-    //    Tilemap tilemap = GameObject.Find("FloorVisual").GetComponent<Tilemap>();
-
-    //    Grid grid = tilemap.layoutGrid;
-    //    Vector3Int cellPos = grid.WorldToCell(transform.position);
-    //    cellPos.z = 0;
-    //    Vector3 snappedPos = grid.WorldToCell(cellPos);
-    //    transform.position = snappedPos;
-    //    Debug.Log(transform.position);
-    //}
+    public void ShowOutline()
+    {
+        objRenderer.material.SetFloat("_OutlineThickness", 1f);
+        objRenderer.material.SetColor("_OutlineColour", Color.white);
+    }
 
 }
