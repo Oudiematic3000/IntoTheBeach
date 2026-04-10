@@ -15,12 +15,12 @@ public class GridVisual : MonoBehaviour, Iinteractable
     private void OnDisable()
     {
         UIActions.OnMovement -= HighlightMovableTiles;
-        UIActions.OnAttack -= highlightAttackableTiles;
+        UIActions.OnAttack -= HighlightAttackableTiles;
     }
     private void OnEnable()
     {
         UIActions.OnMovement += HighlightMovableTiles;
-        UIActions.OnAttack += highlightAttackableTiles;
+        UIActions.OnAttack += HighlightAttackableTiles;
     }
     public void OnHover(Vector2 mousePos)
     {
@@ -50,7 +50,7 @@ public class GridVisual : MonoBehaviour, Iinteractable
         }
     }
  
-    public void unitattack(Vector3Int targetTile) 
+    public void Unitattack(Vector3Int targetTile) 
     {
         var currentSelection = InputManager.Instance.GetCurrentSelection();
         if (currentSelection != null) return;
@@ -69,6 +69,8 @@ public class GridVisual : MonoBehaviour, Iinteractable
         currentSelection.ghost=ghost;
         TurnStateMachine.Instance.currentTurnInfo.ghosts.Add(ghost);
         currentSelection.hasMoved = true;
+        Debug.Log("DIRECTION: "+GetDirection(currentSelection.GetTilePos(saloonTiles), ghost.GetTilePos(saloonTiles)));
+        currentSelection.unitClass.direction=GetDirection(currentSelection.GetTilePos(saloonTiles), ghost.GetTilePos(saloonTiles));
         TurnStateMachine.Instance.currentTurnInfo.IncrementMoveCount(1);
         InputManager.Instance.SetState(InputManager.TurnState.None);
         
@@ -89,7 +91,7 @@ public class GridVisual : MonoBehaviour, Iinteractable
             ghost=null;
         }
     }
-    public void highlightAttackableTiles() 
+    public void HighlightAttackableTiles() 
     {
         List<Vector3Int> highlightedTiles = new List<Vector3Int>();
         var currentSelection = InputManager.Instance.GetCurrentSelection();
@@ -132,8 +134,41 @@ public class GridVisual : MonoBehaviour, Iinteractable
             }
         }
         HighlightedTiles = highlightedTiles;
+      
+    }
 
-        
+    public int GetDirection(Vector3Int from, Vector3Int to)
+    {
+        int xDistance = to.x - from.x;
+        int yDistance = to.y - from.y;
+
+        int move1Distance, move2Distance;
+        move1Distance = Math.Min(xDistance, yDistance);
+        move2Distance = Math.Max(xDistance, yDistance);
+
+        Vector3Int move1, move2;
+        Vector2 move2Normalised = Vector2.zero;
+
+        if (xDistance == move1Distance)
+        {
+            move1 = new Vector3Int(move1Distance, 0, 0);
+            move2 = new Vector3Int(0, move2Distance, 0);
+            move2Normalised = new Vector2(move2.x, move2.y).normalized;
+
+        }
+        else if (yDistance == move1Distance) 
+        {
+            move1 = new Vector3Int(0, move1Distance, 0);
+            move2 = new Vector3Int(move2Distance, 0, 0);
+            move2Normalised = new Vector2(move2.x, move2.y).normalized;
+
+        }
+
+        if (move2Normalised == Vector2.left) return 0;
+        if(move2Normalised == Vector2.up) return 1;
+        if (move2Normalised == Vector2.right) return 2;
+        if(move2Normalised == Vector2.down) return 3;
+        else return 0;
     }
 
 }
