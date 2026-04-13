@@ -8,11 +8,16 @@ public class GridVisual : MonoBehaviour, Iinteractable
 {
     public Tilemap saloonTiles, obstacles;
     public static event Action OnUnitMoved;
+    public static event Action onMoveText;
     public List<Vector3Int> HighlightedTiles = new List<Vector3Int>();
-    public UIActions Actions;
+   
     //CharacterVisual selectedUnit; TODO: Use event to update this rather than referencing singleton.
     UnitGhost ghost;
 
+    private void Awake()
+    {
+      
+    }
     private void OnDisable()
     {
         UIActions.OnMovement -= HighlightMovableTiles;
@@ -27,7 +32,7 @@ public class GridVisual : MonoBehaviour, Iinteractable
     {
         Vector3Int tilePos = saloonTiles.WorldToCell(mousePos);
         Vector3 worldPos = saloonTiles.CellToWorld(tilePos);
-        if (InputManager.Instance.GetState() == InputManager.TurnState.Moving)
+        if (InputManager.Instance.GetState() == InputManager.TurnStates.Moving)
         {
             if(!ghost) return;
             if (!HighlightedTiles.Contains(tilePos)) return;
@@ -42,22 +47,14 @@ public class GridVisual : MonoBehaviour, Iinteractable
         Vector3Int tilePos = saloonTiles.WorldToCell(mousePos);
         var currentSelection = InputManager.Instance.GetCurrentSelection();
        
-        print("pressed " + tilePos);
-        if (InputManager.Instance.GetState() == InputManager.TurnState.None )
-        {
-
-            Actions.HideAll();
-        }
-        if (InputManager.Instance.GetState() == InputManager.TurnState.Moving) 
+       
+        if (InputManager.Instance.GetState() == InputManager.TurnStates.Moving) 
         {
            
             MoveUnit(tilePos);
         }
-        if (InputManager.Instance.GetState() == InputManager.TurnState.Attacking) 
-        {
+      
 
-        }
-       
     }
  
     public void Unitattack(Vector3Int targetTile) 
@@ -83,13 +80,13 @@ public class GridVisual : MonoBehaviour, Iinteractable
         currentSelection.direction=GetDirection(currentSelection.GetTilePos(saloonTiles), ghost.GetTilePos(saloonTiles));
         currentSelection.AnimUpdate();
         TurnStateMachine.Instance.currentTurnInfo.IncrementMoveCount(1);
-        InputManager.Instance.SetState(InputManager.TurnState.None);
+        InputManager.Instance.SetState(InputManager.TurnStates.None);
         
         OnUnitMoved?.Invoke();
 
         ResetTiles();
         currentSelection.RemoveOutline();
-
+       onMoveText?.Invoke();
     }
     private void ResetTiles() 
     {

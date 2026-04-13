@@ -13,21 +13,33 @@ public class UIActions : MonoBehaviour
     [SerializeField] Button moveButton, attackButton, endTurn;
     [SerializeField] Sprite[] classIcons;
     [SerializeField] GameObject[] pips;
+    public GameObject selectUnit;
+    public GameObject moveUnitText;
+    public GameObject attackUnitText;
+    public GameObject endTurnUnitText;
+    public GameObject tileSelect;
+    public GameObject attackTileSelect;
     private void OnEnable()
     {
        
         CharacterVisual.OnClick += SetSelectedCharacter;
+        CharacterVisual.OnMoveSelected += showMoveText;
+        CharacterVisual.OnAttackSelected += ShowAttackText;
         InputManager.OnClickNothing += HideAll;
         
         GridVisual.OnUnitMoved += ShowUnitInfo;
         GridVisual.OnUnitMoved += HidePip;
+        GridVisual.onMoveText += hideAllText;
     }
     private void OnDisable()
     {
         CharacterVisual.OnClick -= SetSelectedCharacter;
+        CharacterVisual.OnMoveSelected -= showMoveText;
+        CharacterVisual.OnAttackSelected -= ShowAttackText;
         InputManager.OnClickNothing -= HideAll;
         GridVisual.OnUnitMoved -= ShowUnitInfo;
         GridVisual.OnUnitMoved -= HidePip;
+        GridVisual.onMoveText -= hideAllText;
 
     }
     public void SetSelectedCharacter(CharacterVisual selectedCharacter)
@@ -45,11 +57,18 @@ public class UIActions : MonoBehaviour
 
     public void MoveButtonPressed() 
     {
+        hideAllText();
+        moveUnitText.SetActive(false);
+        tileSelect.SetActive(true);
         OnMovement?.Invoke();
     }
 
     public void AttackButtonPressed() 
     {
+        hideAllText();
+        attackTileSelect.SetActive(true);
+        selectUnit.SetActive(false);
+        
         OnAttack?.Invoke();
     }
 
@@ -95,13 +114,34 @@ public class UIActions : MonoBehaviour
         }
 
     }
+    public void hideAllText() 
+    {
+        selectUnit.gameObject.SetActive(true);
+        moveUnitText.gameObject.SetActive(false);   
+        attackTileSelect.gameObject.SetActive(false);
+        attackUnitText.gameObject.SetActive(false);
+        endTurnUnitText.gameObject.SetActive(false);
+        tileSelect.SetActive(false);
+    }
+    
     public void HideAll()
     {
+        hideAllText();
         var currentselection = InputManager.Instance.GetCurrentSelection();
         currentselection.RemoveOutline();
         moveButton.gameObject.SetActive(false);
         attackButton.gameObject.SetActive(false);
         classUIHolder.SetActive(false);
         buttonsUIHolder.SetActive(false);
+    }
+    private void showMoveText() 
+    {
+        selectUnit.SetActive(false);
+        moveUnitText.SetActive(true);
+    }
+    private void ShowAttackText() 
+    {
+        selectUnit.SetActive(false);
+        attackUnitText.SetActive(true);
     }
 }

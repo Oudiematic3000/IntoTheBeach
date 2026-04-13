@@ -2822,7 +2822,7 @@ MonoBehaviour:
   saloonTiles: {fileID: 952375206}
   obstacles: {fileID: 883389233}
   HighlightedTiles: []
-  Actions: {fileID: 0}
+  actions: {fileID: 0}
 --- !u!1 &977667882
 GameObject:
   m_ObjectHideFlags: 0
@@ -2940,6 +2940,12 @@ MonoBehaviour:
   pips:
   - {fileID: 1268484185}
   - {fileID: 1851873841}
+  selectUnit: {fileID: 209546133}
+  moveUnitText: {fileID: 1960452260}
+  attackUnitText: {fileID: 977667882}
+  endTurnUnitText: {fileID: 749435242}
+  tileSelect: {fileID: 55404942}
+  attackTileSelect: {fileID: 671746720}
 --- !u!114 &1014807446
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3537,10 +3543,10 @@ Camera:
   m_LensShift: {x: 0, y: 0}
   m_NormalizedViewPortRect:
     serializedVersion: 2
-    x: 0.24082072
-    y: 0.23992322
-    width: 0.5183585
-    height: 0.51823413
+    x: 0
+    y: 0
+    width: 1
+    height: 1
   near clip plane: 0.3
   far clip plane: 1000
   field of view: 60

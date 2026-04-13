@@ -4,9 +4,11 @@ using UnityEngine;
 public class AttackPlanTurnState : TurnState
 {
     public static event Action OnAttackPlanStart, OnAttackPlanEnd;
+    
     public AttackPlanTurnState(TurnStateMachine turnStateMachine) : base(turnStateMachine)
     {
     }
+    
 
     public override void StartState()
     {
@@ -19,11 +21,12 @@ public class AttackPlanTurnState : TurnState
         OnAttackPlanEnd?.Invoke();
        // turnStateMachine.currentState
     }
+   
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        
+       
     }
 
     // Update is called once per frame

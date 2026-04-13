@@ -6,27 +6,29 @@ public class InputManager : MonoBehaviour
 {
     public static InputManager Instance;
     [SerializeField] private CharacterVisual CurrentSelection;
+   
 
     public static event Action OnClickNothing;
 
-    [SerializeField] private TurnState currentState = TurnState.None;
-    public enum TurnState
+    [SerializeField] private TurnStates currentState = TurnStates.None;
+    public enum TurnStates
     {
         None,
         Moving,
         Attacking,
     }
-    public TurnState GetState() 
+    public TurnStates GetState() 
     {
         return currentState;
     }
-    public void SetState(TurnState state) 
+    public void SetState(TurnStates state) 
     {
         this.currentState = state;
     }
     private void Awake()
     {
         InputManager.Instance = this;
+        
     }
    
     private void OnEnable()
@@ -45,13 +47,15 @@ public class InputManager : MonoBehaviour
     }
     private void enterMoveMode()
     {
+      
         if (CurrentSelection == null) return;
-        currentState = TurnState.Moving;
+        currentState = TurnStates.Moving;
     }
     private void enterAttackMode() 
     { 
+      
       if(CurrentSelection == null) return;
-      currentState = TurnState.Attacking;
+      currentState = TurnStates.Attacking;
     }
 
     //Update method

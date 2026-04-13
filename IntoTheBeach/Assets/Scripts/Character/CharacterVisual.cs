@@ -5,6 +5,8 @@ using UnityEngine.Tilemaps;
 
 public class CharacterVisual : MonoBehaviour, Iinteractable
 {
+    public static event Action OnMoveSelected;
+    public static event Action OnAttackSelected;
     public static event Action<CharacterVisual> OnClick;
     public UnitClass unitClass;
     public UnitGhost ghost;
@@ -12,12 +14,16 @@ public class CharacterVisual : MonoBehaviour, Iinteractable
     private Renderer objRenderer;
     private SpriteRenderer spriteRenderer;
     public int direction;
-
+    private UIActions actions;
+    private TurnStateMachine turnState;
 
     private void Start()
     {
         objRenderer = GetComponent<Renderer>();
         spriteRenderer = GetComponent<SpriteRenderer>();
+        actions = FindAnyObjectByType<UIActions>();
+         turnState = FindAnyObjectByType<TurnStateMachine>();
+
     }
 
     private void OnEnable()
@@ -39,7 +45,21 @@ public class CharacterVisual : MonoBehaviour, Iinteractable
     {
         OnClick?.Invoke(this);
         var currentSelection = InputManager.Instance.GetCurrentSelection();
-        currentSelection.ShowOutline();
+
+
+        if (turnState.currentState is MovePlanTurnState)
+        {
+            OnMoveSelected?.Invoke();
+        }
+        if (turnState.currentState is AttackPlanTurnState) 
+        {
+            OnAttackSelected?.Invoke();
+        }
+            
+       
+        
+        
+            currentSelection.ShowOutline();
 
 
     }
