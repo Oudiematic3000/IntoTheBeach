@@ -16,7 +16,7 @@ public class GunslingerAttackPattern : AttackPattern
 
         for(int i = 0; i <= range; i++)
         {
-            Vector3Int currentTile = new Vector3Int(position.x + i, position.y);
+            Vector3Int currentTile = new Vector3Int(position.x - i, position.y);
             if (currentTile==position)continue;
 
             tiles.Add(currentTile);

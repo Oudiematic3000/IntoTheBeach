@@ -150,37 +150,7 @@ public class GridVisual : MonoBehaviour, Iinteractable
     }
 
     public int GetDirection(Vector3Int from, Vector3Int to)
-    {
-        //int xDistance = to.x - from.x;
-        //int yDistance = to.y - from.y;
-
-        //int move1Distance, move2Distance;
-        //move1Distance = Math.Min(xDistance, yDistance);
-        //move2Distance = Math.Max(xDistance, yDistance);
-
-        //Vector3Int move1, move2;
-        //Vector2 move2Normalised = Vector2.zero;
-
-        //if (xDistance == move1Distance)
-        //{
-        //    move1 = new Vector3Int(move1Distance, 0, 0);
-        //    move2 = new Vector3Int(0, move2Distance, 0);
-        //    move2Normalised = new Vector2(move2.x, move2.y).normalized;
-
-        //}
-        //else if (yDistance == move1Distance) 
-        //{
-        //    move1 = new Vector3Int(0, move1Distance, 0);
-        //    move2 = new Vector3Int(move2Distance, 0, 0);
-        //    move2Normalised = new Vector2(move2.x, move2.y).normalized;
-
-        //}
-
-        //if (move2Normalised == Vector2.left) return 0;
-        //if(move2Normalised == Vector2.up) return 1;
-        //if (move2Normalised == Vector2.right) return 2;
-        //if(move2Normalised == Vector2.down) return 3;
-        //else return 0;
+    {  
 
         Vector3Int dir = to - from;
 
