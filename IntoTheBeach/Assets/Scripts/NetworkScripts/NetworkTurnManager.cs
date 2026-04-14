@@ -18,17 +18,17 @@ public class NetworkTurnManager : NetworkBehaviour
         else Destroy(gameObject);
     }
 
-    [Rpc(SendTo.Server, InvokePermission=RpcInvokePermission.Everyone)]
-    public void SubmitTurnPlanServerRpc(NetUnitPlan[] plans, ServerRpcParams rpcParams = default)
-    {
-        ulong senderID = rpcParams.Receive.SenderClientId;
-        submittedPlans[senderID] = plans;
+    //[Rpc(SendTo.Server, InvokePermission=RpcInvokePermission.Everyone)]
+    //public void SubmitTurnPlanServerRpc(NetUnitPlan[] plans, ServerRpcParams rpcParams = default)
+    //{
+    //    ulong senderID = rpcParams.Receive.SenderClientId;
+    //    submittedPlans[senderID] = plans;
 
-        if (submittedPlans.Count >= expectedPlayerCount)
-        {
+    //    if (submittedPlans.Count >= expectedPlayerCount)
+    //    {
             
-        }
-    }
+    //    }
+    //}
 
    
 }

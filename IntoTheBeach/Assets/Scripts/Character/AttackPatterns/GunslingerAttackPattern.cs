@@ -2,8 +2,6 @@ using NUnit.Framework;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
-using UnityEngine.WSA;
-using static UnityEditor.PlayerSettings;
 
 [System.Serializable]
 public class GunslingerAttackPattern : AttackPattern
