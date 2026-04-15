@@ -33,9 +33,9 @@ public class GridManager : NetworkBehaviour
 
     public void RegisterUnitIDs()
     {
-        foreach(var unit in FindObjectsByType<Unit>(FindObjectsSortMode.InstanceID))
-        {
-            gridState.SetOccupant(floor.WorldToCell(unit.transform.position), unit.unitID);
+        foreach(var unit in FindObjectsByType<CharacterVisual>(FindObjectsSortMode.InstanceID))
+        {   
+            //gridState.SetOccupant(floor.WorldToCell(unit.transform.position), unit.unitID);
         }
     }
 
