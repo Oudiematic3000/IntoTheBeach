@@ -12,7 +12,7 @@ public class CharacterVisual : MonoBehaviour, Iinteractable
     private Renderer objRenderer;
     private SpriteRenderer spriteRenderer;
     public int direction;
-
+    public int unitID;
 
     private void Start()
     {

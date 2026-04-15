@@ -18,19 +18,36 @@ public class NetworkTurnManager : NetworkBehaviour
         else Destroy(gameObject);
     }
 
-    //[Rpc(SendTo.Server, InvokePermission=RpcInvokePermission.Everyone)]
-    //public void SubmitTurnPlanServerRpc(NetUnitPlan[] plans, ServerRpcParams rpcParams = default)
-    //{
-    //    ulong senderID = rpcParams.Receive.SenderClientId;
-    //    submittedPlans[senderID] = plans;
+    [Rpc(SendTo.Server, InvokePermission = RpcInvokePermission.Everyone)]
+    public void SubmitTurnPlanServerRpc(NetUnitPlan[] plans, RpcParams rpcParams = default)
+    {
+        ulong senderID = rpcParams.Receive.SenderClientId;
+        submittedPlans[senderID] = plans;
 
-    //    if (submittedPlans.Count >= expectedPlayerCount)
-    //    {
-            
-    //    }
-    //}
+        if (submittedPlans.Count >= expectedPlayerCount)
+        {
+            ResolveTurn();
+        }
+    }
 
-   
+    private void ResolveTurn()
+    {
+        var allPlans = submittedPlans.Values
+            .SelectMany(plans => plans)
+            .ToArray();
+
+        var resolver = new TurnResolver(GridManager.instance.gridState);
+        NetUnitResult[] results = resolver.Resolve(allPlans);
+
+        submittedPlans.Clear();
+        BroadcastResolvedTurnClientRpc(results);
+    }
+
+    [Rpc(SendTo.ClientsAndHost)]
+    private void BroadcastResolvedTurnClientRpc(NetUnitResult[] results)
+    {
+        OnTurnResolved?.Invoke(results);
+    }
 }
 public struct NetVector3Int : INetworkSerializable
 {

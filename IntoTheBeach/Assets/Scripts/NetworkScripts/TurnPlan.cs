@@ -84,6 +84,12 @@ public class MoveAction
         paths.Add(new path(direction, path.MoveType.collision)); 
         CalculateResultant();
     }
+    public void StopOneTileShort()
+    {
+        resultant = resultant - GetDirection();
+        paths = BreakdownMove(startPos, resultant);
+        paths.Add(new path(Vector3Int.zero, path.MoveType.collision));
+    }
 
     public void CalculateResultant()
     {
