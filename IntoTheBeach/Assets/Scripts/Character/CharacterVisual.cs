@@ -16,6 +16,7 @@ public class CharacterVisual : MonoBehaviour, Iinteractable
     public int direction;
     private UIActions actions;
     private TurnStateMachine turnState;
+    public int unitID;
 
     private void Start()
     {

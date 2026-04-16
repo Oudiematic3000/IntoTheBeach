@@ -1,8 +1,10 @@
+using Unity.Netcode;
 using UnityEngine;
 
-public class Unit : Entity
+public class Unit : NetworkBehaviour
 {
     public int unitID;
+    public UnitClass UnitClass;
     void Start()
     {
         

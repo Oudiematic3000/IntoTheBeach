@@ -4,6 +4,7 @@ using UnityEngine.Tilemaps;
 public class UnitGhost : MonoBehaviour
 {
     Renderer objRenderer;
+    public CharacterVisual owner;
     private void Awake()
     {
         objRenderer = gameObject.GetComponent<Renderer>();

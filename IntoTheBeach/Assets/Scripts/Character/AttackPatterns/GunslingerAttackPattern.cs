@@ -2,8 +2,6 @@ using NUnit.Framework;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
-using UnityEngine.WSA;
-using static UnityEditor.PlayerSettings;
 
 [System.Serializable]
 public class GunslingerAttackPattern : AttackPattern
@@ -16,7 +14,7 @@ public class GunslingerAttackPattern : AttackPattern
 
         for(int i = 0; i <= range; i++)
         {
-            Vector3Int currentTile = new Vector3Int(position.x + i, position.y);
+            Vector3Int currentTile = new Vector3Int(position.x - i, position.y);
             if (currentTile==position)continue;
 
             tiles.Add(currentTile);
