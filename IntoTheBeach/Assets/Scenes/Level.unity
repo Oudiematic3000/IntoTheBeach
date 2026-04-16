@@ -2822,7 +2822,6 @@ MonoBehaviour:
   saloonTiles: {fileID: 952375206}
   obstacles: {fileID: 883389233}
   HighlightedTiles: []
-  actions: {fileID: 0}
 --- !u!1 &977667882
 GameObject:
   m_ObjectHideFlags: 0
