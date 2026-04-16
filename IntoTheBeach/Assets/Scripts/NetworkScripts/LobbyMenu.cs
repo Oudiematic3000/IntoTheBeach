@@ -1,3 +1,5 @@
+using System.Linq;
+using System.Net;
 using TMPro;
 using Unity.Netcode;
 using Unity.Netcode.Transports.UTP;
@@ -8,6 +10,7 @@ using UnityEngine.UI;
 public class LobbyMenu : MonoBehaviour
 {
     [SerializeField] TMP_InputField ipInput, portInput;
+    [SerializeField] TextMeshProUGUI yourIP;
     string defaultIP = "127.0.0.1";
     ushort defaultPort = 7777;
 
@@ -18,6 +21,7 @@ public class LobbyMenu : MonoBehaviour
     {
         if(ipInput) ipInput.text = defaultIP;
         if(portInput) portInput.text = defaultPort.ToString();
+        if (yourIP) yourIP.text = GetLocalIPv4();
     }
 
     public void StartHost()
@@ -52,7 +56,13 @@ public class LobbyMenu : MonoBehaviour
 
         return port;
     }
-
+    public string GetLocalIPv4()
+    {
+        return Dns.GetHostEntry(Dns.GetHostName())
+        .AddressList.First(
+        f => f.AddressFamily == System.Net.Sockets.AddressFamily.InterNetwork)
+        .ToString();
+    }
     // Update is called once per frame
     void Update()
     {

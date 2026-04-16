@@ -4,11 +4,11 @@ using UnityEngine;
 
 public class TurnResolver
 {
-    private GridState _gridState;
+    private GridState gridState;
 
     public TurnResolver(GridState gridState)
     {
-        _gridState = gridState;
+        this.gridState = gridState;
     }
 
     public NetUnitResult[] Resolve(NetUnitPlan[] allPlans)
