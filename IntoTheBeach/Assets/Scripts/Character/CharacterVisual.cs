@@ -1,4 +1,6 @@
 using System;
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
@@ -63,6 +65,87 @@ public class CharacterVisual : MonoBehaviour, Iinteractable
             currentSelection.ShowOutline();
 
 
+    }
+    public void ExecuteMovement(List<path> paths)
+    {
+        StartCoroutine(MoveRoutine(paths));
+    }
+    private IEnumerator MoveRoutine(List<path> paths)
+    {
+        foreach (var step in paths)
+        {
+            Vector3 startPos = transform.position;
+            Vector3 targetPos = startPos + (Vector3)step.move;
+
+           
+            SetDirection(step.move);
+
+            float duration = 1f; 
+            float time = 0f;
+
+            float animTimer = 0f;
+            bool useWalkSprite = true;
+
+            while (time < duration)
+            {
+                time += Time.deltaTime;
+                float t = time / duration;
+
+                
+                transform.position = Vector3.Lerp(startPos, targetPos, t);
+
+               
+                animTimer += Time.deltaTime;
+                if (animTimer >= 0.5f) 
+                {
+                    useWalkSprite = !useWalkSprite;
+                    animTimer = 0f;
+
+                    UpdateStepAnimation(useWalkSprite);
+                }
+
+                yield return null;
+            }
+
+            transform.position = targetPos;
+        }
+
+      
+        UpdateStepAnimation(false);
+    }
+    private void UpdateStepAnimation(bool isWalking)
+    {
+        var anims = unitClass.animations;
+
+        if (isWalking)
+        {
+            switch (direction)
+            {
+                case 0: spriteRenderer.sprite = anims.walkLeft; break;
+                case 1: spriteRenderer.sprite = anims.walkTop; break;
+                case 2: spriteRenderer.sprite = anims.walkRight; break;
+                case 3: spriteRenderer.sprite = anims.walkBottom; break;
+            }
+        }
+        else
+        {
+            switch (direction)
+            {
+                case 0: spriteRenderer.sprite = anims.idleLeft; break;
+                case 1: spriteRenderer.sprite = anims.idleTop; break;
+                case 2: spriteRenderer.sprite = anims.idleRight; break;
+                case 3: spriteRenderer.sprite = anims.idleBottom; break;
+            }
+        }
+    }
+    private void SetDirection(Vector3Int move)
+    {
+        if (move == Vector3Int.zero) return;
+
+        if (Mathf.Abs(move.x) > Mathf.Abs(move.y))
+            direction = move.x > 0 ? 2 : 0; 
+        else
+            direction = move.y > 0 ? 1 : 3; 
     }
     public void AnimUpdate() 
     {

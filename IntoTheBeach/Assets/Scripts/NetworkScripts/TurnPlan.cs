@@ -18,6 +18,7 @@ public class MoveAction
 {
     public Vector3Int startPos, resultant;
     public List<path> paths;
+    public CharacterVisual characterVisual;
 
     public MoveAction(Vector3Int startPos, Vector3Int resultant)
     {
