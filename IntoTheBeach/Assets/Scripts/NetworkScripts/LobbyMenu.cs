@@ -29,7 +29,7 @@ public class LobbyMenu : MonoBehaviour
         ushort port = GetPort();
         transport.SetConnectionData("0.0.0.0", port);
         networkManager.StartHost();
-        SceneManager.LoadScene("Level");
+        networkManager.SceneManager.LoadScene("Level", LoadSceneMode.Single);
     }
     public void JoinGame()
     {

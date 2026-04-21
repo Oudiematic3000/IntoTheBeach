@@ -23,7 +23,7 @@ public class NetworkTurnManager : NetworkBehaviour
     {
         ulong senderID = rpcParams.Receive.SenderClientId;
         submittedPlans[senderID] = plans;
-
+        Debug.Log("Received Plan from " + senderID);
         if (submittedPlans.Count >= expectedPlayerCount)
         {
             ResolveTurn();

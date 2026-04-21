@@ -48,9 +48,9 @@ public class UIActions : MonoBehaviour
         ShowUnitInfo();
     }
     public void EndTurn() 
-    { 
-        HideAll();
+    {
         TurnStateMachine.Instance.UpdateState();
+        HideAll();
        
        
     }

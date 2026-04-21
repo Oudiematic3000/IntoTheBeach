@@ -73,6 +73,7 @@ public class GridVisual : MonoBehaviour, Iinteractable
 
        // currentSelection.transform.position = saloonTiles.CellToWorld(TargetPos);
         currentSelection.ghost=ghost;
+        ghost.owner = currentSelection;
         TurnStateMachine.Instance.currentTurnInfo.ghosts.Add(ghost);
         currentSelection.hasMoved = true;
         Debug.Log("DIRECTION: "+GetDirection(currentSelection.GetTilePos(saloonTiles), ghost.GetTilePos(saloonTiles)));

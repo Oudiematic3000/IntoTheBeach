@@ -19,19 +19,7 @@ public class AttackPlanTurnState : TurnState
     public override void UpdateState()
     {
         OnAttackPlanEnd?.Invoke();
-       // turnStateMachine.currentState
+        turnStateMachine.currentState = new StandbyTurnState(turnStateMachine);
     }
    
-
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
-    {
-       
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
 }

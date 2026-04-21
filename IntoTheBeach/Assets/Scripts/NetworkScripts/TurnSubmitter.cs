@@ -7,6 +7,10 @@ public class TurnSubmitter : MonoBehaviour
 {
     public Tilemap saloonTiles;
 
+    private void OnEnable()
+    {
+        StandbyTurnState.OnStandbyStart += SubmitCurrentPlan;
+    }
     public void SubmitCurrentPlan()
     {
         var plans = BuildNetPlans(TurnStateMachine.Instance.currentTurnInfo);
