@@ -25,11 +25,9 @@ public class LobbyMenu : MonoBehaviour
         if (yourIP) yourIP.text = GetLocalIPv4();
     }
 
-    public void StartHost()
+    public void StartGame()
     {
-        ushort port = GetPort();
-        transport.SetConnectionData("0.0.0.0", port);
-        networkManager.StartHost();
+       
         networkManager.SceneManager.LoadScene("Level", LoadSceneMode.Single);
     }
     public void JoinGame()
@@ -64,8 +62,17 @@ public class LobbyMenu : MonoBehaviour
         f => f.AddressFamily == System.Net.Sockets.AddressFamily.InterNetwork)
         .ToString();
     }
+
+    public void StartHost()
+    {
+        ushort port = GetPort();
+        transport.SetConnectionData("0.0.0.0", port);
+        networkManager.StartHost();
+        SetUsername();
+    }
     public void SetUsername()
     {
+        if(networkManager.IsClient)
         PlayerData.Local.SetUsernameServerRpc((FixedString64Bytes)(usernameInput.text));
     }
 }
