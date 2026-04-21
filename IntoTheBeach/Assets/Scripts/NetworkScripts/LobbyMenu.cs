@@ -36,6 +36,7 @@ public class LobbyMenu : MonoBehaviour
         ushort port = GetPort();
         transport.SetConnectionData(ip, port);
         networkManager.StartClient();
+        SetUsername();
     }
     public void StartServerOnly()
     {
@@ -73,6 +74,9 @@ public class LobbyMenu : MonoBehaviour
     public void SetUsername()
     {
         if(networkManager.IsClient)
-        PlayerData.Local.SetUsernameServerRpc((FixedString64Bytes)(usernameInput.text));
+        if(string.IsNullOrWhiteSpace(usernameInput.text))
+        PlayerData.Local.SetUsernameServerRpc((FixedString64Bytes)("Player"));
+            else
+                PlayerData.Local.SetUsernameServerRpc((FixedString64Bytes)(usernameInput.text));
     }
 }
