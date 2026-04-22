@@ -32,6 +32,8 @@ public class LobbyMenu : MonoBehaviour
     }
     public void JoinGame()
     {
+        if (!transport) transport = FindAnyObjectByType<UnityTransport>();
+        if (!networkManager) networkManager = FindAnyObjectByType<NetworkManager>();
         string ip = GetIP();
         ushort port = GetPort();
         transport.SetConnectionData(ip, port);
@@ -66,6 +68,8 @@ public class LobbyMenu : MonoBehaviour
 
     public void StartHost()
     {
+        if (!transport) transport = FindAnyObjectByType<UnityTransport>();
+        if (!networkManager) networkManager = FindAnyObjectByType<NetworkManager>();
         ushort port = GetPort();
         transport.SetConnectionData("0.0.0.0", port);
         networkManager.StartHost();
@@ -73,10 +77,16 @@ public class LobbyMenu : MonoBehaviour
     }
     public void SetUsername()
     {
-        if(networkManager.IsClient)
-        if(string.IsNullOrWhiteSpace(usernameInput.text))
+        if (!transport) transport = FindAnyObjectByType<UnityTransport>();
+        if (!networkManager) networkManager = FindAnyObjectByType<NetworkManager>();
+        if (networkManager.IsClient)
+        if(!usernameInput || string.IsNullOrWhiteSpace(usernameInput.text))
         PlayerData.Local.SetUsernameServerRpc((FixedString64Bytes)("Player"));
             else
                 PlayerData.Local.SetUsernameServerRpc((FixedString64Bytes)(usernameInput.text));
+    }
+    public void HideCanvas()
+    {
+        transform.parent.gameObject.SetActive(false);
     }
 }

@@ -396,8 +396,9 @@ GameObject:
   - component: {fileID: 79625363}
   - component: {fileID: 79625362}
   - component: {fileID: 79625361}
+  - component: {fileID: 79625364}
   m_Layer: 0
-  m_Name: NetworkManager
+  m_Name: NetworkManagerLobby
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -492,6 +493,18 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &79625364
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 79625360}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f29b669007275a3479a1a7ffe262f3c4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::NetworkAntiDuplicator
 --- !u!1 &99077473
 GameObject:
   m_ObjectHideFlags: 0
@@ -2396,10 +2409,10 @@ Camera:
   m_LensShift: {x: 0, y: 0}
   m_NormalizedViewPortRect:
     serializedVersion: 2
-    x: 0
-    y: 0
-    width: 1
-    height: 1
+    x: 0.083333336
+    y: 0.083333336
+    width: 0.8333333
+    height: 0.8333333
   near clip plane: 0.3
   far clip plane: 1000
   field of view: 60
@@ -4862,7 +4875,6 @@ GameObject:
   m_Component:
   - component: {fileID: 2046004951}
   - component: {fileID: 2046004950}
-  - component: {fileID: 2046004949}
   m_Layer: 5
   m_Name: Text (TMP)
   m_TagString: Untagged
@@ -4945,18 +4957,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1970977734}
   m_CullTransparentMesh: 1
---- !u!114 &2046004949
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1963027260}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 0}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!222 &2046004950
 CanvasRenderer:
   m_ObjectHideFlags: 0

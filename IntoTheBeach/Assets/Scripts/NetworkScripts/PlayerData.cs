@@ -38,6 +38,7 @@ public class PlayerData : NetworkBehaviour
 
         _onUsernameChanged = (_, _) => LobbyPlayerListUI.Instance?.Refresh();
         Username.OnValueChanged += _onUsernameChanged;
+        DontDestroyOnLoad(this.gameObject);
     }
 
     public override void OnNetworkDespawn()
