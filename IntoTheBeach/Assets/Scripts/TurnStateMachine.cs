@@ -16,10 +16,12 @@ public class TurnStateMachine : MonoBehaviour
     private void OnEnable()
     {
         BoardSyncTurnState.OnSyncStart += CreateTurnInfo;
+        BoardSyncTurnState.OnGameStart += CreateTurnInfo;
     }
     private void OnDisable()
     {
         BoardSyncTurnState.OnSyncStart -= CreateTurnInfo;
+        BoardSyncTurnState.OnGameStart -= CreateTurnInfo;
     }
     void Start()
     {
@@ -42,6 +44,10 @@ public class TurnStateMachine : MonoBehaviour
         return AnimState.None;
     }
     public void CreateTurnInfo(NetUnitResult[] results)
+    {
+        currentTurnInfo = new TurnInfo();
+    }
+    public void CreateTurnInfo()
     {
         currentTurnInfo = new TurnInfo();
     }

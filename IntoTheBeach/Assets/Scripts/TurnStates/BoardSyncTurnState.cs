@@ -20,14 +20,12 @@ public class BoardSyncTurnState : TurnState
         else
         {
             OnGameStart?.Invoke();
-            //TEMP
             LeanTween.delayedCall(0f, () =>
             {
                 UpdateState();
 
             });
         }
-        //TEMP
         
     }
 
