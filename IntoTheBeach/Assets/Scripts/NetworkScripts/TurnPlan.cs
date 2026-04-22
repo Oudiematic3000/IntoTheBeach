@@ -27,7 +27,7 @@ public class MoveAction
         this.paths = BreakdownMove(startPos, resultant);
     }
 
-    List<path> BreakdownMove(Vector3Int to, Vector3Int from)
+    List<path> BreakdownMove(Vector3Int from, Vector3Int to)
     {
         int xDistance = to.x - from.x;
         int yDistance = to.y - from.y;

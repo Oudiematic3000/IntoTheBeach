@@ -66,57 +66,87 @@ public class CharacterVisual : MonoBehaviour, Iinteractable
 
 
     }
-    public void ExecuteMovement(List<path> paths)
+    public void ExecuteMovement(List<path> paths, Tilemap tilemap)
     {
-        StartCoroutine(MoveRoutine(paths));
+        StartCoroutine(MoveRoutine(paths, tilemap));
     }
-    private IEnumerator MoveRoutine(List<path> paths)
+
+    private IEnumerator MoveRoutine(List<path> paths, Tilemap tilemap)
     {
+        int directionBeforeCollision = direction;
+
         foreach (var step in paths)
         {
-            Vector3 startPos = transform.position;
-            Vector3 targetPos = startPos + (Vector3)step.move;
-
-           
-            SetDirection(step.move);
-
-            float duration = 1f; 
-            float time = 0f;
-
-            float animTimer = 0f;
-            bool useWalkSprite = true;
-
-            while (time < duration)
+            if (step.moveType == path.MoveType.walk)
             {
-                time += Time.deltaTime;
-                float t = time / duration;
-
-                
-                transform.position = Vector3.Lerp(startPos, targetPos, t);
-
-               
-                animTimer += Time.deltaTime;
-                if (animTimer >= 0.5f) 
-                {
-                    useWalkSprite = !useWalkSprite;
-                    animTimer = 0f;
-
-                    UpdateStepAnimation(useWalkSprite);
-                }
-
-                yield return null;
+                yield return StartCoroutine(WalkStep(step, tilemap));
+                directionBeforeCollision = direction;
             }
-
-            transform.position = targetPos;
+            else if (step.moveType == path.MoveType.collision)
+            {
+                yield return StartCoroutine(CollisionStep(step, directionBeforeCollision, tilemap));
+            }
         }
 
-      
         UpdateStepAnimation(false);
     }
+
+    private IEnumerator WalkStep(path step, Tilemap tilemap)
+    {
+        Vector3 startPos = transform.position;
+        Vector3Int currentCell = tilemap.WorldToCell(startPos);
+        Vector3 targetPos = tilemap.CellToWorld(currentCell + step.move);
+
+        SetDirection(step.move);
+
+        float duration = 1f;
+        float time = 0f;
+        float animTimer = 0f;
+        bool useWalkSprite = true;
+
+        while (time < duration)
+        {
+            time += Time.deltaTime;
+            transform.position = Vector3.Lerp(startPos, targetPos, time / duration);
+
+            animTimer += Time.deltaTime;
+            if (animTimer >= 0.5f)
+            {
+                useWalkSprite = !useWalkSprite;
+                animTimer = 0f;
+                UpdateStepAnimation(useWalkSprite);
+            }
+
+            yield return null;
+        }
+
+        transform.position = targetPos;
+    }
+
+    private IEnumerator CollisionStep(path step, int directionBeforeCollision, Tilemap tilemap)
+    {
+        Vector3 startPos = transform.position;
+        Vector3Int currentCell = tilemap.WorldToCell(startPos);
+        Vector3 targetPos = tilemap.CellToWorld(currentCell + step.move);
+
+        direction = directionBeforeCollision;
+
+        float duration = 0.3f;
+        float time = 0f;
+
+        while (time < duration)
+        {
+            time += Time.deltaTime;
+            transform.position = Vector3.Lerp(startPos, targetPos, time / duration);
+            yield return null;
+        }
+
+        transform.position = targetPos;
+    }
+
     private void UpdateStepAnimation(bool isWalking)
     {
         var anims = unitClass.animations;
-
         if (isWalking)
         {
             switch (direction)
