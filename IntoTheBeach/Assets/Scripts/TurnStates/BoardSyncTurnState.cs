@@ -3,24 +3,30 @@ using UnityEngine;
 
 public class BoardSyncTurnState : TurnState
 {
-    public static event Action OnSyncStart, OnSyncEnd;
-
-    public BoardSyncTurnState(TurnStateMachine turnStateMachine) : base(turnStateMachine)
+    public static event Action<NetUnitResult[]> OnSyncStart;
+    public static event Action OnGameStart, OnSyncEnd;
+    NetUnitResult[] results;
+    public BoardSyncTurnState(TurnStateMachine turnStateMachine, NetUnitResult[] results) : base(turnStateMachine)
     {
-
+        this.results = results;
     }
 
     public override void StartState()
     {
         Debug.Log("Syncing");
 
-        OnSyncStart?.Invoke();
-        //TEMP
-        LeanTween.delayedCall(0f, () =>
+        if (!results.Equals(null))
+            OnSyncStart?.Invoke(results);
+        else
         {
-            UpdateState();
+            OnGameStart?.Invoke();
+            //TEMP
+            LeanTween.delayedCall(0f, () =>
+            {
+                UpdateState();
 
-        });
+            });
+        }
         //TEMP
         
     }

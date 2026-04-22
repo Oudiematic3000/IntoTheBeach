@@ -15,8 +15,14 @@ public class UnitAnimator : MonoBehaviour
             unitMap[unit.unitID] = unit;
     }
 
-    private void OnEnable() => NetworkTurnManager.OnTurnResolved += PlayResults;
-    private void OnDisable() => NetworkTurnManager.OnTurnResolved -= PlayResults;
+    private void OnEnable()
+    {
+        BoardSyncTurnState.OnSyncStart += PlayResults;
+    }
+    private void OnDisable()
+    {
+        BoardSyncTurnState.OnSyncStart -= PlayResults;
+    } 
 
     private void PlayResults(NetUnitResult[] results)
     {

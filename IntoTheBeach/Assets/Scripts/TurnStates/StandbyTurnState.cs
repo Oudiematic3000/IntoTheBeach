@@ -18,7 +18,6 @@ public class StandbyTurnState : TurnState
     public override void UpdateState()
     {
         OnStandbyEnd?.Invoke();
-        turnStateMachine.currentState = new BoardSyncTurnState(turnStateMachine);
     }
 
 }

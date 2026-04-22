@@ -7,7 +7,6 @@ using UnityEngine;
 public class NetworkTurnManager : NetworkBehaviour
 {
     public static NetworkTurnManager Instance { get; private set; }
-    public static event Action<NetUnitResult[]> OnTurnResolved; 
 
     private Dictionary<ulong, NetUnitPlan[]> submittedPlans = new();
     private int expectedPlayerCount = 2;
@@ -46,7 +45,7 @@ public class NetworkTurnManager : NetworkBehaviour
     [Rpc(SendTo.ClientsAndHost)]
     private void BroadcastResolvedTurnClientRpc(NetUnitResult[] results)
     {
-        OnTurnResolved?.Invoke(results);
+        TurnStateMachine.Instance.currentState = new BoardSyncTurnState(TurnStateMachine.Instance, results);
     }
 }
 public struct NetVector3Int : INetworkSerializable

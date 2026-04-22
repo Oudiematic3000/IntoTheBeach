@@ -23,7 +23,7 @@ public class TurnStateMachine : MonoBehaviour
     }
     void Start()
     {
-        currentState = new BoardSyncTurnState(this);
+        currentState = new BoardSyncTurnState(this, null);
     }
 
     // Update is called once per frame
@@ -41,7 +41,7 @@ public class TurnStateMachine : MonoBehaviour
 
         return AnimState.None;
     }
-    public void CreateTurnInfo()
+    public void CreateTurnInfo(NetUnitResult[] results)
     {
         currentTurnInfo = new TurnInfo();
     }
