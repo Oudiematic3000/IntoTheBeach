@@ -15,7 +15,7 @@ public class BoardSyncTurnState : TurnState
     {
         Debug.Log("Syncing");
 
-        if (!results.Equals(null))
+        if (results != null)
             OnSyncStart?.Invoke(results);
         else
         {
