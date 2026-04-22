@@ -66,12 +66,12 @@ public class CharacterVisual : MonoBehaviour, Iinteractable
 
 
     }
-    public void ExecuteMovement(List<path> paths, Tilemap tilemap)
+    public void ExecuteMovement(List<path> paths, Tilemap tilemap, Action onComplete = null)
     {
-        StartCoroutine(MoveRoutine(paths, tilemap));
+        StartCoroutine(MoveRoutine(paths, tilemap, onComplete));
     }
 
-    private IEnumerator MoveRoutine(List<path> paths, Tilemap tilemap)
+    private IEnumerator MoveRoutine(List<path> paths, Tilemap tilemap, Action onComplete)
     {
         int directionBeforeCollision = direction;
 
@@ -89,6 +89,7 @@ public class CharacterVisual : MonoBehaviour, Iinteractable
         }
 
         UpdateStepAnimation(false);
+        onComplete?.Invoke();
     }
 
     private IEnumerator WalkStep(path step, Tilemap tilemap)

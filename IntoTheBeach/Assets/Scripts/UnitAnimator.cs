@@ -22,18 +22,35 @@ public class UnitAnimator : MonoBehaviour
     private void OnDisable()
     {
         BoardSyncTurnState.OnSyncStart -= PlayResults;
-    } 
+    }
 
     private void PlayResults(NetUnitResult[] results)
     {
-        foreach (var result in results)
-        {
-            if (!unitMap.TryGetValue(result.unitID, out var unit)) continue;
+        var movingResults = results.Where(r =>
+    unitMap.ContainsKey(r.unitID) && r.paths != null && r.paths.Length > 0).ToList();
 
+        if (movingResults.Count == 0)
+        {
+            TurnStateMachine.Instance.UpdateState();
+            return;
+        }
+
+        int remaining = movingResults.Count;
+
+        foreach (var result in movingResults)
+        {
+            unitMap.TryGetValue(result.unitID, out var unit);
             List<path> paths = result.paths.Select(p => p.ToPath()).ToList();
-            unit.ExecuteMovement(paths, saloonTiles);
+            unit.ExecuteMovement(paths, saloonTiles, () =>
+            {
+                remaining--;
+                Debug.Log("Animations remaing: " + remaining+" State: "+TurnStateMachine.Instance.currentState);
+                
+                if (remaining <= 0)
+                    TurnStateMachine.Instance.UpdateState();
+            });
         }
     }
 
-   
+
 }

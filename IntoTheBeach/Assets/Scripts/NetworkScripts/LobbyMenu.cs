@@ -34,6 +34,10 @@ public class LobbyMenu : MonoBehaviour
     {
         if (!transport) transport = FindAnyObjectByType<UnityTransport>();
         if (!networkManager) networkManager = FindAnyObjectByType<NetworkManager>();
+        if (networkManager.IsListening)
+        {
+            networkManager.Shutdown();
+        }
         string ip = GetIP();
         ushort port = GetPort();
         transport.SetConnectionData(ip, port);
@@ -70,6 +74,10 @@ public class LobbyMenu : MonoBehaviour
     {
         if (!transport) transport = FindAnyObjectByType<UnityTransport>();
         if (!networkManager) networkManager = FindAnyObjectByType<NetworkManager>();
+        if (networkManager.IsListening)
+        {
+            networkManager.Shutdown();
+        }
         ushort port = GetPort();
         transport.SetConnectionData("0.0.0.0", port);
         networkManager.StartHost();
@@ -89,4 +97,5 @@ public class LobbyMenu : MonoBehaviour
     {
         transform.parent.gameObject.SetActive(false);
     }
+ 
 }

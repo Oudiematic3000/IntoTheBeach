@@ -45,6 +45,7 @@ public class NetworkTurnManager : NetworkBehaviour
     [Rpc(SendTo.ClientsAndHost)]
     private void BroadcastResolvedTurnClientRpc(NetUnitResult[] results)
     {
+        Debug.Log("broadcasting results: "+results.Length);
         TurnStateMachine.Instance.currentState = new BoardSyncTurnState(TurnStateMachine.Instance, results);
     }
 }
