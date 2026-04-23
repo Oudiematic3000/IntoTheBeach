@@ -34,19 +34,23 @@ public class GridVisual : MonoBehaviour, Iinteractable
         Vector3Int tilePos = saloonTiles.WorldToCell(mousePos);
         Vector3 worldPos = saloonTiles.CellToWorld(tilePos);
         var currentSelection = InputManager.Instance.GetCurrentSelection();
+        //print(tilePos);
 
         if (InputManager.Instance.GetState() == InputManager.TurnStates.Moving)
         {
             if(!ghost) return;
             if (!HighlightedTiles.Contains(tilePos)) return;
             ghost.UpdatePosition(worldPos);
+            currentSelection.direction = InputManager.Instance.GetCursorDirectionFromCharacter(currentSelection, saloonTiles);
+            currentSelection.AnimUpdate();
+            
         }
         if (InputManager.Instance.GetState() == InputManager.TurnStates.Attacking)
         {
-            int direction = InputManager.Instance.GetCursorDirectionFromCharacter(currentSelection, saloonTiles);
-
             Vector3Int pos = currentSelection.GetTilePos(saloonTiles);
             if (currentSelection.ghost) pos = currentSelection.ghost.GetTilePos(saloonTiles);
+            int direction = InputManager.Instance.GetCursorDirectionFromCharacter(pos, saloonTiles);
+
             List<List<Vector3Int>> directionSeperatedList = AttackPattern.GetDirectionSeparatedList(currentSelection.unitClass.attackPattern.AttackTilesVisual(saloonTiles, obstacles, pos), pos);
 
             if (!directionSeperatedList[direction].Contains(tilePos))
@@ -62,16 +66,15 @@ public class GridVisual : MonoBehaviour, Iinteractable
             }
 
         }
-        //print(tilePos);
     }
     public List<Vector3Int> GetDirectionedAttackTiles(Vector3Int tilePos)
     {
-
+       
         var currentSelection = InputManager.Instance.GetCurrentSelection();
-        int direction = InputManager.Instance.GetCursorDirectionFromCharacter(currentSelection, saloonTiles);
 
         Vector3Int pos = currentSelection.GetTilePos(saloonTiles);
         if (currentSelection.ghost) pos = currentSelection.ghost.GetTilePos(saloonTiles);
+        int direction = InputManager.Instance.GetCursorDirectionFromCharacter(pos, saloonTiles);
 
         List<List<Vector3Int>> directionSeperatedList = AttackPattern.GetDirectionSeparatedList(currentSelection.unitClass.attackPattern.AttackTilesVisual(saloonTiles, obstacles, pos), pos);
 
@@ -116,7 +119,7 @@ public class GridVisual : MonoBehaviour, Iinteractable
         if (currentSelection == null) return;
         if (!HighlightedTiles.Contains(tilePos)) return;
        var attack= GetDirectionedAttackTiles(tilePos);
-
+        if(attack.Count == 0) return;
         foreach (var tile in attack)
         {
             saloonTiles.SetColor(tile, Color.darkRed);
@@ -140,13 +143,12 @@ public class GridVisual : MonoBehaviour, Iinteractable
         if (!HighlightedTiles.Contains(TargetPos)) return;
 
        // currentSelection.transform.position = saloonTiles.CellToWorld(TargetPos);
-        currentSelection.ghost=ghost;
-        ghost.owner = currentSelection;
+
         TurnStateMachine.Instance.currentTurnInfo.ghosts.Add(ghost);
         currentSelection.hasMoved = true;
         Debug.Log("DIRECTION: "+GetDirection(currentSelection.GetTilePos(saloonTiles), ghost.GetTilePos(saloonTiles)));
         currentSelection.direction=GetDirection(currentSelection.GetTilePos(saloonTiles), ghost.GetTilePos(saloonTiles));
-        currentSelection.AnimUpdate();
+        currentSelection.AnimUpdate(); 
         TurnStateMachine.Instance.currentTurnInfo.IncrementMoveCount(1);
         InputManager.Instance.SetState(InputManager.TurnStates.None);
         
@@ -210,6 +212,8 @@ public class GridVisual : MonoBehaviour, Iinteractable
         if (currentSelection == null) return;
         Vector3Int pos = currentSelection.GetTilePos(saloonTiles);
         ghost = InputManager.Instance.GetCurrentSelection().GenerateMoveGhost(pos);
+        currentSelection.ghost = ghost;
+        ghost.SetOwner(currentSelection);
 
         for (int x=pos.x-currentSelection.unitClass.moveRange; x <= pos.x + currentSelection.unitClass.moveRange; x++)
         {

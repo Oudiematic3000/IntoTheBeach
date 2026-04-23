@@ -20,15 +20,22 @@ public class CharacterVisual : MonoBehaviour, Iinteractable
     private TurnStateMachine turnState;
     public int unitID;
 
+    public event Action<Sprite> OnAnimUpdate;
+
     private void Start()
     {
         objRenderer = GetComponent<Renderer>();
         spriteRenderer = GetComponent<SpriteRenderer>();
         actions = FindAnyObjectByType<UIActions>();
          turnState = FindAnyObjectByType<TurnStateMachine>();
+        MoveToNearestTile();
 
     }
-
+    public void MoveToNearestTile()
+    {
+        Tilemap tilemap = GameObject.Find("FloorVisual").GetComponent<Tilemap>();
+        transform.position = tilemap.CellToWorld(GetTilePos(tilemap));
+    }
     private void OnEnable()
     {
         MovePlanTurnState.OnMovePlanStart += AnimUpdate;
@@ -196,6 +203,7 @@ public class CharacterVisual : MonoBehaviour, Iinteractable
         UnitAnimations.AnimState state = TurnStateMachine.Instance.GetAnimState();
 
         spriteRenderer.sprite = unitClass.animations.GetSpriteAnim(state, direction);
+        OnAnimUpdate?.Invoke(spriteRenderer.sprite);
     }
    public Vector3Int GetTilePos(Tilemap tilemap)
     {

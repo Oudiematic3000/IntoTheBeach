@@ -81,9 +81,21 @@ public class InputManager : MonoBehaviour
 
     private RaycastHit2D InteractMouse()
     {
+        LayerMask mask = LayerMask.NameToLayer("Unit");
+        int invertedMaskInt = ~(1<<mask);
+
         Vector3 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         Vector2 mousePos2D = new Vector2(mousePos.x, mousePos.y);
-        RaycastHit2D hit = Physics2D.Raycast(mousePos2D, Vector2.zero);
+        RaycastHit2D hit;
+        if (currentState == TurnStates.Attacking)
+        {
+             hit = Physics2D.Raycast(mousePos2D, Vector2.zero, invertedMaskInt);
+        }
+        else
+        {
+            hit = Physics2D.Raycast(mousePos2D, Vector2.zero);
+
+        }
         return hit;
     }
     public void HoverInteract() 
@@ -120,7 +132,7 @@ public class InputManager : MonoBehaviour
 
             hoverObject.OnPress(ray.point);
             }
-        
+     
     }
     public int GetCursorDirectionFromCharacter(CharacterVisual character, Tilemap tilemap)
     {
@@ -135,6 +147,25 @@ public class InputManager : MonoBehaviour
         if (Mathf.Abs(dx) >= Mathf.Abs(dy))
         {
             return dx < 0 ? 0 : 2; 
+        }
+        else
+        {
+            return dy < 0 ? 3 : 1;
+        }
+    }
+    public int GetCursorDirectionFromCharacter(Vector3Int pos, Tilemap tilemap)
+    {
+        var point = InteractMouse().point;
+
+        Vector3Int characterCell = pos;
+        Vector3Int mouseCell = tilemap.WorldToCell(point);
+
+        int dx = mouseCell.x - characterCell.x;
+        int dy = mouseCell.y - characterCell.y;
+
+        if (Mathf.Abs(dx) >= Mathf.Abs(dy))
+        {
+            return dx < 0 ? 0 : 2;
         }
         else
         {

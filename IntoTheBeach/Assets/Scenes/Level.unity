@@ -4948,10 +4948,10 @@ Camera:
   m_LensShift: {x: 0, y: 0}
   m_NormalizedViewPortRect:
     serializedVersion: 2
-    x: 0.22716945
-    y: 0.14058354
-    width: 0.5452067
-    height: 0.7161804
+    x: 0.048826292
+    y: 0.048393827
+    width: 0.9014085
+    height: 0.90112644
   near clip plane: 0.3
   far clip plane: 1000
   field of view: 60
@@ -5433,7 +5433,7 @@ GameObject:
   - component: {fileID: 1697876574}
   - component: {fileID: 1697876576}
   - component: {fileID: 1697876577}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: BrawlerLeftUp
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -6256,7 +6256,7 @@ GameObject:
   - component: {fileID: 2014543403}
   - component: {fileID: 2014543402}
   - component: {fileID: 2014543401}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: BrawlerLeftUp (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -6367,7 +6367,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_MaskInteraction: 0
-  m_Sprite: {fileID: 21300000, guid: 0c697e01456689a48a560fcbe63e15e4, type: 3}
+  m_Sprite: {fileID: 21300000, guid: d5bb03ab6e101084991b71255bb874f8, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -6386,7 +6386,7 @@ Transform:
   m_GameObject: {fileID: 2014543400}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -1.02, y: -2.48, z: 0}
+  m_LocalPosition: {x: -1.51, y: -2.5, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
