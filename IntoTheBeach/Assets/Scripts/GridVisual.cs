@@ -9,6 +9,8 @@ public class GridVisual : MonoBehaviour, Iinteractable
     public Tilemap saloonTiles, obstacles;
     public static event Action OnUnitMoved, OnUnitAttacked;
     public static event Action onMoveText;
+    public static event Action OnGridClick;
+    public static event Action OnResetPip;
     public List<Vector3Int> HighlightedTiles = new List<Vector3Int>();
     public List<Vector3Int> LockedAttackTiles = new List<Vector3Int>();
    
@@ -28,6 +30,10 @@ public class GridVisual : MonoBehaviour, Iinteractable
     {
         UIActions.OnMovement += HighlightMovableTiles;
         UIActions.OnAttack += HighlightAttackableTiles;
+    }
+    public static void resetPip() 
+    {
+        OnResetPip?.Invoke();
     }
     public void OnHover(Vector2 mousePos)
     {
@@ -107,8 +113,8 @@ public class GridVisual : MonoBehaviour, Iinteractable
         }
         else
         {
-           
-            currentSelection.RemoveOutline();
+
+            OnGridClick?.Invoke();
             InputManager.Instance.SetCurrentSelection(null);
         }
     }
@@ -117,7 +123,11 @@ public class GridVisual : MonoBehaviour, Iinteractable
     {
         var currentSelection = InputManager.Instance.GetCurrentSelection();
         if (currentSelection == null) return;
-        if (!HighlightedTiles.Contains(tilePos)) return;
+        if (!HighlightedTiles.Contains(tilePos))
+        {
+            OnGridClick?.Invoke();
+            return;
+        } 
        var attack= GetDirectionedAttackTiles(tilePos);
         if(attack.Count == 0) return;
         foreach (var tile in attack)
@@ -132,6 +142,7 @@ public class GridVisual : MonoBehaviour, Iinteractable
         ResetTiles();
         OnUnitAttacked?.Invoke();
         currentSelection.RemoveOutline();
+        OnGridClick?.Invoke();
         InputManager.Instance.SetState(InputManager.TurnStates.None);
 
     }
@@ -140,9 +151,13 @@ public class GridVisual : MonoBehaviour, Iinteractable
         var currentSelection = InputManager.Instance.GetCurrentSelection();
       
         if (currentSelection == null) return;
-        if (!HighlightedTiles.Contains(TargetPos)) return;
+        if (!HighlightedTiles.Contains(TargetPos)) 
+        {
+            OnGridClick?.Invoke();
+            return;
+        }
 
-       // currentSelection.transform.position = saloonTiles.CellToWorld(TargetPos);
+        // currentSelection.transform.position = saloonTiles.CellToWorld(TargetPos);
 
         TurnStateMachine.Instance.currentTurnInfo.ghosts.Add(ghost);
         currentSelection.hasMoved = true;

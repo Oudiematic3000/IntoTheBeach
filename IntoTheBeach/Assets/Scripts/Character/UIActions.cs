@@ -26,9 +26,11 @@ public class UIActions : MonoBehaviour
         CharacterVisual.OnMoveSelected += showMoveText;
         CharacterVisual.OnAttackSelected += ShowAttackText;
         InputManager.OnClickNothing += HideAll;
-        
+        GridVisual.OnGridClick += HideAll;
+        GridVisual.OnResetPip += ShowAllPips;
         GridVisual.OnUnitMoved += ShowUnitInfo;
         GridVisual.OnUnitMoved += HidePip;
+        GridVisual.OnUnitAttacked += HidePip;
         GridVisual.onMoveText += hideAllText;
     }
     private void OnDisable()
@@ -36,10 +38,14 @@ public class UIActions : MonoBehaviour
         CharacterVisual.OnClick -= SetSelectedCharacter;
         CharacterVisual.OnMoveSelected -= showMoveText;
         CharacterVisual.OnAttackSelected -= ShowAttackText;
+        GridVisual.OnGridClick -= HideAll;
+        GridVisual.OnResetPip -= ShowAllPips;
         InputManager.OnClickNothing -= HideAll;
         GridVisual.OnUnitMoved -= ShowUnitInfo;
         GridVisual.OnUnitMoved -= HidePip;
         GridVisual.onMoveText -= hideAllText;
+        GridVisual.OnUnitAttacked -= HidePip;
+
 
     }
     public void SetSelectedCharacter(CharacterVisual selectedCharacter)
@@ -51,8 +57,9 @@ public class UIActions : MonoBehaviour
     {
         TurnStateMachine.Instance.UpdateState();
         HideAll();
-       
-       
+
+        GridVisual.resetPip();
+
     }
 
     public void MoveButtonPressed() 
@@ -134,6 +141,7 @@ public class UIActions : MonoBehaviour
         attackButton.gameObject.SetActive(false);
         classUIHolder.SetActive(false);
         buttonsUIHolder.SetActive(false);
+       
     }
     private void showMoveText() 
     {
