@@ -107,7 +107,7 @@ public class UIActions : MonoBehaviour
         if (TurnStateMachine.Instance.currentState is MovePlanTurnState)
         {
             if (TurnStateMachine.Instance.currentTurnInfo.GetMoveCount() > 2) return;
-            pips[(pips.Length-1)-TurnStateMachine.Instance.currentTurnInfo.GetMoveCount()].SetActive(false);
+            pips[(pips.Length)-TurnStateMachine.Instance.currentTurnInfo.GetMoveCount()].SetActive(false);
         }else if(TurnStateMachine.Instance.currentState is AttackPlanTurnState)
         {
             pips[(pips.Length - 1) - TurnStateMachine.Instance.currentTurnInfo.GetAttackCount()].SetActive(false);
