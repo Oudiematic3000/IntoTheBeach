@@ -47,7 +47,19 @@ public class CharacterVisual : MonoBehaviour, Iinteractable
     public void OnPress(Vector2 mousePos)
     {
         OnClick?.Invoke(this);
-        var currentSelection = InputManager.Instance.GetCurrentSelection();
+        //var currentSelection = InputManager.Instance.GetCurrentSelection()
+        var previousSelection = InputManager.Instance.GetCurrentSelection();
+
+        if (previousSelection != null && previousSelection != this)
+        {
+            previousSelection.RemoveOutline();
+        }
+
+       
+        InputManager.Instance.SetCurrentSelection(this);
+
+       
+        ShowOutline();
 
 
         if (turnState.currentState is MovePlanTurnState)
@@ -62,16 +74,16 @@ public class CharacterVisual : MonoBehaviour, Iinteractable
        
         
         
-            currentSelection.ShowOutline();
+           //preSelection.ShowOutline();
 
 
     }
-    public void ExecuteMovement(List<path> paths, Tilemap tilemap)
+    public void ExecuteMovement(List<path> paths, Tilemap tilemap, Action onComplete = null)
     {
-        StartCoroutine(MoveRoutine(paths, tilemap));
+        StartCoroutine(MoveRoutine(paths, tilemap, onComplete));
     }
 
-    private IEnumerator MoveRoutine(List<path> paths, Tilemap tilemap)
+    private IEnumerator MoveRoutine(List<path> paths, Tilemap tilemap, Action onComplete)
     {
         int directionBeforeCollision = direction;
 
@@ -89,6 +101,7 @@ public class CharacterVisual : MonoBehaviour, Iinteractable
         }
 
         UpdateStepAnimation(false);
+        onComplete?.Invoke();
     }
 
     private IEnumerator WalkStep(path step, Tilemap tilemap)

@@ -1,0 +1,26 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a58a4bfadc06f0844adec9a760a6d097, type: 3}
+  m_Name: Bouncer Animations
+  m_EditorClassIdentifier: Assembly-CSharp::UnitAnimations
+  idleLeft: {fileID: 21300000, guid: a9970f57b4e61da4eb9397737f979126, type: 3}
+  idleRight: {fileID: 21300000, guid: ab7d466924f8b254e8161430fb03f941, type: 3}
+  idleTop: {fileID: 21300000, guid: 86246bf2d5eb96a45ba6c2845e9b0864, type: 3}
+  idleBottom: {fileID: 21300000, guid: e809a2c0477c265468db5b239d8593ea, type: 3}
+  walkLeft: {fileID: 21300000, guid: 0db46c78d1f260e43869ee06b101c9cc, type: 3}
+  walkRight: {fileID: 21300000, guid: b716d29e2cb446d4e836b965527f17e4, type: 3}
+  walkTop: {fileID: 21300000, guid: 7d77316479aaa334ca874a8afe611e5c, type: 3}
+  walkBottom: {fileID: 21300000, guid: 025b40cc2cab0ef49810c74ff7b13c55, type: 3}
+  attackLeft: {fileID: 21300000, guid: 7f064b734283d3d4ab2db3d1136aa274, type: 3}
+  attackRight: {fileID: 21300000, guid: c7030360be682e049b6e17521e1e7d0a, type: 3}
+  attackTop: {fileID: 21300000, guid: e2b7c54aba9d583408d28ac39308254b, type: 3}
+  attackBottom: {fileID: 21300000, guid: 5893be53dddb96b4bbee9f8bf1a03b56, type: 3}

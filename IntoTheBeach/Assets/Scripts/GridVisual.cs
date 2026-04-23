@@ -2,13 +2,15 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
+using static UnityEditor.PlayerSettings;
 
 public class GridVisual : MonoBehaviour, Iinteractable
 {
     public Tilemap saloonTiles, obstacles;
-    public static event Action OnUnitMoved;
+    public static event Action OnUnitMoved, OnUnitAttacked;
     public static event Action onMoveText;
     public List<Vector3Int> HighlightedTiles = new List<Vector3Int>();
+    public List<Vector3Int> LockedAttackTiles = new List<Vector3Int>();
    
     //CharacterVisual selectedUnit; TODO: Use event to update this rather than referencing singleton.
     UnitGhost ghost;
@@ -31,37 +33,103 @@ public class GridVisual : MonoBehaviour, Iinteractable
     {
         Vector3Int tilePos = saloonTiles.WorldToCell(mousePos);
         Vector3 worldPos = saloonTiles.CellToWorld(tilePos);
+        var currentSelection = InputManager.Instance.GetCurrentSelection();
+
         if (InputManager.Instance.GetState() == InputManager.TurnStates.Moving)
         {
             if(!ghost) return;
             if (!HighlightedTiles.Contains(tilePos)) return;
             ghost.UpdatePosition(worldPos);
         }
+        if (InputManager.Instance.GetState() == InputManager.TurnStates.Attacking)
+        {
+            int direction = InputManager.Instance.GetCursorDirectionFromCharacter(currentSelection, saloonTiles);
 
+            Vector3Int pos = currentSelection.GetTilePos(saloonTiles);
+            if (currentSelection.ghost) pos = currentSelection.ghost.GetTilePos(saloonTiles);
+            List<List<Vector3Int>> directionSeperatedList = AttackPattern.GetDirectionSeparatedList(currentSelection.unitClass.attackPattern.AttackTilesVisual(saloonTiles, obstacles, pos), pos);
+
+            if (!directionSeperatedList[direction].Contains(tilePos))
+            {
+                foreach (var tile in HighlightedTiles) saloonTiles.SetColor(tile, Color.darkRed);
+
+                return;
+            }
+            foreach (var tile in directionSeperatedList[direction])
+            {
+                saloonTiles.SetColor(tile, Color.darkGreen);
+
+            }
+
+        }
         //print(tilePos);
     }
+    public List<Vector3Int> GetDirectionedAttackTiles(Vector3Int tilePos)
+    {
 
+        var currentSelection = InputManager.Instance.GetCurrentSelection();
+        int direction = InputManager.Instance.GetCursorDirectionFromCharacter(currentSelection, saloonTiles);
+
+        Vector3Int pos = currentSelection.GetTilePos(saloonTiles);
+        if (currentSelection.ghost) pos = currentSelection.ghost.GetTilePos(saloonTiles);
+
+        List<List<Vector3Int>> directionSeperatedList = AttackPattern.GetDirectionSeparatedList(currentSelection.unitClass.attackPattern.AttackTilesVisual(saloonTiles, obstacles, pos), pos);
+
+
+        if (directionSeperatedList[direction].Contains(tilePos))
+        {
+            return directionSeperatedList[direction];
+        }
+        else
+        {
+            return new List<Vector3Int>();
+        }
+
+
+    }
     public void OnPress(Vector2 mousePos)
     {
         Vector3Int tilePos = saloonTiles.WorldToCell(mousePos);
+
         var currentSelection = InputManager.Instance.GetCurrentSelection();
-       
-       
-        if (InputManager.Instance.GetState() == InputManager.TurnStates.Moving) 
+        if (currentSelection == null) return;
+
+        if (InputManager.Instance.GetState() == InputManager.TurnStates.Moving)
         {
-           
             MoveUnit(tilePos);
         }
-      
-
+        else if (InputManager.Instance.GetState() == InputManager.TurnStates.Attacking)
+        {
+            Unitattack(tilePos);
+        }
+        else
+        {
+           
+            currentSelection.RemoveOutline();
+            InputManager.Instance.SetCurrentSelection(null);
+        }
     }
  
-    public void Unitattack(Vector3Int targetTile) 
+    public void Unitattack(Vector3Int tilePos) 
     {
         var currentSelection = InputManager.Instance.GetCurrentSelection();
-        if (currentSelection != null) return;
+        if (currentSelection == null) return;
+        if (!HighlightedTiles.Contains(tilePos)) return;
+       var attack= GetDirectionedAttackTiles(tilePos);
 
+        foreach (var tile in attack)
+        {
+            saloonTiles.SetColor(tile, Color.darkRed);
+            LockedAttackTiles.Add(tile);
+        }
 
+        currentSelection.hasAttacked = true;
+        //currentSelection.AnimUpdate();
+        TurnStateMachine.Instance.currentTurnInfo.IncrementAttackCount(1);
+        ResetTiles();
+        OnUnitAttacked?.Invoke();
+        currentSelection.RemoveOutline();
+        InputManager.Instance.SetState(InputManager.TurnStates.None);
 
     }
     public void MoveUnit(Vector3Int TargetPos) 
@@ -90,11 +158,24 @@ public class GridVisual : MonoBehaviour, Iinteractable
     }
     private void ResetTiles() 
     {
-        foreach (var tile in HighlightedTiles) 
+        for (int i = HighlightedTiles.Count-1;i>=0;i--) 
         {
-            saloonTiles.SetColor(tile, Color.white);
-        }
-        HighlightedTiles.Clear();
+            if (TurnStateMachine.Instance.currentState is AttackPlanTurnState)
+            {
+                if (LockedAttackTiles.Contains(HighlightedTiles[i])) continue;
+            }
+            else
+            {
+                if (LockedAttackTiles.Contains(HighlightedTiles[i]))
+                    LockedAttackTiles.Remove(HighlightedTiles[i]);
+            }
+
+                saloonTiles.SetColor(HighlightedTiles[i], Color.white);
+           
+            HighlightedTiles.RemoveAt(i);
+
+        
+        }   
         if (ghost)
         {
             ghost=null;
@@ -115,10 +196,10 @@ public class GridVisual : MonoBehaviour, Iinteractable
         List<Vector3Int> tilesToHighlight = AttackPattern.GetAllAttackHighlightTiles(currentSelection.unitClass.attackPattern.AttackTilesVisual(saloonTiles, obstacles, pos), pos, obstacles);
         foreach (var tile in tilesToHighlight)
         {
-            saloonTiles.SetColor(tile, Color.darkGreen);
-
+            saloonTiles.SetColor(tile, Color.darkRed);
+            highlightedTiles.Add(tile);
         }
-
+        HighlightedTiles = highlightedTiles;
 
     }
     public void HighlightMovableTiles()

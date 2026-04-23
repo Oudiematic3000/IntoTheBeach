@@ -128,6 +128,7 @@ public class UIActions : MonoBehaviour
     {
         hideAllText();
         var currentselection = InputManager.Instance.GetCurrentSelection();
+        if(currentselection != null)
         currentselection.RemoveOutline();
         moveButton.gameObject.SetActive(false);
         attackButton.gameObject.SetActive(false);

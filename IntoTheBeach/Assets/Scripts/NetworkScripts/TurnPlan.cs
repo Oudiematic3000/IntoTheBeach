@@ -12,6 +12,7 @@ public class UnitPlan
 {
     public int unitID;
     public MoveAction moveAction;
+    public AttackAction attackAction;
 }
 
 public class MoveAction
@@ -99,6 +100,22 @@ public class MoveAction
             pathsResult += path.move;
                 }
         resultant = startPos + pathsResult;
+    }
+}
+
+public class AttackAction
+{
+    public Vector3Int unitPos;
+    public AttackPattern attackPattern;
+    public int direction;
+    public int unitID;
+
+    public AttackAction(Vector3Int unitPos, AttackPattern attackPattern, int direction, int unitID)
+    {
+        this.unitPos = unitPos;
+        this.attackPattern = attackPattern;
+        this.direction = direction;
+        this.unitID = unitID;
     }
 }
 

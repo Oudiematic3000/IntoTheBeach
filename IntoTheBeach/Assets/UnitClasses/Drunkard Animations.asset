@@ -1,0 +1,26 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a58a4bfadc06f0844adec9a760a6d097, type: 3}
+  m_Name: Drunkard Animations
+  m_EditorClassIdentifier: Assembly-CSharp::UnitAnimations
+  idleLeft: {fileID: 21300000, guid: 69d67482f4b36504c9f77a74ed919d35, type: 3}
+  idleRight: {fileID: 21300000, guid: 26513c0cda58c9d47965de3ea753afcc, type: 3}
+  idleTop: {fileID: 21300000, guid: 5225a8fa7914eab4e9373f6e8d9efc51, type: 3}
+  idleBottom: {fileID: 21300000, guid: 7cbf87719547653438808a04a1ae6579, type: 3}
+  walkLeft: {fileID: 21300000, guid: 40ab325e5cf83ac4da752a0d8963054f, type: 3}
+  walkRight: {fileID: 21300000, guid: 14e7417f192c25040a7989603aea4833, type: 3}
+  walkTop: {fileID: 21300000, guid: c1ca942c763e343488fcdf539c549c56, type: 3}
+  walkBottom: {fileID: 21300000, guid: a72a515488418f040ac4cfc31a2b812b, type: 3}
+  attackLeft: {fileID: 21300000, guid: 650f980dfff3f204db252fc7a3714fc3, type: 3}
+  attackRight: {fileID: 21300000, guid: c7e56f9b248f0db419ff5a78a8277eec, type: 3}
+  attackTop: {fileID: 21300000, guid: 44cd0dfaa55a3984896670280179e7b0, type: 3}
+  attackBottom: {fileID: 21300000, guid: c0c7c7219663edf42b7fdf1a88b1debd, type: 3}

@@ -13,8 +13,12 @@ public class TurnSubmitter : MonoBehaviour
     }
     public void SubmitCurrentPlan()
     {
-        var plans = BuildNetPlans(TurnStateMachine.Instance.currentTurnInfo);
-        NetworkTurnManager.Instance.SubmitTurnPlanServerRpc(plans);
+        LeanTween.delayedCall(0f, () =>
+        {
+            var plans = BuildNetPlans(TurnStateMachine.Instance.currentTurnInfo);
+            NetworkTurnManager.Instance.SubmitTurnPlanServerRpc(plans);
+        });
+
     }
 
     private NetUnitPlan[] BuildNetPlans(TurnInfo turnInfo)

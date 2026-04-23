@@ -1,0 +1,28 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e9351d6d47506e4cbfe0551240eb57e, type: 3}
+  m_Name: Drunkard
+  m_EditorClassIdentifier: Assembly-CSharp::UnitClass
+  moveRange: 2
+  health: 5
+  damage: 1
+  weight: 1
+  attackPattern:
+    rid: 351225969909432578
+  unitGhost: {fileID: 9012563408507327037, guid: 455f3842a6dde624d9eb166e082d5bb4, type: 3}
+  animations: {fileID: 11400000, guid: 67e3f09af94bdfc48becfe3c30d9e91a, type: 2}
+  references:
+    version: 2
+    RefIds:
+    - rid: 351225969909432578
+      type: {class: GunslingerAttackPattern, ns: , asm: Assembly-CSharp}
+      data: 
