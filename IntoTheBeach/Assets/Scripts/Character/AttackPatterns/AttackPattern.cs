@@ -29,7 +29,15 @@ public abstract class AttackPattern
         }
         return tiles;
     }
-
+    public static List<List<Vector3Int>> GetDirectionSeparatedList(List<Vector3Int> absoluteTiles, Vector3Int unitPosition)
+    {
+        List<List<Vector3Int>> directionSeperatedList = new List<List<Vector3Int>>();
+        for(int i = 0; i < 4; i++)
+        {
+            directionSeperatedList.Add(GetRotatedAttackTiles(absoluteTiles, unitPosition, i));
+        }
+        return directionSeperatedList;
+    }
     public static List<Vector3Int> GetAllAttackHighlightTiles(List<Vector3Int> absoluteTiles, Vector3Int unitPosition, Tilemap obstacles)               
     {
         var allTiles = new HashSet<Vector3Int>();

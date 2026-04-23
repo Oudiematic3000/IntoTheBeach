@@ -124,10 +124,10 @@ public class InputManager : MonoBehaviour
     }
     public int GetCursorDirectionFromCharacter(CharacterVisual character, Tilemap tilemap)
     {
-        Vector3 mouseWorldPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        var point = InteractMouse().point;
 
-        Vector3Int characterCell = tilemap.WorldToCell(character.transform.position);
-        Vector3Int mouseCell = tilemap.WorldToCell(mouseWorldPos);
+        Vector3Int characterCell = character.GetTilePos(tilemap);
+        Vector3Int mouseCell = tilemap.WorldToCell(point);
 
         int dx = mouseCell.x - characterCell.x;
         int dy = mouseCell.y - characterCell.y;
