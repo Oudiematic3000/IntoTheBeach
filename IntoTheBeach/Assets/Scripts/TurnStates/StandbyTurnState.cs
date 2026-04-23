@@ -11,8 +11,8 @@ public class StandbyTurnState : TurnState
 
     public override void StartState()
     {
-        OnStandbyStart?.Invoke();
         Debug.Log("Standing By...");
+        OnStandbyStart?.Invoke();
     }
 
     public override void UpdateState()

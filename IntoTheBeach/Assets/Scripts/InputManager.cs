@@ -1,6 +1,7 @@
 using System;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.Tilemaps;
 
 public class InputManager : MonoBehaviour
 {
@@ -120,6 +121,25 @@ public class InputManager : MonoBehaviour
             hoverObject.OnPress(ray.point);
             }
         
+    }
+    public int GetCursorDirectionFromCharacter(CharacterVisual character, Tilemap tilemap)
+    {
+        var point = InteractMouse().point;
+
+        Vector3Int characterCell = character.GetTilePos(tilemap);
+        Vector3Int mouseCell = tilemap.WorldToCell(point);
+
+        int dx = mouseCell.x - characterCell.x;
+        int dy = mouseCell.y - characterCell.y;
+
+        if (Mathf.Abs(dx) >= Mathf.Abs(dy))
+        {
+            return dx < 0 ? 0 : 2; 
+        }
+        else
+        {
+            return dy < 0 ? 3 : 1;
+        }
     }
 }
 public interface Iinteractable

@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
+using static UnityEditor.PlayerSettings;
 
 public class GridVisual : MonoBehaviour, Iinteractable
 {
@@ -37,7 +38,32 @@ public class GridVisual : MonoBehaviour, Iinteractable
             if (!HighlightedTiles.Contains(tilePos)) return;
             ghost.UpdatePosition(worldPos);
         }
+        if (InputManager.Instance.GetState() == InputManager.TurnStates.Attacking)
+        {
+            var currentSelection = InputManager.Instance.GetCurrentSelection();
+            int direction = InputManager.Instance.GetCursorDirectionFromCharacter(currentSelection, saloonTiles);
 
+            Vector3Int pos = currentSelection.GetTilePos(saloonTiles);
+
+            if (currentSelection.ghost)
+            {
+                pos = currentSelection.ghost.GetTilePos(saloonTiles);
+            }
+            List<List<Vector3Int>> directionSeperatedList = AttackPattern.GetDirectionSeparatedList(currentSelection.unitClass.attackPattern.AttackTilesVisual(saloonTiles, obstacles, pos), pos);
+
+            if (!directionSeperatedList[direction].Contains(tilePos))
+            {
+                foreach(var tile in HighlightedTiles) saloonTiles.SetColor(tile, Color.darkRed);
+
+                return;
+            }
+            foreach (var tile in directionSeperatedList[direction])
+            {
+                saloonTiles.SetColor(tile, Color.darkGreen);
+
+            }
+
+        }
         //print(tilePos);
     }
 
@@ -52,8 +78,10 @@ public class GridVisual : MonoBehaviour, Iinteractable
            
             MoveUnit(tilePos);
         }
-      
+        if (InputManager.Instance.GetState() == InputManager.TurnStates.Attacking)
+        {
 
+        }
     }
  
     public void Unitattack(Vector3Int targetTile) 
@@ -115,10 +143,10 @@ public class GridVisual : MonoBehaviour, Iinteractable
         List<Vector3Int> tilesToHighlight = AttackPattern.GetAllAttackHighlightTiles(currentSelection.unitClass.attackPattern.AttackTilesVisual(saloonTiles, obstacles, pos), pos, obstacles);
         foreach (var tile in tilesToHighlight)
         {
-            saloonTiles.SetColor(tile, Color.darkGreen);
-
+            saloonTiles.SetColor(tile, Color.darkRed);
+            highlightedTiles.Add(tile);
         }
-
+        HighlightedTiles = highlightedTiles;
 
     }
     public void HighlightMovableTiles()
