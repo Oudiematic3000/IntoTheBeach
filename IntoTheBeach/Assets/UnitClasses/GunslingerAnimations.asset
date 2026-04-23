@@ -12,15 +12,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a58a4bfadc06f0844adec9a760a6d097, type: 3}
   m_Name: GunslingerAnimations
   m_EditorClassIdentifier: Assembly-CSharp::UnitAnimations
-  idleLeft: {fileID: 21300000, guid: 9b4b846e33501af44891e6f8b7387cc0, type: 3}
-  idleRight: {fileID: 21300000, guid: 66de2e75db27ce440954c5773d9d12df, type: 3}
-  idleTop: {fileID: 21300000, guid: 0c697e01456689a48a560fcbe63e15e4, type: 3}
-  idleBottom: {fileID: 21300000, guid: c84bfc9d53d6aad4c847162e4d7f1756, type: 3}
-  walkLeft: {fileID: 21300000, guid: 9b4b846e33501af44891e6f8b7387cc0, type: 3}
-  walkRight: {fileID: 21300000, guid: 66de2e75db27ce440954c5773d9d12df, type: 3}
-  walkTop: {fileID: 21300000, guid: 0c697e01456689a48a560fcbe63e15e4, type: 3}
-  walkBottom: {fileID: 21300000, guid: c84bfc9d53d6aad4c847162e4d7f1756, type: 3}
-  attackLeft: {fileID: 0}
-  attackRight: {fileID: 0}
-  attackTop: {fileID: 0}
-  attackBottom: {fileID: 0}
+  idleLeft: {fileID: 21300000, guid: 4627b75a27e19564f8f302569ee832f5, type: 3}
+  idleRight: {fileID: 21300000, guid: d5bb03ab6e101084991b71255bb874f8, type: 3}
+  idleTop: {fileID: 21300000, guid: 7c01d6612caf6fe43a4fe98bf225dada, type: 3}
+  idleBottom: {fileID: 21300000, guid: f617ca238433c7d4298bdd8805f2f546, type: 3}
+  walkLeft: {fileID: 21300000, guid: b0d764a0a8dbdfd44a5af4ea786181db, type: 3}
+  walkRight: {fileID: 21300000, guid: 8e2eba1ae5e226f48addec265eeca91c, type: 3}
+  walkTop: {fileID: 21300000, guid: bea9c8f564cef0a4c9a47b17e7975100, type: 3}
+  walkBottom: {fileID: 21300000, guid: 224203ddcbfc51c449f117d084616579, type: 3}
+  attackLeft: {fileID: 21300000, guid: f5262c8734bbea54db2051fdc4fd5691, type: 3}
+  attackRight: {fileID: 21300000, guid: 4b2b06ffb09a7f94c8c58ee401ef028f, type: 3}
+  attackTop: {fileID: 21300000, guid: b618039cbe5721f4a842ae9483732187, type: 3}
+  attackBottom: {fileID: 21300000, guid: c8f38fa6d8b6b1e499db115d97060ad8, type: 3}
