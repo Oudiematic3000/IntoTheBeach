@@ -90,17 +90,23 @@ public class GridVisual : MonoBehaviour, Iinteractable
     public void OnPress(Vector2 mousePos)
     {
         Vector3Int tilePos = saloonTiles.WorldToCell(mousePos);
+
         var currentSelection = InputManager.Instance.GetCurrentSelection();
-       
-       
-        if (InputManager.Instance.GetState() == InputManager.TurnStates.Moving) 
+        if (currentSelection == null) return;
+
+        if (InputManager.Instance.GetState() == InputManager.TurnStates.Moving)
         {
-           
             MoveUnit(tilePos);
         }
-        if (InputManager.Instance.GetState() == InputManager.TurnStates.Attacking)
+        else if (InputManager.Instance.GetState() == InputManager.TurnStates.Attacking)
         {
             Unitattack(tilePos);
+        }
+        else
+        {
+           
+            currentSelection.RemoveOutline();
+            InputManager.Instance.SetCurrentSelection(null);
         }
     }
  

@@ -47,7 +47,19 @@ public class CharacterVisual : MonoBehaviour, Iinteractable
     public void OnPress(Vector2 mousePos)
     {
         OnClick?.Invoke(this);
-        var currentSelection = InputManager.Instance.GetCurrentSelection();
+        //var currentSelection = InputManager.Instance.GetCurrentSelection()
+        var previousSelection = InputManager.Instance.GetCurrentSelection();
+
+        if (previousSelection != null && previousSelection != this)
+        {
+            previousSelection.RemoveOutline();
+        }
+
+       
+        InputManager.Instance.SetCurrentSelection(this);
+
+       
+        ShowOutline();
 
 
         if (turnState.currentState is MovePlanTurnState)
@@ -62,7 +74,7 @@ public class CharacterVisual : MonoBehaviour, Iinteractable
        
         
         
-            currentSelection.ShowOutline();
+           //preSelection.ShowOutline();
 
 
     }
