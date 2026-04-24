@@ -15,7 +15,9 @@ public class CharacterVisual : MonoBehaviour, Iinteractable
     public bool hasMoved, hasAttacked;
     private Renderer objRenderer;
     private SpriteRenderer spriteRenderer;
-    public GameObject[] hearts;
+    public int health = 0;
+    [SerializeField] Sprite[] hearts, OppHearts;
+    [SerializeField] SpriteRenderer heartObject;
     public int direction;
     private UIActions actions;
     private TurnStateMachine turnState;
@@ -31,7 +33,8 @@ public class CharacterVisual : MonoBehaviour, Iinteractable
         actions = FindAnyObjectByType<UIActions>();
          turnState = FindAnyObjectByType<TurnStateMachine>();
         MoveToNearestTile();
-
+        health = unitClass.health;
+        SetHearts(unitClass.health);
     }
     public void MoveToNearestTile()
     {
@@ -42,6 +45,7 @@ public class CharacterVisual : MonoBehaviour, Iinteractable
     {
         MovePlanTurnState.OnMovePlanStart += AnimUpdate;
         AttackPlanTurnState.OnAttackPlanStart += AnimUpdate;
+        AttackPlanTurnState.OnAttackPlanStart += DebugID;
 
     }
     private void OnDisable()
@@ -53,6 +57,28 @@ public class CharacterVisual : MonoBehaviour, Iinteractable
     {
     }
 
+    public void SetHearts(int health)
+    {
+        if (teamIndex == PlayerData.Local.TeamIndex.Value)
+        {
+            heartObject.sprite = hearts[health - 1];
+        }
+        else
+        {
+            heartObject.sprite = OppHearts[health - 1];
+
+        }
+    }
+    public void TakeDamage(int damage)
+    {
+        health-=damage;
+        SetHearts(health);
+    }
+
+    void DebugID()
+    {
+        Debug.Log(unitClass.name + " ID: " + unitID.ToString());
+    }
     public void OnPress(Vector2 mousePos)
     {
         OnClick?.Invoke(this);

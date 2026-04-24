@@ -5,6 +5,7 @@ using UnityEngine;
 public class TurnResolver
 {
     private GridState gridState;
+    Dictionary<int,int> pendingDamage = new Dictionary<int, int>();
 
     public TurnResolver(GridState gridState)
     {
@@ -18,7 +19,16 @@ public class TurnResolver
 
         foreach (var plan in allPlans)
         {
-            workingMoves[plan.unitID] = plan.ToMoveAction();
+            if (plan.hasMoveAction)
+            {
+                workingMoves[plan.unitID] = plan.ToMoveAction();
+            }
+            else
+            {
+                Vector3Int currentPos = gridState.GetUnitPosition(plan.unitID) ?? Vector3Int.zero;
+                workingMoves[plan.unitID] = new MoveAction(currentPos, currentPos);
+            }
+
             if (plan.hasAttackAction)
                 workingAttacks[plan.unitID] = plan.ToAttackAction();
         }
@@ -30,7 +40,8 @@ public class TurnResolver
         return workingMoves.Select(kvp => NetUnitResult.From(
             kvp.Key,
             kvp.Value,
-            workingAttacks.TryGetValue(kvp.Key, out var attack) ? attack : null
+            workingAttacks.TryGetValue(kvp.Key, out var attack) ? attack : null,
+            pendingDamage.TryGetValue(kvp.Key, out int dmg) ? dmg : 0
         )).ToArray();
     }
 
@@ -42,7 +53,6 @@ public class TurnResolver
 
     private void ResolveAttacks(Dictionary<int, MoveAction> moves, Dictionary<int, AttackAction> attacks)
     {
-        var pendingDamage = new Dictionary<int, int>();
 
         foreach (var kvp in attacks)
         {

@@ -25,6 +25,11 @@ public class UnitGhost : MonoBehaviour
         Debug.Log("Ghost Owner: "+owner);
         owner.OnAnimUpdate += AnimUpdate;
     }
+    private void OnDestroy()
+    {
+        owner.OnAnimUpdate -= AnimUpdate;
+
+    }
     public void UpdatePosition(Vector3 pos)
     {
         transform.position = pos;

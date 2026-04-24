@@ -23,13 +23,25 @@ public class GameManager : NetworkBehaviour
     public override void OnNetworkSpawn()
     {
         if (IsServer)
+        {
             InitialiseMatch();
+            NetworkManager.Singleton.OnClientConnectedCallback += HandleClientConnected;
+
+        }
     }
 
-
+    public override void OnNetworkDespawn()
+    {
+        if (IsServer && NetworkManager.Singleton != null)
+        {
+            NetworkManager.Singleton.OnClientConnectedCallback -= HandleClientConnected;
+        }
+    }
     private void InitialiseMatch()
     {
         var allVisuals = FindObjectsByType<CharacterVisual>(FindObjectsSortMode.None);
+        var syncDataList = new List<UnitSyncData>(); 
+
         var players = NetworkManager.Singleton.ConnectedClientsList
             .Select(c => c.PlayerObject?.GetComponent<PlayerData>())
             .Where(pd => pd != null)
@@ -38,24 +50,87 @@ public class GameManager : NetworkBehaviour
         foreach (var visual in allVisuals)
         {
             int unitID = nextUnitID++;
-            visual.unitID = unitID;  
+
+            visual.unitID = unitID;
             unitVisuals[unitID] = visual;
 
             PlayerData owner = players.FirstOrDefault(p => p.TeamIndex.Value == visual.teamIndex);
             if (owner != null)
                 owner.RegisterUnit(unitID);
 
-            GridState.RegisterUnit(unitID, visual.GetTilePos(floorTilemap), visual.unitClass.health);
+            Vector3Int tilePos = visual.GetTilePos(floorTilemap);
+
+            GridState.RegisterUnit(unitID, tilePos, visual.unitClass.health);
+
+            syncDataList.Add(new UnitSyncData { tilePos = tilePos, unitID = unitID });
+        }
+
+        SyncUnitsClientRpc(syncDataList.ToArray());
+    }
+
+    [ClientRpc]
+    private void SyncUnitsClientRpc(UnitSyncData[] syncDataArray, ClientRpcParams clientRpcParams = default)
+    {
+        if (IsServer) return;
+
+        var allVisuals = FindObjectsByType<CharacterVisual>(FindObjectsSortMode.None);
+
+        foreach (var syncData in syncDataArray)
+        {
+            // The client finds the matching visual using the grid position
+            var visual = allVisuals.FirstOrDefault(v => v.GetTilePos(floorTilemap) == syncData.tilePos);
+
+            if (visual != null)
+            {
+                // Assign the server-mandated ID to the client's local visual
+                visual.unitID = syncData.unitID;
+                unitVisuals[syncData.unitID] = visual;
+            }
         }
     }
 
+    private void HandleClientConnected(ulong clientId)
+    {
+        if (clientId == NetworkManager.ServerClientId) return;
 
+        var syncDataList = new List<UnitSyncData>();
+
+        foreach (var kvp in unitVisuals)
+        {
+            int unitID = kvp.Key;
+            CharacterVisual visual = kvp.Value;
+            Vector3Int tilePos = visual.GetTilePos(floorTilemap);
+
+            syncDataList.Add(new UnitSyncData { tilePos = tilePos, unitID = unitID });
+        }
+
+        ClientRpcParams clientRpcParams = new ClientRpcParams
+        {
+            Send = new ClientRpcSendParams
+            {
+                TargetClientIds = new ulong[] { clientId }
+            }
+        };
+
+        SyncUnitsClientRpc(syncDataList.ToArray(), clientRpcParams);
+    }
     public CharacterVisual GetVisual(int unitID)
     {
         return unitVisuals.TryGetValue(unitID, out var visual) ? visual : null;
     }
 
     public IReadOnlyDictionary<int, CharacterVisual> GetAllVisuals() => unitVisuals;
+}
+public struct UnitSyncData : INetworkSerializable
+{
+    public Vector3Int tilePos;
+    public int unitID;
+
+    public void NetworkSerialize<T>(BufferSerializer<T> serializer) where T : IReaderWriter
+    {
+        serializer.SerializeValue(ref tilePos);
+        serializer.SerializeValue(ref unitID);
+    }
 }
 public class GridState
 {

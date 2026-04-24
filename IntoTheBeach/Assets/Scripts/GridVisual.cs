@@ -25,11 +25,13 @@ public class GridVisual : MonoBehaviour, Iinteractable
     {
         UIActions.OnMovement -= HighlightMovableTiles;
         UIActions.OnAttack -= HighlightAttackableTiles;
+        StandbyTurnState.OnStandbyStart -= ResetTiles;
     }
     private void OnEnable()
     {
         UIActions.OnMovement += HighlightMovableTiles;
         UIActions.OnAttack += HighlightAttackableTiles;
+        StandbyTurnState.OnStandbyStart += ResetTiles;
     }
     public static void resetPip() 
     {
@@ -180,29 +182,36 @@ public class GridVisual : MonoBehaviour, Iinteractable
         currentSelection.RemoveOutline();
        onMoveText?.Invoke();
     }
-    private void ResetTiles() 
+    private void ResetTiles()
     {
-        for (int i = HighlightedTiles.Count-1;i>=0;i--) 
+        bool isAttackState = TurnStateMachine.Instance.currentState is AttackPlanTurnState;
+
+        for (int i = HighlightedTiles.Count - 1; i >= 0; i--)
         {
-            if (TurnStateMachine.Instance.currentState is AttackPlanTurnState)
+            var tile = HighlightedTiles[i];
+
+            if (isAttackState && LockedAttackTiles.Contains(tile))
             {
-                if (LockedAttackTiles.Contains(HighlightedTiles[i])) continue;
-            }
-            else
-            {
-                if (LockedAttackTiles.Contains(HighlightedTiles[i]))
-                    LockedAttackTiles.Remove(HighlightedTiles[i]);
+                continue;
             }
 
-                saloonTiles.SetColor(HighlightedTiles[i], Color.white);
-           
+            saloonTiles.SetColor(tile, Color.white);
             HighlightedTiles.RemoveAt(i);
+        }
 
-        
-        }   
+        if (!isAttackState)
+        {
+            foreach (var lockedTile in LockedAttackTiles)
+            {
+                saloonTiles.SetColor(lockedTile, Color.white);
+            }
+
+            LockedAttackTiles.Clear();
+        }
+
         if (ghost)
         {
-            ghost=null;
+            ghost = null;
         }
     }
     public void HighlightAttackableTiles() 
