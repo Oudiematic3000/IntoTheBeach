@@ -24,6 +24,7 @@ public class TurnResolver
         }
 
         ResolveCollisions(workingMoves);
+        ApplyMovesToGridState(workingMoves);
         ResolveAttacks(workingMoves, workingAttacks);
 
         return workingMoves.Select(kvp => NetUnitResult.From(
@@ -31,6 +32,43 @@ public class TurnResolver
             kvp.Value,
             workingAttacks.TryGetValue(kvp.Key, out var attack) ? attack : null
         )).ToArray();
+    }
+
+    private void ApplyMovesToGridState(Dictionary<int, MoveAction> moves)
+    {
+        foreach (var kvp in moves)
+            gridState.UpdateUnitPosition(kvp.Key, kvp.Value.startPos, kvp.Value.resultant);
+    }
+
+    private void ResolveAttacks(Dictionary<int, MoveAction> moves, Dictionary<int, AttackAction> attacks)
+    {
+        var pendingDamage = new Dictionary<int, int>();
+
+        foreach (var kvp in attacks)
+        {
+            int attackerID = kvp.Key;
+            AttackAction attack = kvp.Value;
+
+            Vector3Int attackerPos = moves[attackerID].resultant;
+
+            List<Vector3Int> hitTiles = attack.attackPattern.GetHitTiles(gridState, attackerPos, attack.direction);
+
+            foreach (var tile in hitTiles)
+            {
+                int? hitUnitID = gridState.GetUnitAtPosition(tile);
+                if (hitUnitID.HasValue)
+                {
+                    if (!pendingDamage.ContainsKey(hitUnitID.Value))
+                        pendingDamage[hitUnitID.Value] = 0;
+                    pendingDamage[hitUnitID.Value]++;
+                }
+
+                gridState.TriggerAttackReaction(tile, attackerID);
+            }
+        }
+
+        foreach (var kvp in pendingDamage)
+            gridState.ApplyDamage(kvp.Key, kvp.Value);
     }
 
     private void ResolveCollisions(Dictionary<int, MoveAction> moves)
@@ -47,11 +85,6 @@ public class TurnResolver
             if (kvp.Value.Count <= 1) continue;
             ResolveContestedTile(kvp.Key, kvp.Value, moves);
         }
-    }
-
-    private void ResolveAttacks(Dictionary<int, MoveAction> moves, Dictionary<int, AttackAction> attacks)
-    {
-
     }
 
     private void ResolveContestedTile(Vector3Int contestedTile, List<int> unitIDs, Dictionary<int, MoveAction> plans)

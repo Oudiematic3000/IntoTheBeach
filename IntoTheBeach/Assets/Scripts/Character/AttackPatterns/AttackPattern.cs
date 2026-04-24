@@ -7,6 +7,7 @@ public abstract class AttackPattern
 {
     public abstract int TypeID { get; } 
     public abstract List<Vector3Int> AttackTilesVisual(Tilemap floor, Tilemap obstacles, Vector3Int position);
+    public abstract List<Vector3Int> GetHitTiles(GridState gridState, Vector3Int position, int direction);
     public static Vector3Int RotateAroundPivot(Vector3Int tile, Vector3Int pivot, int rotation)
     {
         Vector3Int offset = tile - pivot;

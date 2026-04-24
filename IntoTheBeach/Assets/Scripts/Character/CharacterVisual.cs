@@ -15,10 +15,12 @@ public class CharacterVisual : MonoBehaviour, Iinteractable
     public bool hasMoved, hasAttacked;
     private Renderer objRenderer;
     private SpriteRenderer spriteRenderer;
+    public GameObject[] hearts;
     public int direction;
     private UIActions actions;
     private TurnStateMachine turnState;
     public int unitID;
+    public int teamIndex;
 
     public event Action<Sprite> OnAnimUpdate;
 

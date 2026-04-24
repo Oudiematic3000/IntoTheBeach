@@ -4949,9 +4949,9 @@ Camera:
   m_NormalizedViewPortRect:
     serializedVersion: 2
     x: 0.048826292
-    y: 0.04841402
+    y: 0.048393827
     width: 0.9014085
-    height: 0.9015025
+    height: 0.90112644
   near clip plane: 0.3
   far clip plane: 1000
   field of view: 60
@@ -5568,7 +5568,8 @@ MonoBehaviour:
   hasMoved: 0
   hasAttacked: 0
   direction: 0
-  unitID: 1
+  unitID: 0
+  teamIndex: 0
 --- !u!1 &1744967658
 GameObject:
   m_ObjectHideFlags: 0
@@ -6281,6 +6282,7 @@ MonoBehaviour:
   hasAttacked: 0
   direction: 0
   unitID: 0
+  teamIndex: 1
 --- !u!70 &2014543402
 CapsuleCollider2D:
   m_ObjectHideFlags: 0
@@ -6680,18 +6682,14 @@ PrefabInstance:
       propertyPath: GlobalObjectIdHash
       value: 3985107333
       objectReference: {fileID: 0}
-    - target: {fileID: 3741862264811555217, guid: 667050bf22430dd4095f8bd02eea9fb3, type: 3}
-      propertyPath: SceneMigrationSynchronization
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3741862264811555217, guid: 667050bf22430dd4095f8bd02eea9fb3, type: 3}
-      propertyPath: InScenePlacedSourceGlobalObjectIdHash
-      value: 957450542
-      objectReference: {fileID: 0}
     - target: {fileID: 4730324986138600965, guid: 667050bf22430dd4095f8bd02eea9fb3, type: 3}
       propertyPath: m_Name
-      value: GridManagerNGO
+      value: GameManagerNGO
       objectReference: {fileID: 0}
+    - target: {fileID: 6067719788974936037, guid: 667050bf22430dd4095f8bd02eea9fb3, type: 3}
+      propertyPath: floorTilemap
+      value: 
+      objectReference: {fileID: 952375206}
     - target: {fileID: 8374031494528562216, guid: 667050bf22430dd4095f8bd02eea9fb3, type: 3}
       propertyPath: m_LocalPosition.x
       value: -1.57875

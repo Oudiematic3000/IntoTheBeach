@@ -35,7 +35,7 @@ public class NetworkTurnManager : NetworkBehaviour
             .SelectMany(plans => plans)
             .ToArray();
 
-        var resolver = new TurnResolver(GridManager.instance.gridState);
+        var resolver = new TurnResolver(GameManager.Instance.GridState);
         NetUnitResult[] results = resolver.Resolve(allPlans);
 
         submittedPlans.Clear();
