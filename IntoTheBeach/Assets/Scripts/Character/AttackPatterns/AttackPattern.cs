@@ -48,7 +48,6 @@ public abstract class AttackPattern
             foreach (var tile in absoluteTiles)
             {
                 Vector3Int rotated = RotateAroundPivot(tile, unitPosition, r);
-                if (obstacles.GetTile(rotated) is Obstacle) continue;
                 allTiles.Add(rotated);
             }
         }
