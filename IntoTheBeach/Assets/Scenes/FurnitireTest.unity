@@ -2307,7 +2307,7 @@ SpriteRenderer:
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 1
   m_MaskInteraction: 0
   m_Sprite: {fileID: 21300000, guid: 069359785136b584caccf0da9bcfb5ef, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -2791,7 +2791,7 @@ SpriteRenderer:
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 1
   m_MaskInteraction: 0
   m_Sprite: {fileID: 21300000, guid: e0e54b5d3a7d90048b965793ed85aa80, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -3818,7 +3818,6 @@ MonoBehaviour:
   endTurn: {fileID: 461254002}
   attackText: {fileID: 816615703}
   moveText: {fileID: 2117405857}
-  classIcons: []
   pips:
   - {fileID: 954700544}
   - {fileID: 423292327}
@@ -4073,7 +4072,7 @@ SpriteRenderer:
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 1
   m_MaskInteraction: 0
   m_Sprite: {fileID: 21300000, guid: 7c17f981b5395504685eac7663501437, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -4270,7 +4269,7 @@ SpriteRenderer:
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 1
   m_MaskInteraction: 0
   m_Sprite: {fileID: 21300000, guid: 85431ed1afa74a648b4c81c2b9b2eecf, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -4744,7 +4743,7 @@ SpriteRenderer:
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 1
   m_MaskInteraction: 0
   m_Sprite: {fileID: 21300000, guid: 5806a2c69bd3a144bab50a94004db50f, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -5374,7 +5373,7 @@ SpriteRenderer:
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 1
   m_MaskInteraction: 0
   m_Sprite: {fileID: 21300000, guid: fc1e9ce3ab45d2844984c704c5a6d72f, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -7358,7 +7357,7 @@ SpriteRenderer:
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 1
   m_MaskInteraction: 0
   m_Sprite: {fileID: 21300000, guid: d5bb03ab6e101084991b71255bb874f8, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -8635,6 +8634,7 @@ GameObject:
   - component: {fileID: 2074421611}
   - component: {fileID: 2074421613}
   - component: {fileID: 2074421612}
+  - component: {fileID: 2074421616}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -8776,6 +8776,23 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2074421616
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2074421610}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 045dbe1c0f6101b4ea4f3209d0d6c93a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::CameraEdgePanner
+  pixelsPerUnit: 64
+  panSpeed: 4
+  edgeThickness: 5
+  minPanLimit: {x: -1.5, y: -1.5}
+  maxPanLimit: {x: 1.5, y: 1.5}
 --- !u!1 &2117405856
 GameObject:
   m_ObjectHideFlags: 0
