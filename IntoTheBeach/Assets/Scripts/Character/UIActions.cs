@@ -1,4 +1,5 @@
 using System;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -11,6 +12,7 @@ public class UIActions : MonoBehaviour
 
     [SerializeField] GameObject classUIHolder, buttonsUIHolder;
     [SerializeField] Button moveButton, attackButton, endTurn;
+    [SerializeField] Image attackText, moveText;
     [SerializeField] Sprite[] classIcons;
     [SerializeField] GameObject[] pips;
     public GameObject selectUnit;
@@ -19,10 +21,12 @@ public class UIActions : MonoBehaviour
     public GameObject endTurnUnitText;
     public GameObject tileSelect;
     public GameObject attackTileSelect;
+    public Image objectIcon;
     private void OnEnable()
     {
        
         CharacterVisual.OnClick += SetSelectedCharacter;
+        CharacterVisual.OnClick += updateIcon; 
         CharacterVisual.OnMoveSelected += showMoveText;
         CharacterVisual.OnAttackSelected += ShowAttackText;
         InputManager.OnClickNothing += HideAll;
@@ -38,6 +42,7 @@ public class UIActions : MonoBehaviour
         CharacterVisual.OnClick -= SetSelectedCharacter;
         CharacterVisual.OnMoveSelected -= showMoveText;
         CharacterVisual.OnAttackSelected -= ShowAttackText;
+        CharacterVisual.OnClick -= updateIcon;
         GridVisual.OnGridClick -= HideAll;
         GridVisual.OnResetPip -= ShowAllPips;
         InputManager.OnClickNothing -= HideAll;
@@ -47,6 +52,13 @@ public class UIActions : MonoBehaviour
         GridVisual.OnUnitAttacked -= HidePip;
 
 
+    }
+    public void updateIcon(CharacterVisual character) 
+    {
+        if(character == null) return;
+
+        objectIcon.sprite = character.unitClass.icon;
+        objectIcon.enabled = true;
     }
     public void SetSelectedCharacter(CharacterVisual selectedCharacter)
     {    
@@ -96,9 +108,12 @@ public class UIActions : MonoBehaviour
         }
 
         if(TurnStateMachine.Instance.currentState is AttackPlanTurnState)
-        {
+        { 
             buttonsUIHolder.SetActive(true);
             attackButton.gameObject.SetActive(true);
+            attackText.gameObject.SetActive(true);
+            moveText.gameObject.SetActive(false);
+            
             if(!TurnStateMachine.Instance.currentTurnInfo.CanAttack() || selectedCharacter.hasAttacked) attackButton.interactable = false;
             else attackButton.interactable = true;
 

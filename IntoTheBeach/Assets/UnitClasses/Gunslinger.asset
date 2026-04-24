@@ -20,6 +20,7 @@ MonoBehaviour:
     rid: 351225969909432578
   unitGhost: {fileID: 9012563408507327037, guid: 455f3842a6dde624d9eb166e082d5bb4, type: 3}
   animations: {fileID: 11400000, guid: 9352104b5f6460647813801e9c239c80, type: 2}
+  icon: {fileID: 21300000, guid: 2854cee5fe831c5479d2390e84d0ee3f, type: 3}
   references:
     version: 2
     RefIds:
