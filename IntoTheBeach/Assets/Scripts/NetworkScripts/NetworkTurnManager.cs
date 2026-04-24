@@ -35,7 +35,7 @@ public class NetworkTurnManager : NetworkBehaviour
             .SelectMany(plans => plans)
             .ToArray();
 
-        var resolver = new TurnResolver(GridManager.instance.gridState);
+        var resolver = new TurnResolver(GameManager.Instance.GridState);
         NetUnitResult[] results = resolver.Resolve(allPlans);
 
         submittedPlans.Clear();
@@ -84,43 +84,83 @@ public struct NetPath : INetworkSerializable
     public path ToPath() => new path(move.ToVector3Int(), moveType);
 }
 
+public struct NetAttackAction : INetworkSerializable
+{
+    public NetVector3Int unitPos;
+    public int attackPatternTypeID; 
+    public int direction;
+    public int unitID;
+
+    public void NetworkSerialize<T>(BufferSerializer<T> s) where T : IReaderWriter
+    {
+        s.SerializeValue(ref unitPos);
+        s.SerializeValue(ref attackPatternTypeID);
+        s.SerializeValue(ref direction);
+        s.SerializeValue(ref unitID);
+    }
+
+    public static NetAttackAction From(AttackAction action) => new NetAttackAction
+    {
+        unitPos = NetVector3Int.From(action.unitPos),
+        attackPatternTypeID = action.attackPattern.TypeID,
+        direction = action.direction,
+        unitID = action.unitID
+    };
+
+    public AttackAction ToAttackAction() => new AttackAction(
+        unitPos.ToVector3Int(),
+        AttackPatternRegistry.FromID(attackPatternTypeID),
+        direction,
+        unitID
+    );
+}
+
 public struct NetUnitPlan : INetworkSerializable
 {
     public int unitID;
     public NetVector3Int startPos;
     public NetVector3Int resultant;
     public NetPath[] paths;
+    public bool hasMoveAction;      // new
+    public bool hasAttackAction;
+    public NetAttackAction attackAction;
 
     public void NetworkSerialize<T>(BufferSerializer<T> s) where T : IReaderWriter
     {
         s.SerializeValue(ref unitID);
-        s.SerializeValue(ref startPos);
-        s.SerializeValue(ref resultant);
-
-        int pathCount = paths?.Length ?? 0;
-        s.SerializeValue(ref pathCount);
-
-        if (s.IsReader)
-            paths = new NetPath[pathCount];
-
-        for (int i = 0; i < pathCount; i++)
-            s.SerializeNetworkSerializable(ref paths[i]);
+        s.SerializeValue(ref hasMoveAction);    // new
+        if (hasMoveAction)
+        {
+            s.SerializeValue(ref startPos);
+            s.SerializeValue(ref resultant);
+            int pathCount = paths?.Length ?? 0;
+            s.SerializeValue(ref pathCount);
+            if (s.IsReader) paths = new NetPath[pathCount];
+            for (int i = 0; i < pathCount; i++)
+                s.SerializeNetworkSerializable(ref paths[i]);
+        }
+        s.SerializeValue(ref hasAttackAction);
+        if (hasAttackAction)
+            s.SerializeNetworkSerializable(ref attackAction);
     }
 
-    public static NetUnitPlan From(int id, MoveAction action) => new NetUnitPlan
+    public static NetUnitPlan From(UnitPlan plan) => new NetUnitPlan
     {
-        unitID = id,
-        startPos = NetVector3Int.From(action.startPos),
-        resultant = NetVector3Int.From(action.resultant),
-        paths = action.paths.Select(p => NetPath.From(p)).ToArray()
+        unitID = plan.unitID,
+        hasMoveAction = plan.moveAction != null,
+        startPos = plan.moveAction != null ? NetVector3Int.From(plan.moveAction.startPos) : default,
+        resultant = plan.moveAction != null ? NetVector3Int.From(plan.moveAction.resultant) : default,
+        paths = plan.moveAction != null ? plan.moveAction.paths.Select(p => NetPath.From(p)).ToArray() : null,
+        hasAttackAction = plan.attackAction != null,
+        attackAction = plan.attackAction != null ? NetAttackAction.From(plan.attackAction) : default
     };
 
-    public MoveAction ToMoveAction()
-    {
-        var action = new MoveAction(startPos.ToVector3Int(), resultant.ToVector3Int());
-        action.paths = paths.Select(p => p.ToPath()).ToList();
-        return action;
-    }
+    public MoveAction ToMoveAction() =>
+        hasMoveAction ? new MoveAction(startPos.ToVector3Int(), resultant.ToVector3Int())
+        { paths = paths.Select(p => p.ToPath()).ToList() } : null;
+
+    public AttackAction ToAttackAction() =>
+        hasAttackAction ? attackAction.ToAttackAction() : null;
 }
 
 public struct NetUnitResult : INetworkSerializable
@@ -129,28 +169,44 @@ public struct NetUnitResult : INetworkSerializable
     public NetVector3Int startPos;
     public NetVector3Int finalPos;
     public NetPath[] paths;
+    public bool hasAttackAction;
+    public NetAttackAction attackAction;
+    public int damageTaken; 
 
     public void NetworkSerialize<T>(BufferSerializer<T> s) where T : IReaderWriter
     {
         s.SerializeValue(ref unitID);
         s.SerializeValue(ref startPos);
         s.SerializeValue(ref finalPos);
-
         int pathCount = paths?.Length ?? 0;
         s.SerializeValue(ref pathCount);
-
-        if (s.IsReader)
-            paths = new NetPath[pathCount];
-
+        if (s.IsReader) paths = new NetPath[pathCount];
         for (int i = 0; i < pathCount; i++)
             s.SerializeNetworkSerializable(ref paths[i]);
+        s.SerializeValue(ref hasAttackAction);
+        if (hasAttackAction)
+            s.SerializeNetworkSerializable(ref attackAction);
+        s.SerializeValue(ref damageTaken);
     }
 
-    public static NetUnitResult From(int id, MoveAction action) => new NetUnitResult
+    public static NetUnitResult From(int id, MoveAction moveAction, AttackAction attackAction = null, int damageTaken = 0) => new NetUnitResult
     {
         unitID = id,
-        startPos = NetVector3Int.From(action.startPos),
-        finalPos = NetVector3Int.From(action.resultant),
-        paths = action.paths.Select(p => NetPath.From(p)).ToArray()
+        startPos = NetVector3Int.From(moveAction.startPos),
+        finalPos = NetVector3Int.From(moveAction.resultant),
+        paths = moveAction.paths.Select(p => NetPath.From(p)).ToArray(),
+        hasAttackAction = attackAction != null,
+        attackAction = attackAction != null ? NetAttackAction.From(attackAction) : default,
+        damageTaken = damageTaken
     };
+
+    public MoveAction ToMoveAction()
+    {
+        var action = new MoveAction(startPos.ToVector3Int(), finalPos.ToVector3Int());
+        action.paths = paths.Select(p => p.ToPath()).ToList();
+        return action;
+    }
+
+    public AttackAction ToAttackAction() =>
+        hasAttackAction ? attackAction.ToAttackAction() : null;
 }

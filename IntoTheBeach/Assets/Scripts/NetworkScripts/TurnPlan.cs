@@ -1,11 +1,32 @@
 using NUnit.Framework;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class TurnPlan
 {
     List<UnitPlan> unitPlans = new List<UnitPlan>();
+
+    public List<UnitPlan> GetUnitPlans() {  return unitPlans; }
+    public void ModifyUnitPlanMoveAction(int ID, MoveAction moveAction)
+    {
+        UnitPlan plan = unitPlans.FirstOrDefault(plan => plan.unitID == ID);
+        if (plan != null)
+            plan.moveAction = moveAction;
+        else
+            unitPlans.Add(new UnitPlan(ID, moveAction));
+    }
+
+    public void ModifyUnitPlanAttackAction(int ID, AttackAction attackAction)
+    {
+        UnitPlan plan = unitPlans.FirstOrDefault(plan => plan.unitID == ID);
+        if (plan != null)
+            plan.attackAction = attackAction;
+        else
+            unitPlans.Add(new UnitPlan(ID, null, attackAction));
+    }
+
 }
 
 public class UnitPlan
@@ -13,6 +34,13 @@ public class UnitPlan
     public int unitID;
     public MoveAction moveAction;
     public AttackAction attackAction;
+
+    public UnitPlan(int unitID, MoveAction moveAction = null, AttackAction attackAction=null)
+    {
+        this.unitID = unitID;
+        this.moveAction = moveAction;
+        this.attackAction = attackAction;
+    }
 }
 
 public class MoveAction

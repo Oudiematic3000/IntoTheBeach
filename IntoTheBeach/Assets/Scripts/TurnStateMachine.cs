@@ -17,11 +17,13 @@ public class TurnStateMachine : MonoBehaviour
     {
         BoardSyncTurnState.OnSyncStart += CreateTurnInfo;
         BoardSyncTurnState.OnGameStart += CreateTurnInfo;
+        StandbyTurnState.OnStandbyStart += ClearGhosts;
     }
     private void OnDisable()
     {
         BoardSyncTurnState.OnSyncStart -= CreateTurnInfo;
         BoardSyncTurnState.OnGameStart -= CreateTurnInfo;
+        StandbyTurnState.OnStandbyStart -= ClearGhosts;
     }
     void Start()
     {
@@ -31,7 +33,7 @@ public class TurnStateMachine : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+
     }
     public AnimState GetAnimState()
     {
@@ -52,9 +54,16 @@ public class TurnStateMachine : MonoBehaviour
         currentTurnInfo = new TurnInfo();
     }
 
-    public void UpdateState() 
+    public void UpdateState()
     {
         currentState.UpdateState();
+    }
+    public void ClearGhosts()
+    {
+        foreach (var ghost in currentTurnInfo.ghosts) {
+            Destroy(ghost.gameObject);
+        }
+        currentTurnInfo.ghosts.Clear();
     }
 }
 
@@ -77,7 +86,7 @@ public class TurnInfo
     int moveActionCount = 0;
     int attackActionCount = 0;
     public List<UnitGhost> ghosts = new();
-    
+    public TurnPlan turnPlan = new TurnPlan();
     public int GetMoveCount()
     {
         return moveActionCount;
