@@ -5,6 +5,7 @@ using UnityEngine.Tilemaps;
 [System.Serializable]
 public abstract class AttackPattern
 {
+    public abstract int TypeID { get; } 
     public abstract List<Vector3Int> AttackTilesVisual(Tilemap floor, Tilemap obstacles, Vector3Int position);
     public static Vector3Int RotateAroundPivot(Vector3Int tile, Vector3Int pivot, int rotation)
     {

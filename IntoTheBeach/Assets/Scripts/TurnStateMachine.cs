@@ -77,7 +77,7 @@ public class TurnInfo
     int moveActionCount = 0;
     int attackActionCount = 0;
     public List<UnitGhost> ghosts = new();
-    
+    public TurnPlan turnPlan = new TurnPlan();
     public int GetMoveCount()
     {
         return moveActionCount;

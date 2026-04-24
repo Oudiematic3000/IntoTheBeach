@@ -6,6 +6,7 @@ using UnityEngine.Tilemaps;
 [System.Serializable]
 public class GunslingerAttackPattern : AttackPattern
 {
+    public override int TypeID => AttackPatternRegistry.GunslingerAttack;
     static int range=2;
     
     public override List<Vector3Int> AttackTilesVisual(Tilemap floor, Tilemap obstacles, Vector3Int position)

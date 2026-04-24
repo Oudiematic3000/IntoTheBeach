@@ -127,8 +127,11 @@ public class GridVisual : MonoBehaviour, Iinteractable
         {
             OnGridClick?.Invoke();
             return;
-        } 
-       var attack= GetDirectionedAttackTiles(tilePos);
+        }
+        Vector3Int pos = currentSelection.GetTilePos(saloonTiles);
+        if (currentSelection.ghost) pos = currentSelection.ghost.GetTilePos(saloonTiles);
+        int direction = InputManager.Instance.GetCursorDirectionFromCharacter(pos, saloonTiles);
+        var attack= GetDirectionedAttackTiles(tilePos);
         if(attack.Count == 0) return;
         foreach (var tile in attack)
         {
@@ -137,8 +140,11 @@ public class GridVisual : MonoBehaviour, Iinteractable
         }
 
         currentSelection.hasAttacked = true;
-        //currentSelection.AnimUpdate();
+        currentSelection.direction = direction;
+        currentSelection.AnimUpdate();
         TurnStateMachine.Instance.currentTurnInfo.IncrementAttackCount(1);
+        AttackAction attackAction = new AttackAction(currentSelection.GetTilePos(saloonTiles), currentSelection.unitClass.attackPattern, direction, currentSelection.unitID);
+        TurnStateMachine.Instance.currentTurnInfo.turnPlan.ModifyUnitPlanAttackAction(currentSelection.unitID, attackAction);
         ResetTiles();
         OnUnitAttacked?.Invoke();
         currentSelection.RemoveOutline();
@@ -168,7 +174,8 @@ public class GridVisual : MonoBehaviour, Iinteractable
         InputManager.Instance.SetState(InputManager.TurnStates.None);
         
         OnUnitMoved?.Invoke();
-
+        MoveAction moveAction = new MoveAction(currentSelection.GetTilePos(saloonTiles),ghost.GetTilePos(saloonTiles));
+        TurnStateMachine.Instance.currentTurnInfo.turnPlan.ModifyUnitPlanMoveAction(currentSelection.unitID, moveAction);
         ResetTiles();
         currentSelection.RemoveOutline();
        onMoveText?.Invoke();

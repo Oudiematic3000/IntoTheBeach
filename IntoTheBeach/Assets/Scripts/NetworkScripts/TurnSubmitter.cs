@@ -25,14 +25,10 @@ public class TurnSubmitter : MonoBehaviour
     {
         var plans = new List<NetUnitPlan>();
 
-        foreach (var ghost in turnInfo.ghosts)
+        foreach (var unitPlan in turnInfo.turnPlan.GetUnitPlans())
         {
-            var unit = ghost.owner;
-            var action = new MoveAction(
-                unit.GetTilePos(saloonTiles),
-                ghost.GetTilePos(saloonTiles)
-            );
-            plans.Add(NetUnitPlan.From(unit.unitID, action));
+            
+            plans.Add(NetUnitPlan.From(unitPlan));
         }
 
         return plans.ToArray();
