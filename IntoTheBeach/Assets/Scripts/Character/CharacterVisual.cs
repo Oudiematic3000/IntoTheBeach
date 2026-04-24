@@ -41,17 +41,18 @@ public class CharacterVisual : MonoBehaviour, Iinteractable
         Tilemap tilemap = GameObject.Find("FloorVisual").GetComponent<Tilemap>();
         transform.position = tilemap.CellToWorld(GetTilePos(tilemap));
     }
+
     private void OnEnable()
     {
         MovePlanTurnState.OnMovePlanStart += AnimUpdate;
         AttackPlanTurnState.OnAttackPlanStart += AnimUpdate;
-        AttackPlanTurnState.OnAttackPlanStart += DebugID;
-
+        BoardSyncTurnState.OnSyncEnd += ResetMoves;
     }
     private void OnDisable()
     {
         MovePlanTurnState.OnMovePlanStart -= AnimUpdate;
         AttackPlanTurnState.OnAttackPlanStart -= AnimUpdate;
+        BoardSyncTurnState.OnSyncEnd -= ResetMoves;
     }
     public void OnHover(Vector2 mousePos)
     {
@@ -59,7 +60,7 @@ public class CharacterVisual : MonoBehaviour, Iinteractable
 
     public void SetHearts(int health)
     {
-        if (teamIndex == PlayerData.Local.TeamIndex.Value)
+        if (PlayerData.Local && teamIndex == PlayerData.Local.TeamIndex.Value)
         {
             heartObject.sprite = hearts[health - 1];
         }
@@ -68,6 +69,11 @@ public class CharacterVisual : MonoBehaviour, Iinteractable
             heartObject.sprite = OppHearts[health - 1];
 
         }
+    }
+    public void ResetMoves()
+    {
+        hasMoved=false;
+        hasAttacked=false;
     }
     public void TakeDamage(int damage)
     {

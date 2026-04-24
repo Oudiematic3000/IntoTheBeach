@@ -80,24 +80,30 @@ public class InputManager : MonoBehaviour
    
 
     private RaycastHit2D InteractMouse()
+{
+    int unitLayer = LayerMask.NameToLayer("Unit");
+    int unitLayerMask = 1 << unitLayer;
+    int invertedMaskInt = ~unitLayerMask;
+
+    Vector3 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+    Vector2 mousePos2D = new Vector2(mousePos.x, mousePos.y);
+    
+    if (currentState == TurnStates.Attacking)
     {
-        LayerMask mask = LayerMask.NameToLayer("Unit");
-        int invertedMaskInt = ~(1<<mask);
-
-        Vector3 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-        Vector2 mousePos2D = new Vector2(mousePos.x, mousePos.y);
-        RaycastHit2D hit;
-        if (currentState == TurnStates.Attacking)
-        {
-             hit = Physics2D.Raycast(mousePos2D, Vector2.zero, invertedMaskInt);
-        }
-        else
-        {
-            hit = Physics2D.Raycast(mousePos2D, Vector2.zero);
-
-        }
-        return hit;
+        return Physics2D.Raycast(mousePos2D, Vector2.zero, Mathf.Infinity, invertedMaskInt);
     }
+    else
+    {
+        RaycastHit2D unitHit = Physics2D.Raycast(mousePos2D, Vector2.zero, Mathf.Infinity, unitLayerMask);
+        
+        if (unitHit.collider != null)
+        {
+            return unitHit;
+        }
+
+        return Physics2D.Raycast(mousePos2D, Vector2.zero);
+    }
+}
     public void HoverInteract() 
     {
         RaycastHit2D ray = InteractMouse();

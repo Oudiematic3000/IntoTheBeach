@@ -13,7 +13,6 @@ public class UIActions : MonoBehaviour
     [SerializeField] GameObject classUIHolder, buttonsUIHolder;
     [SerializeField] Button moveButton, attackButton, endTurn;
     [SerializeField] Image attackText, moveText;
-    [SerializeField] Sprite[] classIcons;
     [SerializeField] GameObject[] pips;
     public GameObject selectUnit;
     public GameObject moveUnitText;
