@@ -20,6 +20,10 @@ public class NetworkTurnManager : NetworkBehaviour
     [Rpc(SendTo.Server, InvokePermission = RpcInvokePermission.Everyone)]
     public void SubmitTurnPlanServerRpc(NetUnitPlan[] plans, RpcParams rpcParams = default)
     {
+        expectedPlayerCount = NetworkManager.Singleton.ConnectedClientsList
+            .Select(c => c.PlayerObject?.GetComponent<PlayerData>())
+            .Where(pd => pd != null)
+            .ToList().Count;
         ulong senderID = rpcParams.Receive.SenderClientId;
         submittedPlans[senderID] = plans;
         Debug.Log("Received Plan from " + senderID);

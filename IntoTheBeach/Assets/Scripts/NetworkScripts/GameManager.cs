@@ -46,6 +46,10 @@ public class GameManager : NetworkBehaviour
             .Select(c => c.PlayerObject?.GetComponent<PlayerData>())
             .Where(pd => pd != null)
             .ToList();
+        for (int i=0;i<players.Count;i++)
+        {
+            players[i].SetTeam(i);
+        }
 
         foreach (var visual in allVisuals)
         {
@@ -72,23 +76,22 @@ public class GameManager : NetworkBehaviour
     private void SyncUnitsClientRpc(UnitSyncData[] syncDataArray, ClientRpcParams clientRpcParams = default)
     {
         if (IsServer) return;
-
+      
         var allVisuals = FindObjectsByType<CharacterVisual>(FindObjectsSortMode.None);
 
         foreach (var syncData in syncDataArray)
         {
-            // The client finds the matching visual using the grid position
             var visual = allVisuals.FirstOrDefault(v => v.GetTilePos(floorTilemap) == syncData.tilePos);
 
             if (visual != null)
             {
-                // Assign the server-mandated ID to the client's local visual
                 visual.unitID = syncData.unitID;
                 unitVisuals[syncData.unitID] = visual;
             }
         }
-    }
 
+    }
+   // void SyncTeamIndexes
     private void HandleClientConnected(ulong clientId)
     {
         if (clientId == NetworkManager.ServerClientId) return;

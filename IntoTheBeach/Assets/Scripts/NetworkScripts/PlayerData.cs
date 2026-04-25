@@ -60,7 +60,6 @@ public class PlayerData : NetworkBehaviour
         TeamIndex.Value = teamIndex;
     }
 
-
     public void RegisterUnit(int unitID)
     {
         if (!IsServer) return;
