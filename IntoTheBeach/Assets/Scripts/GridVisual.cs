@@ -21,18 +21,23 @@ public class GridVisual : MonoBehaviour, Iinteractable
     {
       
     }
+    private void OnEnable()
+    {
+        UIActions.OnMovement += HighlightMovableTiles;
+        
+        UIActions.OnAttack += HighlightAttackableTiles;
+        StandbyTurnState.OnStandbyStart += ResetTiles;
+        InputManager.OnRemove += RemoveGhost;
+    }
     private void OnDisable()
     {
         UIActions.OnMovement -= HighlightMovableTiles;
         UIActions.OnAttack -= HighlightAttackableTiles;
         StandbyTurnState.OnStandbyStart -= ResetTiles;
+        
+        InputManager.OnRemove -= RemoveGhost;
     }
-    private void OnEnable()
-    {
-        UIActions.OnMovement += HighlightMovableTiles;
-        UIActions.OnAttack += HighlightAttackableTiles;
-        StandbyTurnState.OnStandbyStart += ResetTiles;
-    }
+    
     public static void resetPip() 
     {
         OnResetPip?.Invoke();
@@ -213,6 +218,45 @@ public class GridVisual : MonoBehaviour, Iinteractable
         {
             ghost = null;
         }
+    }
+    public void RemoveGhost() 
+    {
+        bool isAttackState = TurnStateMachine.Instance.currentState is AttackPlanTurnState;
+
+        for (int i = HighlightedTiles.Count - 1; i >= 0; i--)
+        {
+            var tile = HighlightedTiles[i];
+
+            if (isAttackState && LockedAttackTiles.Contains(tile))
+            {
+                continue;
+            }
+
+            saloonTiles.SetColor(tile, Color.white);
+            HighlightedTiles.RemoveAt(i);
+        }
+
+        if (!isAttackState)
+        {
+            foreach (var lockedTile in LockedAttackTiles)
+            {
+                saloonTiles.SetColor(lockedTile, Color.white);
+            }
+
+            LockedAttackTiles.Clear();
+        }
+
+        if (ghost)
+        {  
+            Destroy(ghost.gameObject);  
+            ghost = null;
+           
+        }
+        if (ghost) 
+        {
+            
+        }
+
     }
     public void HighlightAttackableTiles() 
     {

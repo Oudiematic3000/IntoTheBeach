@@ -11,6 +11,8 @@ public class InputManager : MonoBehaviour
    
 
     public static event Action OnClickNothing;
+    public static event Action OnRemove;
+
 
     [SerializeField] private TurnStates currentState = TurnStates.None;
     public enum TurnStates
@@ -68,6 +70,19 @@ public class InputManager : MonoBehaviour
         {
             PressInteract();
         }
+        if (Input.GetMouseButtonDown(1)) 
+        {
+            pressUnselect();
+        }
+    }
+
+    public void pressUnselect() 
+    {
+        CurrentSelection.RemoveOutline();
+        CurrentSelection = null;
+        currentState = TurnStates.None;
+        
+        OnRemove?.Invoke();
     }
     public CharacterVisual GetCurrentSelection() 
     {
