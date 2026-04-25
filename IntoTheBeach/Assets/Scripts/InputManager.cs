@@ -7,6 +7,7 @@ public class InputManager : MonoBehaviour
 {
     public static InputManager Instance;
     [SerializeField] private CharacterVisual CurrentSelection;
+    public bool teamExclusiveSelection;
    
 
     public static event Action OnClickNothing;
@@ -59,7 +60,7 @@ public class InputManager : MonoBehaviour
       currentState = TurnStates.Attacking;
     }
 
-    //Update method
+   
     void Update()
     {
         HoverInteract();
@@ -135,6 +136,13 @@ public class InputManager : MonoBehaviour
             if (ray.collider.TryGetComponent<Iinteractable>(out var hoverObject))
             {
                 if (hoverObject==null) return;
+            if (CurrentSelection)
+            CurrentSelection.RemoveOutline();
+
+            if (currentState == TurnStates.Attacking || currentState == TurnStates.Moving) 
+            {
+                if(ray.collider.GetComponent<CharacterVisual>()) return;
+            }
 
             hoverObject.OnPress(ray.point);
             }

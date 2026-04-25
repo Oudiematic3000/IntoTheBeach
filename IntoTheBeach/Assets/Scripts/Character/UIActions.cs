@@ -7,12 +7,14 @@ public class UIActions : MonoBehaviour
 {
     public static event Action OnMovement;
     public static event Action OnAttack;
+    
 
     [SerializeField] CharacterVisual selectedCharacter;
 
     [SerializeField] GameObject classUIHolder, buttonsUIHolder;
     [SerializeField] Button moveButton, attackButton, endTurn;
     [SerializeField] Image attackText, moveText;
+    [SerializeField] GameObject endPhaseButton;
     [SerializeField] GameObject[] pips;
     public GameObject selectUnit;
     public GameObject moveUnitText;
@@ -34,6 +36,7 @@ public class UIActions : MonoBehaviour
         GridVisual.OnUnitMoved += ShowUnitInfo;
         GridVisual.OnUnitMoved += HidePip;
         GridVisual.OnUnitAttacked += HidePip;
+        MovePlanTurnState.OnMovePlanStart += ShowEndTurn;
         GridVisual.onMoveText += hideAllText;
     }
     private void OnDisable()
@@ -48,6 +51,7 @@ public class UIActions : MonoBehaviour
         GridVisual.OnUnitMoved -= ShowUnitInfo;
         GridVisual.OnUnitMoved -= HidePip;
         GridVisual.onMoveText -= hideAllText;
+        MovePlanTurnState.OnMovePlanStart -= ShowEndTurn;
         GridVisual.OnUnitAttacked -= HidePip;
 
 
@@ -71,6 +75,16 @@ public class UIActions : MonoBehaviour
 
         GridVisual.resetPip();
 
+        if(TurnStateMachine.Instance.currentState is StandbyTurnState) 
+        {
+            endPhaseButton.SetActive(false);
+        }
+
+    }
+    public void ShowEndTurn() 
+    {
+        endPhaseButton.SetActive(true);
+        
     }
 
     public void MoveButtonPressed() 
@@ -86,7 +100,6 @@ public class UIActions : MonoBehaviour
         hideAllText();
         attackTileSelect.SetActive(true);
         selectUnit.SetActive(false);
-        
         OnAttack?.Invoke();
     }
 
@@ -98,6 +111,7 @@ public class UIActions : MonoBehaviour
         {
             buttonsUIHolder.SetActive(true);
             moveButton.gameObject.SetActive(true);
+            showMoveText();
 
             if (!TurnStateMachine.Instance.currentTurnInfo.CanMove() || selectedCharacter.hasMoved)
             {
@@ -110,8 +124,7 @@ public class UIActions : MonoBehaviour
         { 
             buttonsUIHolder.SetActive(true);
             attackButton.gameObject.SetActive(true);
-            attackText.gameObject.SetActive(true);
-            moveText.gameObject.SetActive(false);
+           ShowAttackText();
             
             if(!TurnStateMachine.Instance.currentTurnInfo.CanAttack() || selectedCharacter.hasAttacked) attackButton.interactable = false;
             else attackButton.interactable = true;
