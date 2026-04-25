@@ -20,9 +20,7 @@ public class TurnResolver
         foreach (var plan in allPlans)
         {
             if (plan.hasMoveAction)
-            {
                 workingMoves[plan.unitID] = plan.ToMoveAction();
-            }
             else
             {
                 Vector3Int currentPos = gridState.GetUnitPosition(plan.unitID) ?? Vector3Int.zero;
@@ -31,6 +29,15 @@ public class TurnResolver
 
             if (plan.hasAttackAction)
                 workingAttacks[plan.unitID] = plan.ToAttackAction();
+        }
+
+        foreach (int unitID in gridState.GetAllUnitIDs())
+        {
+            if (!workingMoves.ContainsKey(unitID))
+            {
+                Vector3Int currentPos = gridState.GetUnitPosition(unitID) ?? Vector3Int.zero;
+                workingMoves[unitID] = new MoveAction(currentPos, currentPos);
+            }
         }
 
         ResolveCollisions(workingMoves);
@@ -68,6 +75,7 @@ public class TurnResolver
                 int? hitUnitID = gridState.GetUnitAtPosition(tile);
                 if (hitUnitID.HasValue)
                 {
+                    Debug.Log("HITHITHIT");
                     if (!pendingDamage.ContainsKey(hitUnitID.Value))
                         pendingDamage[hitUnitID.Value] = 0;
                     pendingDamage[hitUnitID.Value]++;

@@ -42,7 +42,7 @@ public class LobbyMenu : MonoBehaviour
         ushort port = GetPort();
         transport.SetConnectionData(ip, port);
         networkManager.StartClient();
-        SetUsername();
+        LeanTween.delayedCall(0.5f, SetUsername);
     }
     public void StartServerOnly()
     {

@@ -104,7 +104,7 @@ public class InputManager : MonoBehaviour
     Vector3 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
     Vector2 mousePos2D = new Vector2(mousePos.x, mousePos.y);
     
-    if (currentState == TurnStates.Attacking)
+    if (currentState == TurnStates.Attacking || currentState == TurnStates.Moving)
     {
         return Physics2D.Raycast(mousePos2D, Vector2.zero, Mathf.Infinity, invertedMaskInt);
     }
@@ -154,9 +154,16 @@ public class InputManager : MonoBehaviour
             if (CurrentSelection)
             CurrentSelection.RemoveOutline();
 
-            if (currentState == TurnStates.Attacking || currentState == TurnStates.Moving) 
+            if (ray.collider.GetComponent<CharacterVisual>())
             {
-                if(ray.collider.GetComponent<CharacterVisual>()) return;
+                if (ray.collider.GetComponent<CharacterVisual>().teamIndex != PlayerData.Local.TeamIndex.Value)
+                {
+                    return; 
+                }
+                if (currentState == TurnStates.Attacking || currentState == TurnStates.Moving)
+                {
+                  //  return;
+                }
             }
 
             hoverObject.OnPress(ray.point);

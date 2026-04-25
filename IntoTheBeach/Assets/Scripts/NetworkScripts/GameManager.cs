@@ -42,48 +42,46 @@ public class GameManager : NetworkBehaviour
     {
         if (!IsServer) return;
 
-
         var allVisuals = FindObjectsByType<CharacterVisual>(FindObjectsSortMode.None);
-
         unitVisuals.Clear();
         nextUnitID = 0;
 
+        var syncDataList = new List<UnitSyncData>();
         foreach (var visual in allVisuals)
         {
+            Vector3Int tilePos = visual.GetTilePos(floorTilemap);
+            int teamIndex = GetTeamIndexForTile(tilePos);
+
             visual.unitID = nextUnitID;
+            visual.teamIndex = teamIndex;
             unitVisuals[nextUnitID] = visual;
+            GridState.RegisterUnit(nextUnitID, tilePos, visual.unitClass.health);  
+            syncDataList.Add(new UnitSyncData
+            {
+                tilePos = tilePos,
+                unitID = nextUnitID,
+                teamIndex = teamIndex
+            });
+
             nextUnitID++;
         }
 
+        UnitSyncData[] syncDataArray = syncDataList.ToArray();
 
         var players = NetworkManager.Singleton.ConnectedClientsList
             .Select(c => c.PlayerObject?.GetComponent<PlayerData>())
             .Where(pd => pd != null)
             .ToList();
 
-        var syncDataList = new List<UnitSyncData>();
-        foreach (var kvp in unitVisuals)
-        {
-            int unitID = kvp.Key;
-            CharacterVisual visual = kvp.Value;
-            Vector3Int tilePos = visual.GetTilePos(floorTilemap);
-
-            syncDataList.Add(new UnitSyncData { tilePos = tilePos, unitID = unitID });
-        }
-
-        UnitSyncData[] syncDataArray = syncDataList.ToArray();
-
         for (int i = 0; i < players.Count; i++)
         {
-            players[i].SetTeam(i);
-
-            ulong clientId = players[i].OwnerClientId;
+            players[i].SetTeam(i);  
 
             ClientRpcParams clientRpcParams = new ClientRpcParams
             {
                 Send = new ClientRpcSendParams
                 {
-                    TargetClientIds = new ulong[] { clientId }
+                    TargetClientIds = new ulong[] { players[i].OwnerClientId }
                 }
             };
 
@@ -92,39 +90,31 @@ public class GameManager : NetworkBehaviour
     }
 
     [ClientRpc]
-    private void SyncUnitsClientRpc(UnitSyncData[] syncDataArray, int assignedTeamIndex, ClientRpcParams clientRpcParams = default)
+    private void SyncUnitsClientRpc(UnitSyncData[] syncDataArray, int assignedPlayerTeamIndex, ClientRpcParams clientRpcParams = default)
     {
         if (IsServer) return;
 
-        // Sync the units on the board
         var allVisuals = FindObjectsByType<CharacterVisual>(FindObjectsSortMode.None);
 
         foreach (var syncData in syncDataArray)
         {
             var visual = allVisuals.FirstOrDefault(v => v.GetTilePos(floorTilemap) == syncData.tilePos);
-
             if (visual != null)
             {
                 visual.unitID = syncData.unitID;
+                visual.teamIndex = syncData.teamIndex;  
                 unitVisuals[syncData.unitID] = visual;
             }
         }
 
-        // Apply the team index to the local player
-        if (NetworkManager.Singleton.LocalClient != null && NetworkManager.Singleton.LocalClient.PlayerObject != null)
-        {
-            var localPlayerData = NetworkManager.Singleton.LocalClient.PlayerObject.GetComponent<PlayerData>();
-            if (localPlayerData != null)
-            {
-                localPlayerData.SetTeam(assignedTeamIndex);
-            }
-        }
+        var localPlayerData = NetworkManager.Singleton.LocalClient?.PlayerObject?.GetComponent<PlayerData>();
+        if (localPlayerData != null)
+            localPlayerData.SetTeam(assignedPlayerTeamIndex);
     }
     private void HandleClientConnected(ulong clientId)
     {
         if (clientId == NetworkManager.ServerClientId) return;
 
-        // 1. Evaluate and assign teams based on connection order
         var players = NetworkManager.Singleton.ConnectedClientsList
             .Select(c => c.PlayerObject?.GetComponent<PlayerData>())
             .Where(pd => pd != null)
@@ -133,28 +123,23 @@ public class GameManager : NetworkBehaviour
         int newClientTeamIndex = -1;
         for (int i = 0; i < players.Count; i++)
         {
-            // Set the team on the server
             players[i].SetTeam(i);
-
-            // If this is the client that just connected, save their index
             if (players[i].OwnerClientId == clientId)
-            {
                 newClientTeamIndex = i;
-            }
         }
 
-        // 2. Prepare Unit sync data
         var syncDataList = new List<UnitSyncData>();
         foreach (var kvp in unitVisuals)
         {
-            int unitID = kvp.Key;
-            CharacterVisual visual = kvp.Value;
-            Vector3Int tilePos = visual.GetTilePos(floorTilemap);
-
-            syncDataList.Add(new UnitSyncData { tilePos = tilePos, unitID = unitID });
+            Vector3Int tilePos = kvp.Value.GetTilePos(floorTilemap);
+            syncDataList.Add(new UnitSyncData
+            {
+                tilePos = tilePos,
+                unitID = kvp.Key,
+                teamIndex = GetTeamIndexForTile(tilePos)
+            });
         }
 
-        // 3. Target the specific client
         ClientRpcParams clientRpcParams = new ClientRpcParams
         {
             Send = new ClientRpcSendParams
@@ -163,7 +148,6 @@ public class GameManager : NetworkBehaviour
             }
         };
 
-        // 4. Send the RPC with the new team index included
         SyncUnitsClientRpc(syncDataList.ToArray(), newClientTeamIndex, clientRpcParams);
     }
     public CharacterVisual GetVisual(int unitID)
@@ -172,16 +156,25 @@ public class GameManager : NetworkBehaviour
     }
 
     public IReadOnlyDictionary<int, CharacterVisual> GetAllVisuals() => unitVisuals;
+
+    private int GetTeamIndexForTile(Vector3Int tilePos)
+    {
+        BoundsInt bounds = floorTilemap.cellBounds;
+        float midY = bounds.yMin + bounds.size.y / 2f;
+        return tilePos.y >= midY ? 1 : 0;
+    }
 }
 public struct UnitSyncData : INetworkSerializable
 {
     public Vector3Int tilePos;
     public int unitID;
+    public int teamIndex;  
 
     public void NetworkSerialize<T>(BufferSerializer<T> serializer) where T : IReaderWriter
     {
         serializer.SerializeValue(ref tilePos);
         serializer.SerializeValue(ref unitID);
+        serializer.SerializeValue(ref teamIndex);
     }
 }
 public class GridState
@@ -239,7 +232,7 @@ public class GridState
         if (unitHealth.ContainsKey(unitID))
             unitHealth[unitID] = Mathf.Max(0, unitHealth[unitID] - damage);
     }
-
+    public IEnumerable<int> GetAllUnitIDs() => unitHealth.Keys;
     public bool IsDead(int unitID) => GetHealth(unitID) <= 0;
 
     public bool IsMovementBlocked(Vector3Int position)
