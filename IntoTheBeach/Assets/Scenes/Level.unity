@@ -2363,7 +2363,16 @@ MonoBehaviour:
   - {x: 0, y: 1, z: 0}
   - {x: 0, y: -1, z: 0}
   extraPositions: []
-  animationFrames: []
+  animationFrames:
+  - {fileID: -305172110730277826, guid: 7aea697c280cf8243bc2c599373ee692, type: 3}
+  - {fileID: -46929373840021842, guid: 7aea697c280cf8243bc2c599373ee692, type: 3}
+  - {fileID: -3115277990828067068, guid: 7aea697c280cf8243bc2c599373ee692, type: 3}
+  - {fileID: -133093216007478498, guid: 7aea697c280cf8243bc2c599373ee692, type: 3}
+  - {fileID: -6989057209796371657, guid: 7aea697c280cf8243bc2c599373ee692, type: 3}
+  - {fileID: -5002144151934793037, guid: 7aea697c280cf8243bc2c599373ee692, type: 3}
+  - {fileID: 4029301345714995041, guid: 7aea697c280cf8243bc2c599373ee692, type: 3}
+  - {fileID: 4358829500449101421, guid: 7aea697c280cf8243bc2c599373ee692, type: 3}
+  - {fileID: 7714723764492462826, guid: 7aea697c280cf8243bc2c599373ee692, type: 3}
   speed: 0.12
 --- !u!1 &524305781
 GameObject:
@@ -7359,10 +7368,10 @@ Camera:
   m_LensShift: {x: 0, y: 0}
   m_NormalizedViewPortRect:
     serializedVersion: 2
-    x: 0
-    y: 0
-    width: 1
-    height: 1
+    x: 0.048826292
+    y: 0.048393827
+    width: 0.9014085
+    height: 0.90112644
   near clip plane: 0.3
   far clip plane: 1000
   field of view: 60
@@ -8465,7 +8474,7 @@ Transform:
   m_GameObject: {fileID: 1723865483}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: -0.02, y: -0.17, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -8548,7 +8557,16 @@ MonoBehaviour:
   - {x: 0, y: 1, z: 0}
   - {x: 0, y: -1, z: 0}
   extraPositions: []
-  animationFrames: []
+  animationFrames:
+  - {fileID: -894952143269575122, guid: 591bf753c0013824aaf99af97968ae48, type: 3}
+  - {fileID: 4613692771314228816, guid: 591bf753c0013824aaf99af97968ae48, type: 3}
+  - {fileID: 7640086818028368477, guid: 591bf753c0013824aaf99af97968ae48, type: 3}
+  - {fileID: -6054414463660825553, guid: 591bf753c0013824aaf99af97968ae48, type: 3}
+  - {fileID: 5690723128334796756, guid: 591bf753c0013824aaf99af97968ae48, type: 3}
+  - {fileID: -8798795460712923302, guid: 591bf753c0013824aaf99af97968ae48, type: 3}
+  - {fileID: 9107311752804444344, guid: 591bf753c0013824aaf99af97968ae48, type: 3}
+  - {fileID: 2419402814897953585, guid: 591bf753c0013824aaf99af97968ae48, type: 3}
+  - {fileID: -3212111634524963705, guid: 591bf753c0013824aaf99af97968ae48, type: 3}
   speed: 0.12
 --- !u!1 &1744967658
 GameObject:

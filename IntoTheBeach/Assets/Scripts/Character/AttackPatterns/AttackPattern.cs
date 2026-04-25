@@ -53,4 +53,6 @@ public abstract class AttackPattern
         }
         return new List<Vector3Int>(allTiles);
     }
+    public virtual List<Vector3Int> GetBlockedTiles(GridState gridState, Vector3Int position, int direction)
+        => new List<Vector3Int>();
 }

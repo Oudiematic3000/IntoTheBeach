@@ -7,6 +7,7 @@ public class EnvironmentalObject
     public IMovementBlocker MovementBlocker { get; set; }
     public IAttackBlocker AttackBlocker { get; set; }
     public IAttackReactor AttackReactor { get; set; }
+    public IAttackReactionVisual AttackReactionVisual { get; set; }
 }
 
 public interface IMovementBlocker { }

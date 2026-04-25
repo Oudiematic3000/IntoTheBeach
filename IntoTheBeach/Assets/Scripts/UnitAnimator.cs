@@ -96,8 +96,8 @@ public class UnitAnimator : MonoBehaviour
         foreach (var tile in reactedTiles)
         {
             var envObj = GameManager.Instance.GridState.GetEnvironmentalObject(tile);
-            if (envObj?.AttackReactor is IAttackReactionVisual visual)
-                visual.PlayReactionVisual();
+            Debug.Log($"Reacted tile {tile} — envObj: {envObj != null}, visual: {envObj?.AttackReactionVisual != null}");
+            envObj?.AttackReactionVisual?.PlayReactionVisual();
         }
         foreach (var result in results)
         {

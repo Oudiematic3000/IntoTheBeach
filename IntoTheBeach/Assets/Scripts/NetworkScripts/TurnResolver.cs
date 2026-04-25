@@ -68,9 +68,7 @@ public class TurnResolver
         {
             int attackerID = kvp.Key;
             AttackAction attack = kvp.Value;
-
             Vector3Int attackerPos = moves[attackerID].resultant;
-
             List<Vector3Int> hitTiles = attack.attackPattern.GetHitTiles(gridState, attackerPos, attack.direction);
 
             foreach (var tile in hitTiles)
@@ -83,9 +81,18 @@ public class TurnResolver
                     pendingDamage[hitUnitID.Value]++;
                 }
 
+                gridState.TriggerAttackReaction(tile, attackerID);
                 if (gridState.GetEnvironmentalObject(tile)?.AttackReactor != null)
                     reactedTiles.Add(tile);
+            }
+
+            // Also trigger reactions on blocked tiles
+            List<Vector3Int> blockedTiles = attack.attackPattern.GetBlockedTiles(gridState, attackerPos, attack.direction);
+            foreach (var tile in blockedTiles)
+            {
                 gridState.TriggerAttackReaction(tile, attackerID);
+                if (gridState.GetEnvironmentalObject(tile)?.AttackReactor != null)
+                    reactedTiles.Add(tile);
             }
         }
 

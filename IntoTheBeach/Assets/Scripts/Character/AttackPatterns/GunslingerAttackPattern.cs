@@ -44,4 +44,21 @@ public class GunslingerAttackPattern : AttackPattern
         }
         return tiles;
     }
+    public override List<Vector3Int> GetBlockedTiles(GridState gridState, Vector3Int position, int direction)
+    {
+        List<Vector3Int> blocked = new();
+        Vector3Int dir = DirectionVectors[direction];
+
+        for (int i = 1; i <= range; i++)
+        {
+            Vector3Int current = position + dir * i;
+            if (gridState.IsAttackBlocked(current, dir))
+            {
+                blocked.Add(current);
+                break;
+            }
+            if (gridState.GetUnitAtPosition(current).HasValue) break;
+        }
+        return blocked;
+    }
 }

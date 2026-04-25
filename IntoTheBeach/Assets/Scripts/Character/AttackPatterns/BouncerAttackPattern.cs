@@ -77,4 +77,28 @@ public class BouncerAttackPattern : AttackPattern
 
         return tiles;
     }
+    public override List<Vector3Int> GetBlockedTiles(GridState gridState, Vector3Int position, int direction)
+    {
+        List<Vector3Int> blocked = new();
+        Vector3Int dir = DirectionVectors[direction];
+        Vector3Int perp = PerpVectors[direction];
+        var blockedLanes = new HashSet<int>();
+
+        for (int row = 1; row <= rows; row++)
+        {
+            int spread = (width - 1) + (row - 1);
+            Vector3Int rowCenter = position + dir * row;
+            for (int s = -spread; s <= spread; s++)
+            {
+                if (blockedLanes.Contains(s)) continue;
+                Vector3Int tile = rowCenter + perp * s;
+                if (gridState.IsAttackBlocked(tile, dir))
+                {
+                    blocked.Add(tile);
+                    blockedLanes.Add(s);
+                }
+            }
+        }
+        return blocked;
+    }
 }

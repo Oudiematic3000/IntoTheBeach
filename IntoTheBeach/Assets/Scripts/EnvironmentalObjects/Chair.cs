@@ -15,10 +15,13 @@ public class Chair : MonoBehaviour, IMovementBlocker, IAttackBlocker, IAttackRea
 
     void Start()
     {
-        gridState = GameManager.Instance.GridState;
 
+        gridState = GameManager.Instance.GridState;
+        spriteRenderer = gameObject.GetComponent<SpriteRenderer>();
         envObj = new EnvironmentalObject();
-        envObj.OccupiedTiles.Add(gridState.WorldToCell(transform.position));
+        Vector3Int registeredTile = gridState.WorldToCell(transform.position);
+        Debug.Log($"Chair registering at tile: {registeredTile}");
+        envObj.OccupiedTiles.Add(registeredTile);
 
         if (extraPositions.Count > 0)
         {
@@ -27,6 +30,8 @@ public class Chair : MonoBehaviour, IMovementBlocker, IAttackBlocker, IAttackRea
         }
         envObj.MovementBlocker = this;
         envObj.AttackBlocker = this;
+        envObj.AttackReactor = this;
+        envObj.AttackReactionVisual = this;
         gridState.RegisterEnvironmentalObject(envObj);
     }
 
@@ -55,10 +60,10 @@ public class Chair : MonoBehaviour, IMovementBlocker, IAttackBlocker, IAttackRea
         currentFrame++;
 
         if (currentFrame < animationFrames.Length)
-        {
             LeanTween.delayedCall(speed, AdvanceFrame);
-        }
-        Destroy(gameObject);
+        else
+            Destroy(gameObject); 
+
     }
     public void OnAttacked(GridState gridState, int attackerID)
     {
