@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Unity.Netcode;
+using UnityEditor.PackageManager;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
@@ -39,44 +40,63 @@ public class GameManager : NetworkBehaviour
     }
     private void InitialiseMatch()
     {
+        if (!IsServer) return;
+
+
         var allVisuals = FindObjectsByType<CharacterVisual>(FindObjectsSortMode.None);
-        var syncDataList = new List<UnitSyncData>(); 
+
+        unitVisuals.Clear();
+        nextUnitID = 0;
+
+        foreach (var visual in allVisuals)
+        {
+            visual.unitID = nextUnitID;
+            unitVisuals[nextUnitID] = visual;
+            nextUnitID++;
+        }
+
 
         var players = NetworkManager.Singleton.ConnectedClientsList
             .Select(c => c.PlayerObject?.GetComponent<PlayerData>())
             .Where(pd => pd != null)
             .ToList();
-        for (int i=0;i<players.Count;i++)
+
+        var syncDataList = new List<UnitSyncData>();
+        foreach (var kvp in unitVisuals)
         {
-            players[i].SetTeam(i);
-        }
-
-        foreach (var visual in allVisuals)
-        {
-            int unitID = nextUnitID++;
-
-            visual.unitID = unitID;
-            unitVisuals[unitID] = visual;
-
-            PlayerData owner = players.FirstOrDefault(p => p.TeamIndex.Value == visual.teamIndex);
-            if (owner != null)
-                owner.RegisterUnit(unitID);
-
+            int unitID = kvp.Key;
+            CharacterVisual visual = kvp.Value;
             Vector3Int tilePos = visual.GetTilePos(floorTilemap);
-
-            GridState.RegisterUnit(unitID, tilePos, visual.unitClass.health);
 
             syncDataList.Add(new UnitSyncData { tilePos = tilePos, unitID = unitID });
         }
 
-        SyncUnitsClientRpc(syncDataList.ToArray());
+        UnitSyncData[] syncDataArray = syncDataList.ToArray();
+
+        for (int i = 0; i < players.Count; i++)
+        {
+            players[i].SetTeam(i);
+
+            ulong clientId = players[i].OwnerClientId;
+
+            ClientRpcParams clientRpcParams = new ClientRpcParams
+            {
+                Send = new ClientRpcSendParams
+                {
+                    TargetClientIds = new ulong[] { clientId }
+                }
+            };
+
+            SyncUnitsClientRpc(syncDataArray, i, clientRpcParams);
+        }
     }
 
     [ClientRpc]
-    private void SyncUnitsClientRpc(UnitSyncData[] syncDataArray, ClientRpcParams clientRpcParams = default)
+    private void SyncUnitsClientRpc(UnitSyncData[] syncDataArray, int assignedTeamIndex, ClientRpcParams clientRpcParams = default)
     {
         if (IsServer) return;
-      
+
+        // Sync the units on the board
         var allVisuals = FindObjectsByType<CharacterVisual>(FindObjectsSortMode.None);
 
         foreach (var syncData in syncDataArray)
@@ -90,14 +110,41 @@ public class GameManager : NetworkBehaviour
             }
         }
 
+        // Apply the team index to the local player
+        if (NetworkManager.Singleton.LocalClient != null && NetworkManager.Singleton.LocalClient.PlayerObject != null)
+        {
+            var localPlayerData = NetworkManager.Singleton.LocalClient.PlayerObject.GetComponent<PlayerData>();
+            if (localPlayerData != null)
+            {
+                localPlayerData.SetTeam(assignedTeamIndex);
+            }
+        }
     }
-   // void SyncTeamIndexes
     private void HandleClientConnected(ulong clientId)
     {
         if (clientId == NetworkManager.ServerClientId) return;
 
-        var syncDataList = new List<UnitSyncData>();
+        // 1. Evaluate and assign teams based on connection order
+        var players = NetworkManager.Singleton.ConnectedClientsList
+            .Select(c => c.PlayerObject?.GetComponent<PlayerData>())
+            .Where(pd => pd != null)
+            .ToList();
 
+        int newClientTeamIndex = -1;
+        for (int i = 0; i < players.Count; i++)
+        {
+            // Set the team on the server
+            players[i].SetTeam(i);
+
+            // If this is the client that just connected, save their index
+            if (players[i].OwnerClientId == clientId)
+            {
+                newClientTeamIndex = i;
+            }
+        }
+
+        // 2. Prepare Unit sync data
+        var syncDataList = new List<UnitSyncData>();
         foreach (var kvp in unitVisuals)
         {
             int unitID = kvp.Key;
@@ -107,6 +154,7 @@ public class GameManager : NetworkBehaviour
             syncDataList.Add(new UnitSyncData { tilePos = tilePos, unitID = unitID });
         }
 
+        // 3. Target the specific client
         ClientRpcParams clientRpcParams = new ClientRpcParams
         {
             Send = new ClientRpcSendParams
@@ -115,7 +163,8 @@ public class GameManager : NetworkBehaviour
             }
         };
 
-        SyncUnitsClientRpc(syncDataList.ToArray(), clientRpcParams);
+        // 4. Send the RPC with the new team index included
+        SyncUnitsClientRpc(syncDataList.ToArray(), newClientTeamIndex, clientRpcParams);
     }
     public CharacterVisual GetVisual(int unitID)
     {
