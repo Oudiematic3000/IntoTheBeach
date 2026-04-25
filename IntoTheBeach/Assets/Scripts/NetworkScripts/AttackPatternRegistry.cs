@@ -4,11 +4,13 @@ using System.Collections.Generic;
 public static class AttackPatternRegistry
 {
     public const int GunslingerAttack = 0;
+    public const int BouncerAttack = 1;
 
     private static readonly Dictionary<int, Func<AttackPattern>> factories =
         new Dictionary<int, Func<AttackPattern>>
         {
             { GunslingerAttack, () => new GunslingerAttackPattern() },
+            { BouncerAttack, () => new BouncerAttackPattern() },
             
         };
 

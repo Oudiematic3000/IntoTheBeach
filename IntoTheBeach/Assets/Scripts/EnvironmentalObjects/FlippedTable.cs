@@ -21,7 +21,8 @@ public class FlippedTable : MonoBehaviour, IMovementBlocker, IAttackBlocker
             foreach(GameObject go in extraPositions) envObj.OccupiedTiles.Add(gridState.WorldToCell(go.transform.position));
 
         }
-
+        envObj.MovementBlocker=this;
+        envObj.AttackBlocker=this;
         gridState.RegisterEnvironmentalObject(envObj);
     }
 
@@ -31,6 +32,10 @@ public class FlippedTable : MonoBehaviour, IMovementBlocker, IAttackBlocker
     }
     public bool BlocksAttackFromDirection(Vector3Int direction)
     {
-        throw new System.NotImplementedException();
+        if (blockDirections.Contains(direction))
+        {
+            return true;
+        }
+        return false;
     }
 }

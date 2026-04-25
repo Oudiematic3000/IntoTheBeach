@@ -125,14 +125,14 @@ public struct NetUnitPlan : INetworkSerializable
     public NetVector3Int startPos;
     public NetVector3Int resultant;
     public NetPath[] paths;
-    public bool hasMoveAction;      // new
+    public bool hasMoveAction;      
     public bool hasAttackAction;
     public NetAttackAction attackAction;
 
     public void NetworkSerialize<T>(BufferSerializer<T> s) where T : IReaderWriter
     {
         s.SerializeValue(ref unitID);
-        s.SerializeValue(ref hasMoveAction);    // new
+        s.SerializeValue(ref hasMoveAction);   
         if (hasMoveAction)
         {
             s.SerializeValue(ref startPos);
@@ -175,8 +175,8 @@ public struct NetUnitResult : INetworkSerializable
     public NetPath[] paths;
     public bool hasAttackAction;
     public NetAttackAction attackAction;
-    public int damageTaken; 
-
+    public int damageTaken;
+    public NetVector3Int[] reactedTiles;
     public void NetworkSerialize<T>(BufferSerializer<T> s) where T : IReaderWriter
     {
         s.SerializeValue(ref unitID);
@@ -191,9 +191,14 @@ public struct NetUnitResult : INetworkSerializable
         if (hasAttackAction)
             s.SerializeNetworkSerializable(ref attackAction);
         s.SerializeValue(ref damageTaken);
+        int reactedCount = reactedTiles?.Length ?? 0;
+        s.SerializeValue(ref reactedCount);
+        if (s.IsReader) reactedTiles = new NetVector3Int[reactedCount];
+        for (int i = 0; i < reactedCount; i++)
+            s.SerializeNetworkSerializable(ref reactedTiles[i]);
     }
 
-    public static NetUnitResult From(int id, MoveAction moveAction, AttackAction attackAction = null, int damageTaken = 0) => new NetUnitResult
+    public static NetUnitResult From(int id, MoveAction moveAction, AttackAction attackAction = null, int damageTaken = 0, NetVector3Int[] reactedTiles = null) => new NetUnitResult
     {
         unitID = id,
         startPos = NetVector3Int.From(moveAction.startPos),
@@ -201,7 +206,8 @@ public struct NetUnitResult : INetworkSerializable
         paths = moveAction.paths.Select(p => NetPath.From(p)).ToArray(),
         hasAttackAction = attackAction != null,
         attackAction = attackAction != null ? NetAttackAction.From(attackAction) : default,
-        damageTaken = damageTaken
+        damageTaken = damageTaken,
+        reactedTiles = reactedTiles ?? Array.Empty<NetVector3Int>()
     };
 
     public MoveAction ToMoveAction()

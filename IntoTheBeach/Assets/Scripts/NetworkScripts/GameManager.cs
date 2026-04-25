@@ -237,22 +237,20 @@ public class GridState
 
     public bool IsMovementBlocked(Vector3Int position)
     {
-        return (environmentalObjects.TryGetValue(position, out var obj) && obj is IMovementBlocker)
-            || unitPositions.ContainsKey(position);
+        return (environmentalObjects.TryGetValue(position, out var obj) && obj.MovementBlocker != null);
+            
     }
 
     public bool IsAttackBlocked(Vector3Int position, Vector3Int attackDirection)
     {
         if (!environmentalObjects.TryGetValue(position, out var obj)) return false;
-        if (obj is IAttackBlocker blocker)
-            return blocker.BlocksAttackFromDirection(attackDirection);
-        return false;
+        return obj.AttackBlocker?.BlocksAttackFromDirection(attackDirection) ?? false;
     }
 
     public void TriggerAttackReaction(Vector3Int position, int attackerID)
     {
-        if (environmentalObjects.TryGetValue(position, out var obj) && obj is IAttackReactor reactor)
-            reactor.OnAttacked(this, attackerID);
+        if (environmentalObjects.TryGetValue(position, out var obj))
+            obj.AttackReactor?.OnAttacked(this, attackerID);
     }
 
     public EnvironmentalObject GetEnvironmentalObject(Vector3Int position)

@@ -6,7 +6,7 @@ public class TurnResolver
 {
     private GridState gridState;
     Dictionary<int,int> pendingDamage = new Dictionary<int, int>();
-
+    private List<Vector3Int> reactedTiles = new(); 
     public TurnResolver(GridState gridState)
     {
         this.gridState = gridState;
@@ -48,7 +48,8 @@ public class TurnResolver
             kvp.Key,
             kvp.Value,
             workingAttacks.TryGetValue(kvp.Key, out var attack) ? attack : null,
-            pendingDamage.TryGetValue(kvp.Key, out int dmg) ? dmg : 0
+            pendingDamage.TryGetValue(kvp.Key, out int dmg) ? dmg : 0,
+            reactedTiles.Select(t => NetVector3Int.From(t)).ToArray()
         )).ToArray();
     }
 
@@ -60,6 +61,8 @@ public class TurnResolver
 
     private void ResolveAttacks(Dictionary<int, MoveAction> moves, Dictionary<int, AttackAction> attacks)
     {
+        pendingDamage.Clear();
+        reactedTiles.Clear();
 
         foreach (var kvp in attacks)
         {
@@ -75,12 +78,13 @@ public class TurnResolver
                 int? hitUnitID = gridState.GetUnitAtPosition(tile);
                 if (hitUnitID.HasValue)
                 {
-                    Debug.Log("HITHITHIT");
                     if (!pendingDamage.ContainsKey(hitUnitID.Value))
                         pendingDamage[hitUnitID.Value] = 0;
                     pendingDamage[hitUnitID.Value]++;
                 }
 
+                if (gridState.GetEnvironmentalObject(tile)?.AttackReactor != null)
+                    reactedTiles.Add(tile);
                 gridState.TriggerAttackReaction(tile, attackerID);
             }
         }

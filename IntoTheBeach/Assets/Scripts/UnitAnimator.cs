@@ -63,26 +63,45 @@ public class UnitAnimator : MonoBehaviour
             .Where(r => r.hasAttackAction && unitMap.ContainsKey(r.unitID))
             .ToList();
 
+        var allHitTiles = new List<Vector3Int>();
+
         foreach (var result in attackResults)
         {
             AttackAction attack = result.ToAttackAction();
             Vector3Int attackerPos = result.finalPos.ToVector3Int();
-
             List<Vector3Int> hitTiles = attack.attackPattern.GetHitTiles(
                 GameManager.Instance.GridState, attackerPos, attack.direction);
 
             foreach (var tile in hitTiles)
-                saloonTiles.SetColor(tile, Color.red);
+            {
+                saloonTiles.SetTileFlags(tile, TileFlags.None);
+                saloonTiles.SetColor(tile, Color.darkRed);
+                allHitTiles.Add(tile);
+            }
 
             yield return new WaitForSeconds(attackDisplayDuration);
-
-            foreach (var tile in hitTiles)
-                saloonTiles.SetColor(tile, Color.white);
         }
 
+        foreach (var tile in allHitTiles)
+        {
+            saloonTiles.SetTileFlags(tile, TileFlags.None);
+            saloonTiles.SetColor(tile, Color.white);
+        }
+        var reactedTiles = results
+       .Where(r => r.reactedTiles != null)
+       .SelectMany(r => r.reactedTiles)
+       .Select(t => t.ToVector3Int())
+       .Distinct();
+
+        foreach (var tile in reactedTiles)
+        {
+            var envObj = GameManager.Instance.GridState.GetEnvironmentalObject(tile);
+            if (envObj?.AttackReactor is IAttackReactionVisual visual)
+                visual.PlayReactionVisual();
+        }
         foreach (var result in results)
         {
-            if (result.damageTaken > 0 && unitMap.TryGetValue(result.unitID, out var unit))
+            if (result.damageTaken > 0 && unitMap.TryGetValue(result.unitID , out var unit))
                 unit.TakeDamage(result.damageTaken);
         }
 

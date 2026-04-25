@@ -26,14 +26,14 @@ public class GridVisual : MonoBehaviour, Iinteractable
         UIActions.OnMovement += HighlightMovableTiles;
         
         UIActions.OnAttack += HighlightAttackableTiles;
-        StandbyTurnState.OnStandbyStart += ResetTiles;
+        StandbyTurnState.OnStandbyStart += DelayedReset;
         InputManager.OnRemove += RemoveGhost;
     }
     private void OnDisable()
     {
         UIActions.OnMovement -= HighlightMovableTiles;
         UIActions.OnAttack -= HighlightAttackableTiles;
-        StandbyTurnState.OnStandbyStart -= ResetTiles;
+        StandbyTurnState.OnStandbyStart -= DelayedReset;
         
         InputManager.OnRemove -= RemoveGhost;
     }
@@ -62,21 +62,21 @@ public class GridVisual : MonoBehaviour, Iinteractable
         {
             Vector3Int pos = currentSelection.GetTilePos(saloonTiles);
             if (currentSelection.ghost) pos = currentSelection.ghost.GetTilePos(saloonTiles);
+
             int direction = InputManager.Instance.GetCursorDirectionFromCharacter(pos, saloonTiles);
+            GridState gridState = GameManager.Instance.GridState;
+            AttackPattern pattern = currentSelection.unitClass.attackPattern;
 
-            List<List<Vector3Int>> directionSeperatedList = AttackPattern.GetDirectionSeparatedList(currentSelection.unitClass.attackPattern.AttackTilesVisual(saloonTiles, obstacles, pos), pos);
+            List<Vector3Int> hitTiles = pattern.GetHitTiles(gridState, pos, direction);
 
-            if (!directionSeperatedList[direction].Contains(tilePos))
+            if (!hitTiles.Contains(tilePos))
             {
                 foreach (var tile in HighlightedTiles) saloonTiles.SetColor(tile, Color.darkRed);
-
                 return;
             }
-            foreach (var tile in directionSeperatedList[direction])
-            {
-                saloonTiles.SetColor(tile, Color.darkGreen);
 
-            }
+            foreach (var tile in hitTiles)
+                saloonTiles.SetColor(tile, Color.darkGreen);
 
         }
     }
@@ -187,6 +187,12 @@ public class GridVisual : MonoBehaviour, Iinteractable
         currentSelection.RemoveOutline();
        onMoveText?.Invoke();
     }
+
+    public void DelayedReset()
+    {
+        LeanTween.delayedCall(0f, ResetTiles);
+
+    }
     private void ResetTiles()
     {
         bool isAttackState = TurnStateMachine.Instance.currentState is AttackPlanTurnState;
@@ -194,11 +200,7 @@ public class GridVisual : MonoBehaviour, Iinteractable
         for (int i = HighlightedTiles.Count - 1; i >= 0; i--)
         {
             var tile = HighlightedTiles[i];
-
-            if (isAttackState && LockedAttackTiles.Contains(tile))
-            {
-                continue;
-            }
+            if (isAttackState && LockedAttackTiles.Contains(tile)) continue;
 
             saloonTiles.SetColor(tile, Color.white);
             HighlightedTiles.RemoveAt(i);
@@ -209,15 +211,12 @@ public class GridVisual : MonoBehaviour, Iinteractable
             foreach (var lockedTile in LockedAttackTiles)
             {
                 saloonTiles.SetColor(lockedTile, Color.white);
+                HighlightedTiles.Remove(lockedTile);
             }
-
             LockedAttackTiles.Clear();
         }
 
-        if (ghost)
-        {
-            ghost = null;
-        }
+        if (ghost) ghost = null;
     }
     public void RemoveGhost() 
     {
@@ -258,26 +257,34 @@ public class GridVisual : MonoBehaviour, Iinteractable
         }
 
     }
-    public void HighlightAttackableTiles() 
+    public void HighlightAttackableTiles()
     {
         List<Vector3Int> highlightedTiles = new List<Vector3Int>();
         var currentSelection = InputManager.Instance.GetCurrentSelection();
         if (currentSelection == null) return;
-        Vector3Int pos = currentSelection.GetTilePos(saloonTiles);
 
+        Vector3Int pos = currentSelection.GetTilePos(saloonTiles);
         if (currentSelection.ghost)
-        {
             pos = currentSelection.ghost.GetTilePos(saloonTiles);
+
+        GridState gridState = GameManager.Instance.GridState;
+        AttackPattern pattern = currentSelection.unitClass.attackPattern;
+
+        var allTiles = new HashSet<Vector3Int>();
+        for (int direction = 0; direction < 4; direction++)
+        {
+            List<Vector3Int> hitTiles = pattern.GetHitTiles(gridState, pos, direction);
+            foreach (var tile in hitTiles)
+                allTiles.Add(tile);
         }
 
-        List<Vector3Int> tilesToHighlight = AttackPattern.GetAllAttackHighlightTiles(currentSelection.unitClass.attackPattern.AttackTilesVisual(saloonTiles, obstacles, pos), pos, obstacles);
-        foreach (var tile in tilesToHighlight)
+        foreach (var tile in allTiles)
         {
             saloonTiles.SetColor(tile, Color.darkRed);
             highlightedTiles.Add(tile);
         }
-        HighlightedTiles = highlightedTiles;
 
+        HighlightedTiles = highlightedTiles;
     }
     public void HighlightMovableTiles()
     {   
@@ -297,6 +304,7 @@ public class GridVisual : MonoBehaviour, Iinteractable
             {
                 if(Math.Abs(x-pos.x)+Math.Abs(y-pos.y)>currentSelection.unitClass.moveRange) continue;
                 if (Math.Abs(x - pos.x) + Math.Abs(y - pos.y) ==0) continue;
+                if(GameManager.Instance.GridState.IsMovementBlocked(new Vector3Int(x,y))) continue;
                 highlightedTiles.Add(new Vector3Int(x, y, 0));
                 saloonTiles.SetColor(new Vector3Int(x, y, 0), Color.darkGreen);
               

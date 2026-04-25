@@ -4,6 +4,9 @@ using UnityEngine;
 public class EnvironmentalObject
 {
     public List<Vector3Int> OccupiedTiles { get; set; } = new();
+    public IMovementBlocker MovementBlocker { get; set; }
+    public IAttackBlocker AttackBlocker { get; set; }
+    public IAttackReactor AttackReactor { get; set; }
 }
 
 public interface IMovementBlocker { }
@@ -17,5 +20,8 @@ public interface IAttackReactor
 {
     void OnAttacked(GridState gridState, int attackerID);
 }
-
+public interface IAttackReactionVisual
+{
+    void PlayReactionVisual();
+}
 

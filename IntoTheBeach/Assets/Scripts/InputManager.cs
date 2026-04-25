@@ -98,9 +98,12 @@ public class InputManager : MonoBehaviour
     private RaycastHit2D InteractMouse()
 {
     int unitLayer = LayerMask.NameToLayer("Unit");
+    int furnitureLayer = LayerMask.NameToLayer("Furniture");
     int unitLayerMask = 1 << unitLayer;
     int invertedMaskInt = ~unitLayerMask;
-
+        unitLayerMask &= ~(1<<furnitureLayer);
+        int furnitureLayerMask = 1 << furnitureLayer;
+        int invertedfurnitureLayer = ~furnitureLayer;
     Vector3 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
     Vector2 mousePos2D = new Vector2(mousePos.x, mousePos.y);
     
@@ -158,6 +161,7 @@ public class InputManager : MonoBehaviour
             {
                 if (ray.collider.GetComponent<CharacterVisual>().teamIndex != PlayerData.Local.TeamIndex.Value)
                 {
+                    if(teamExclusiveSelection)
                     return; 
                 }
                 if (currentState == TurnStates.Attacking || currentState == TurnStates.Moving)

@@ -6,7 +6,7 @@ using UnityEngine.Tilemaps;
 public class GunslingerAttackPattern : AttackPattern
 {
     public override int TypeID => AttackPatternRegistry.GunslingerAttack;
-    static int range = 2;
+    static int range = 5;
 
     private static readonly Vector3Int[] DirectionVectors =
     {
