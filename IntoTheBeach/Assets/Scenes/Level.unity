@@ -4372,6 +4372,7 @@ MonoBehaviour:
   endTurn: {fileID: 2084816749}
   attackText: {fileID: 157816114}
   moveText: {fileID: 1343340436}
+  endPhaseButton: {fileID: 2084816748}
   pips:
   - {fileID: 1268484185}
   - {fileID: 1851873841}
@@ -5170,6 +5171,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::InputManager
   CurrentSelection: {fileID: 0}
+  teamExclusiveSelection: 0
   currentState: 0
 --- !u!1 &1363794716
 GameObject:
@@ -5522,10 +5524,10 @@ Camera:
   m_LensShift: {x: 0, y: 0}
   m_NormalizedViewPortRect:
     serializedVersion: 2
-    x: 0
-    y: 0
-    width: 1
-    height: 1
+    x: 0.023809526
+    y: 0.022927688
+    width: 0.952381
+    height: 0.9523809
   near clip plane: 0.3
   far clip plane: 1000
   field of view: 60
