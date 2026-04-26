@@ -22,6 +22,7 @@ public class UIActions : MonoBehaviour
     public GameObject endTurnUnitText;
     public GameObject tileSelect;
     public GameObject attackTileSelect;
+    public GameObject standbyText;
   
     public Image objectIcon;
     private void OnEnable()
@@ -149,10 +150,10 @@ public class UIActions : MonoBehaviour
     }
     public void HidePip()
     {
-        
+
         if (TurnStateMachine.Instance.currentState is MovePlanTurnState)
-        { 
-            
+        {
+
 
             int moveCount = TurnStateMachine.Instance.currentTurnInfo.GetMoveCount();
             int index = pips.Length - moveCount;
@@ -161,15 +162,22 @@ public class UIActions : MonoBehaviour
             {
                 pips[index].SetActive(false);
             }
-           
+
 
         }
-        else if(TurnStateMachine.Instance.currentState is AttackPlanTurnState)
+        else if (TurnStateMachine.Instance.currentState is AttackPlanTurnState)
         {
             hideAllText();
             endTurnUnitText.gameObject.SetActive(false);
             pips[(pips.Length) - TurnStateMachine.Instance.currentTurnInfo.GetAttackCount()].SetActive(false);
-           
+
+        }
+        else if (TurnStateMachine.Instance.currentState is StandbyTurnState)       
+        {
+            HideAll();
+            selectUnit.gameObject.SetActive(false);
+            endTurnUnitText.gameObject.SetActive(false);
+            standbyText.gameObject.SetActive(true);
         }
        
 
