@@ -22,7 +22,7 @@ public class UIActions : MonoBehaviour
     public GameObject endTurnUnitText;
     public GameObject tileSelect;
     public GameObject attackTileSelect;
-    public GameObject phaseText;
+  
     public Image objectIcon;
     private void OnEnable()
     {
@@ -90,7 +90,7 @@ public class UIActions : MonoBehaviour
 
     public void MoveButtonPressed() 
     {
-        hideAllText();
+        //hideAllText();
         moveUnitText.SetActive(false);
         tileSelect.SetActive(true);
         OnMovement?.Invoke();
@@ -98,7 +98,7 @@ public class UIActions : MonoBehaviour
 
     public void AttackButtonPressed() 
     {
-        hideAllText();
+        //hideAllText();
         attackTileSelect.SetActive(true);
         selectUnit.SetActive(false);
         OnAttack?.Invoke();
@@ -112,8 +112,9 @@ public class UIActions : MonoBehaviour
         {
             buttonsUIHolder.SetActive(true);
             moveButton.gameObject.SetActive(true);
-           moveUnitText.gameObject.SetActive(true);
+           moveText.gameObject.SetActive(true);
             attackText.gameObject.SetActive(false);
+           
             print("Movestate");
 
             if (!TurnStateMachine.Instance.currentTurnInfo.CanMove() || selectedCharacter.hasMoved)
@@ -145,25 +146,39 @@ public class UIActions : MonoBehaviour
     }
     public void HidePip()
     {
-        if (hasActive() == false)
-        {
-            hideAllText();
-            selectUnit.SetActive(false);
-            phaseText.gameObject.SetActive(true);
+        
+        if (TurnStateMachine.Instance.currentState is MovePlanTurnState)
+        { 
+            
+
+            int moveCount = TurnStateMachine.Instance.currentTurnInfo.GetMoveCount();
+            int index = pips.Length - moveCount;
+
+            if (index >= 0 && index < pips.Length)
+            {
+                pips[index].SetActive(false);
+            }
+            if (!hasActive())
+            {
+                print("end Phase");
+                hideAllTextforEndPhase();
+               
+
+            }
 
         }
-        else 
+        else if(TurnStateMachine.Instance.currentState is AttackPlanTurnState)
         {
-            hideAllText();
-        }
-        if (TurnStateMachine.Instance.currentState is MovePlanTurnState)
-        {
-            if (TurnStateMachine.Instance.currentTurnInfo.GetMoveCount() > 2) return;
-            pips[(pips.Length)-TurnStateMachine.Instance.currentTurnInfo.GetMoveCount()].SetActive(false);
-        }else if(TurnStateMachine.Instance.currentState is AttackPlanTurnState)
-        {
+           
             pips[(pips.Length) - TurnStateMachine.Instance.currentTurnInfo.GetAttackCount()].SetActive(false);
+            if (hasActive() == false)
+            {
+               
+                hideAllTextforEndPhase();
+
+            }
         }
+       
 
     }
     public bool hasActive()
@@ -181,13 +196,18 @@ public class UIActions : MonoBehaviour
     public void hideAllText() 
     {
         selectUnit.gameObject.SetActive(true);
-       
         attackTileSelect.gameObject.SetActive(false);
-     
-        endTurnUnitText.gameObject.SetActive(false);
+        //endTurnUnitText.gameObject.SetActive(false); 
         tileSelect.SetActive(false);
     }
-    
+    public void hideAllTextforEndPhase()
+    {
+        selectUnit.gameObject.SetActive(false);
+        attackTileSelect.gameObject.SetActive(false);
+        endTurnUnitText.gameObject.SetActive(true);
+        tileSelect.SetActive(false);
+    }
+
     public void HideAll()
     {
         hideAllText();
