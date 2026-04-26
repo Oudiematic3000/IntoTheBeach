@@ -27,9 +27,8 @@ public class UIActions : MonoBehaviour
     {
        
         CharacterVisual.OnClick += SetSelectedCharacter;
-        CharacterVisual.OnClick += updateIcon; 
-        CharacterVisual.OnMoveSelected += showMoveText;
-        CharacterVisual.OnAttackSelected += ShowAttackText;
+        CharacterVisual.OnClick += updateIcon;
+      
         InputManager.OnClickNothing += HideAll;
         GridVisual.OnGridClick += HideAll;
         GridVisual.OnResetPip += ShowAllPips;
@@ -38,12 +37,12 @@ public class UIActions : MonoBehaviour
         GridVisual.OnUnitAttacked += HidePip;
         MovePlanTurnState.OnMovePlanStart += ShowEndTurn;
         GridVisual.onMoveText += hideAllText;
+        InputManager.OnRemove += HideAll;
     }
     private void OnDisable()
     {
         CharacterVisual.OnClick -= SetSelectedCharacter;
-        CharacterVisual.OnMoveSelected -= showMoveText;
-        CharacterVisual.OnAttackSelected -= ShowAttackText;
+       
         CharacterVisual.OnClick -= updateIcon;
         GridVisual.OnGridClick -= HideAll;
         GridVisual.OnResetPip -= ShowAllPips;
@@ -53,6 +52,7 @@ public class UIActions : MonoBehaviour
         GridVisual.onMoveText -= hideAllText;
         MovePlanTurnState.OnMovePlanStart -= ShowEndTurn;
         GridVisual.OnUnitAttacked -= HidePip;
+        InputManager.OnRemove -= HideAll;
 
 
     }
@@ -111,7 +111,9 @@ public class UIActions : MonoBehaviour
         {
             buttonsUIHolder.SetActive(true);
             moveButton.gameObject.SetActive(true);
-            showMoveText();
+           moveUnitText.gameObject.SetActive(true);
+            attackText.gameObject.SetActive(false);
+            print("Movestate");
 
             if (!TurnStateMachine.Instance.currentTurnInfo.CanMove() || selectedCharacter.hasMoved)
             {
@@ -124,9 +126,12 @@ public class UIActions : MonoBehaviour
         { 
             buttonsUIHolder.SetActive(true);
             attackButton.gameObject.SetActive(true);
-           ShowAttackText();
-            
-            if(!TurnStateMachine.Instance.currentTurnInfo.CanAttack() || selectedCharacter.hasAttacked) attackButton.interactable = false;
+            attackText.gameObject.SetActive(true);
+            moveUnitText.gameObject.SetActive(false);
+            print("AttackState");
+           
+
+            if (!TurnStateMachine.Instance.currentTurnInfo.CanAttack() || selectedCharacter.hasAttacked) attackButton.interactable = false;
             else attackButton.interactable = true;
 
         }
@@ -151,9 +156,9 @@ public class UIActions : MonoBehaviour
     public void hideAllText() 
     {
         selectUnit.gameObject.SetActive(true);
-        moveUnitText.gameObject.SetActive(false);   
+       
         attackTileSelect.gameObject.SetActive(false);
-        attackUnitText.gameObject.SetActive(false);
+     
         endTurnUnitText.gameObject.SetActive(false);
         tileSelect.SetActive(false);
     }
@@ -173,11 +178,14 @@ public class UIActions : MonoBehaviour
     private void showMoveText() 
     {
         selectUnit.SetActive(false);
-        moveUnitText.SetActive(true);
+        moveText.gameObject.SetActive(true);
+        attackText.gameObject .SetActive(false);
     }
     private void ShowAttackText() 
     {
         selectUnit.SetActive(false);
-        attackUnitText.SetActive(true);
+        attackText.gameObject.SetActive(true);
+        moveText.gameObject.SetActive(false);
+
     }
 }
