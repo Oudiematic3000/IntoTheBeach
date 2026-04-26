@@ -42,7 +42,6 @@ public class GameManager : NetworkBehaviour
     {
         if (!IsServer) return;
         registeredPlayers.Clear();
-        // ... existing code ...
 
 
             var allVisuals = FindObjectsByType<CharacterVisual>(FindObjectsSortMode.None);

@@ -75,6 +75,7 @@ public class UnitAnimator : MonoBehaviour
             foreach (var tile in hitTiles)
             {
                 saloonTiles.SetTileFlags(tile, TileFlags.None);
+                
                 saloonTiles.SetColor(tile, Color.darkRed);
                 allHitTiles.Add(tile);
             }
