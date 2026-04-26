@@ -116,7 +116,7 @@ public class GridVisual : MonoBehaviour, Iinteractable
         }
         else if (InputManager.Instance.GetState() == InputManager.TurnStates.Attacking)
         {
-            Unitattack(tilePos);
+            UnitAttack(tilePos);
         }
         else
         {
@@ -125,8 +125,8 @@ public class GridVisual : MonoBehaviour, Iinteractable
             InputManager.Instance.SetCurrentSelection(null);
         }
     }
- 
-    public void Unitattack(Vector3Int tilePos) 
+
+    public void UnitAttack(Vector3Int tilePos)
     {
         var currentSelection = InputManager.Instance.GetCurrentSelection();
         if (currentSelection == null) return;
@@ -135,13 +135,20 @@ public class GridVisual : MonoBehaviour, Iinteractable
             OnGridClick?.Invoke();
             return;
         }
+
         Vector3Int pos = currentSelection.GetTilePos(saloonTiles);
         if (currentSelection.ghost) pos = currentSelection.ghost.GetTilePos(saloonTiles);
+
         int direction = InputManager.Instance.GetCursorDirectionFromCharacter(pos, saloonTiles);
-        var attack= GetDirectionedAttackTiles(tilePos);
-        if(attack.Count == 0) return;
-        foreach (var tile in attack)
+
+        List<Vector3Int> hitTiles = currentSelection.unitClass.attackPattern.GetHitTiles(
+            GameManager.Instance.GridState, pos, direction);
+
+        if (hitTiles.Count == 0) return;
+
+        foreach (var tile in hitTiles)
         {
+            saloonTiles.SetTileFlags(tile, TileFlags.None);
             saloonTiles.SetColor(tile, Color.darkRed);
             LockedAttackTiles.Add(tile);
         }
@@ -150,14 +157,20 @@ public class GridVisual : MonoBehaviour, Iinteractable
         currentSelection.direction = direction;
         currentSelection.AnimUpdate();
         TurnStateMachine.Instance.currentTurnInfo.IncrementAttackCount(1);
-        AttackAction attackAction = new AttackAction(currentSelection.GetTilePos(saloonTiles), currentSelection.unitClass.attackPattern, direction, currentSelection.unitID);
+
+        AttackAction attackAction = new AttackAction(
+            currentSelection.GetTilePos(saloonTiles),
+            currentSelection.unitClass.attackPattern,
+            direction,
+            currentSelection.unitID);
+
         TurnStateMachine.Instance.currentTurnInfo.turnPlan.ModifyUnitPlanAttackAction(currentSelection.unitID, attackAction);
+
         ResetTiles();
         OnUnitAttacked?.Invoke();
         currentSelection.RemoveOutline();
         OnGridClick?.Invoke();
         InputManager.Instance.SetState(InputManager.TurnStates.None);
-
     }
     public void MoveUnit(Vector3Int TargetPos) 
     {
