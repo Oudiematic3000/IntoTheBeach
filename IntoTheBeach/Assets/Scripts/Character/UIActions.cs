@@ -90,7 +90,7 @@ public class UIActions : MonoBehaviour
 
     public void MoveButtonPressed() 
     {
-        //hideAllText();
+        
         moveUnitText.SetActive(false);
         tileSelect.SetActive(true);
         OnMovement?.Invoke();
@@ -112,6 +112,7 @@ public class UIActions : MonoBehaviour
         {
             buttonsUIHolder.SetActive(true);
             moveButton.gameObject.SetActive(true);
+            moveUnitText.gameObject.SetActive(true);
            moveText.gameObject.SetActive(true);
             attackText.gameObject.SetActive(false);
            
@@ -128,6 +129,7 @@ public class UIActions : MonoBehaviour
         { 
             buttonsUIHolder.SetActive(true);
             attackButton.gameObject.SetActive(true);
+            attackUnitText.gameObject.SetActive(true);
             attackText.gameObject.SetActive(true);
             moveText.gameObject.SetActive(false);
             print("AttackState");
@@ -158,31 +160,22 @@ public class UIActions : MonoBehaviour
             {
                 pips[index].SetActive(false);
             }
-            if (!hasActive())
-            {
-                print("end Phase");
-                hideAllTextforEndPhase();
-               
-
-            }
+           
 
         }
         else if(TurnStateMachine.Instance.currentState is AttackPlanTurnState)
         {
-           
+            hideAllText();
+            endTurnUnitText.gameObject.SetActive(false);
             pips[(pips.Length) - TurnStateMachine.Instance.currentTurnInfo.GetAttackCount()].SetActive(false);
-            if (hasActive() == false)
-            {
-               
-                hideAllTextforEndPhase();
-
-            }
+           
         }
        
 
     }
     public bool hasActive()
     {
+       
         foreach (var pip in pips) 
         {
             if (pip.activeSelf) 
@@ -191,14 +184,20 @@ public class UIActions : MonoBehaviour
             }
             
         }
+        ShowAllPips();
         return false;
     }
     public void hideAllText() 
     {
         selectUnit.gameObject.SetActive(true);
         attackTileSelect.gameObject.SetActive(false);
-        //endTurnUnitText.gameObject.SetActive(false); 
+        moveUnitText.gameObject.SetActive(false);    
+        endTurnUnitText.gameObject.SetActive(false);
         tileSelect.SetActive(false);
+        if (!hasActive()) 
+        {
+            endTurnUnitText.gameObject.SetActive(true); 
+        }
     }
     public void hideAllTextforEndPhase()
     {
