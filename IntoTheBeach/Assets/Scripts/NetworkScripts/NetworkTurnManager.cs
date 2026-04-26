@@ -35,12 +35,12 @@ public class NetworkTurnManager : NetworkBehaviour
 
     private void ResolveTurn()
     {
-        var allPlans = submittedPlans.Values
-            .SelectMany(plans => plans)
-            .ToArray();
-
+        var allPlans = submittedPlans.Values.SelectMany(p => p).ToArray();
         var resolver = new TurnResolver(GameManager.Instance.GridState);
         NetUnitResult[] results = resolver.Resolve(allPlans);
+
+        foreach (var result in results.Where(r => r.isDead))
+            GameManager.Instance.RemoveUnit(result.unitID);
 
         submittedPlans.Clear();
         BroadcastResolvedTurnClientRpc(results);
@@ -177,6 +177,7 @@ public struct NetUnitResult : INetworkSerializable
     public NetAttackAction attackAction;
     public int damageTaken;
     public NetVector3Int[] reactedTiles;
+    public bool isDead;
     public void NetworkSerialize<T>(BufferSerializer<T> s) where T : IReaderWriter
     {
         s.SerializeValue(ref unitID);
@@ -196,9 +197,10 @@ public struct NetUnitResult : INetworkSerializable
         if (s.IsReader) reactedTiles = new NetVector3Int[reactedCount];
         for (int i = 0; i < reactedCount; i++)
             s.SerializeNetworkSerializable(ref reactedTiles[i]);
+        s.SerializeValue(ref isDead);
     }
 
-    public static NetUnitResult From(int id, MoveAction moveAction, AttackAction attackAction = null, int damageTaken = 0, NetVector3Int[] reactedTiles = null) => new NetUnitResult
+    public static NetUnitResult From(int id, MoveAction moveAction, AttackAction attackAction = null, int damageTaken = 0, NetVector3Int[] reactedTiles = null, bool isDead = false) => new NetUnitResult
     {
         unitID = id,
         startPos = NetVector3Int.From(moveAction.startPos),
@@ -207,7 +209,9 @@ public struct NetUnitResult : INetworkSerializable
         hasAttackAction = attackAction != null,
         attackAction = attackAction != null ? NetAttackAction.From(attackAction) : default,
         damageTaken = damageTaken,
-        reactedTiles = reactedTiles ?? Array.Empty<NetVector3Int>()
+        reactedTiles = reactedTiles ?? Array.Empty<NetVector3Int>(),
+        isDead = isDead
+
     };
 
     public MoveAction ToMoveAction()

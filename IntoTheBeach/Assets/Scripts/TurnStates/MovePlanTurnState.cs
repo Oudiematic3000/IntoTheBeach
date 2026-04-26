@@ -11,6 +11,7 @@ public class MovePlanTurnState : TurnState
 
     public override void StartState()
     {
+        GameManager.Instance.CheckWinCondition();
         OnMovePlanStart?.Invoke();
         Debug.Log("MovePlan");
 
