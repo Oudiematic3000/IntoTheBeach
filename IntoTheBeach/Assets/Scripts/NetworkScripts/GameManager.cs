@@ -173,21 +173,31 @@ public class GameManager : NetworkBehaviour
             .Where(pd => pd != null)
             .ToList();
         Debug.Log($"CheckWinCondition — players: {players.Count}, units in visual map: {unitVisuals.Count}");
-        foreach (var player in players)
+        for (int i = 0; i < players.Count; i++)
         {
-            bool hasLivingUnits = unitVisuals.Any(kvp =>
+            var player = players[i];
+            Debug.Log($"Checking player {i}, team: {player.TeamIndex.Value}");
+
+            bool hasLivingUnits = false;
+            foreach (var kvp in unitVisuals)
             {
-                var visual = kvp.Value;
-                if (visual == null) return false;
-                int unitTeam = visual.teamIndex;
-                return unitTeam == player.TeamIndex.Value && !GridState.IsDead(kvp.Key);
-            });
+                if (kvp.Value == null) continue;
+                bool alive = !GridState.IsDead(kvp.Key);
+                bool sameTeam = kvp.Value.teamIndex == player.TeamIndex.Value;
+                Debug.Log($"  Unit {kvp.Key} team:{kvp.Value.teamIndex} alive:{alive} sameTeam:{sameTeam}");
+                if (sameTeam && alive) { hasLivingUnits = true; break; }
+            }
+
+            Debug.Log($"Player {i} team {player.TeamIndex.Value} hasLivingUnits: {hasLivingUnits}");
 
             if (!hasLivingUnits)
             {
                 var winner = players.FirstOrDefault(p => p != player);
                 if (winner != null)
+                {
+                    Debug.Log($"Winner: {winner.Username.Value}");
                     BroadcastWinnerClientRpc(winner.Username.Value);
+                }
                 return;
             }
         }
