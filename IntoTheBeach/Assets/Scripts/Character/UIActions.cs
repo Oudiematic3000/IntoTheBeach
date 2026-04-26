@@ -41,6 +41,7 @@ public class UIActions : MonoBehaviour
         GridVisual.onMoveText += hideAllText;
         InputManager.OnRemove += HideAll;
         StandbyTurnState.OnStandbyStart += ShowStandbyText;
+        BoardSyncTurnState.OnSyncStart += hideStandbyText;
     }
     private void OnDisable()
     {
@@ -57,6 +58,8 @@ public class UIActions : MonoBehaviour
         GridVisual.OnUnitAttacked -= HidePip;
         InputManager.OnRemove -= HideAll;
         StandbyTurnState.OnStandbyStart -=ShowStandbyText;
+        BoardSyncTurnState.OnSyncStart -= hideStandbyText;
+
 
 
     }
@@ -249,5 +252,8 @@ public class UIActions : MonoBehaviour
         attackText.gameObject.SetActive(true);
         moveText.gameObject.SetActive(false);
 
+    }
+    private void hideStandbyText(NetUnitResult[] bruh) {
+        standbyText.SetActive(false);
     }
 }
