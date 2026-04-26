@@ -20,8 +20,8 @@ public class LobbyMenu : MonoBehaviour
 
     private void Awake()
     {
-        if(ipInput) ipInput.text = defaultIP;
-        if(portInput) portInput.text = defaultPort.ToString();
+        if (ipInput) ipInput.text = "";        
+        if (portInput) portInput.text = defaultPort.ToString();
         if (yourIP) yourIP.text = GetLocalIPv4();
     }
 
@@ -34,14 +34,23 @@ public class LobbyMenu : MonoBehaviour
     {
         if (!transport) transport = FindAnyObjectByType<UnityTransport>();
         if (!networkManager) networkManager = FindAnyObjectByType<NetworkManager>();
+
+        string ip = GetIP();
+
+        if (string.IsNullOrWhiteSpace(ipInput.text) || ip == "127.0.0.1")
+        {
+            Debug.LogWarning("Enter the host's IP address before joining");
+            // TODO: show an error message in UI
+            return;
+        }
+
         if (networkManager.IsListening)
             networkManager.Shutdown();
 
-        string ip = GetIP();
         ushort port = GetPort();
+        Debug.Log($"Connecting to {ip}:{port}");
         transport.SetConnectionData(ip, port);
         networkManager.StartClient();
-
         LeanTween.delayedCall(0.1f, WaitForPlayerData);
     }
 

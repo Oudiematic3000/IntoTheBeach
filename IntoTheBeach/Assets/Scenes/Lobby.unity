@@ -2409,10 +2409,10 @@ Camera:
   m_LensShift: {x: 0, y: 0}
   m_NormalizedViewPortRect:
     serializedVersion: 2
-    x: 0.083333336
-    y: 0.083333336
-    width: 0.8333333
-    height: 0.8333333
+    x: 0.019980019
+    y: 0.019529516
+    width: 0.95904094
+    height: 0.95872176
   near clip plane: 0.3
   far clip plane: 1000
   field of view: 60
@@ -4004,8 +4004,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b9e7192ed8a47b14aa382b454f371c7c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::LobbyMenu
-  ipInput: {fileID: 835036980}
-  portInput: {fileID: 180963067}
+  ipInput: {fileID: 1093185549}
+  portInput: {fileID: 431456755}
   usernameInput: {fileID: 1777186968}
   yourIP: {fileID: 99077475}
   transport: {fileID: 79625361}
