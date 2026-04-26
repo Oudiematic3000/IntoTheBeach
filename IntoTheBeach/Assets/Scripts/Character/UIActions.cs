@@ -141,7 +141,14 @@ public class UIActions : MonoBehaviour
             else attackButton.interactable = true;
 
         }
-        
+        else if (TurnStateMachine.Instance.currentState is StandbyTurnState)
+        {
+            HideAll();
+            selectUnit.gameObject.SetActive(false);
+            endTurnUnitText.gameObject.SetActive(false);
+            standbyText.gameObject.SetActive(true);
+        }
+
 
     }
     public void ShowAllPips()
@@ -172,13 +179,7 @@ public class UIActions : MonoBehaviour
             pips[(pips.Length) - TurnStateMachine.Instance.currentTurnInfo.GetAttackCount()].SetActive(false);
 
         }
-        else if (TurnStateMachine.Instance.currentState is StandbyTurnState)       
-        {
-            HideAll();
-            selectUnit.gameObject.SetActive(false);
-            endTurnUnitText.gameObject.SetActive(false);
-            standbyText.gameObject.SetActive(true);
-        }
+        
        
 
     }
