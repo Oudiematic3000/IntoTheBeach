@@ -42,6 +42,10 @@ public class UIActions : MonoBehaviour
         InputManager.OnRemove += HideAll;
         StandbyTurnState.OnStandbyStart += ShowStandbyText;
         BoardSyncTurnState.OnSyncStart += hideStandbyText;
+        BoardSyncTurnState.OnSyncStart += hideSelectUnitText;
+        MovePlanTurnState.OnMovePlanStart += ShowSelectUnitText;
+        StandbyTurnState.OnStandbyStart += HideAllPips;
+        MovePlanTurnState.OnMovePlanStart += ShowAllPips;
     }
     private void OnDisable()
     {
@@ -59,8 +63,10 @@ public class UIActions : MonoBehaviour
         InputManager.OnRemove -= HideAll;
         StandbyTurnState.OnStandbyStart -=ShowStandbyText;
         BoardSyncTurnState.OnSyncStart -= hideStandbyText;
-
-
+        BoardSyncTurnState.OnSyncStart -= hideSelectUnitText;
+        MovePlanTurnState.OnMovePlanStart -= ShowSelectUnitText;
+        StandbyTurnState.OnStandbyStart -= HideAllPips;
+        MovePlanTurnState.OnMovePlanStart -= ShowAllPips;
 
     }
     public void updateIcon(CharacterVisual character) 
@@ -122,7 +128,7 @@ public class UIActions : MonoBehaviour
             moveUnitText.gameObject.SetActive(true);
            moveText.gameObject.SetActive(true);
             attackText.gameObject.SetActive(false);
-           
+            hasActive();
             print("Movestate");
 
             if (!TurnStateMachine.Instance.currentTurnInfo.CanMove() || selectedCharacter.hasMoved)
@@ -140,7 +146,7 @@ public class UIActions : MonoBehaviour
             attackText.gameObject.SetActive(true);
             moveText.gameObject.SetActive(false);
             print("AttackState");
-           
+            hasActive();
 
             if (!TurnStateMachine.Instance.currentTurnInfo.CanAttack() || selectedCharacter.hasAttacked) attackButton.interactable = false;
             else attackButton.interactable = true;
@@ -163,7 +169,12 @@ public class UIActions : MonoBehaviour
     }
     public void ShowAllPips()
     {
+        if(TurnStateMachine.Instance.currentState is AttackPlanTurnState || TurnStateMachine.Instance.currentState is MovePlanTurnState )
         foreach(var pip in pips)pip.SetActive(true);
+    }
+    void HideAllPips()
+    {
+        foreach( var pip in pips) pip.SetActive(false);
     }
     public void HidePip()
     {
@@ -179,34 +190,37 @@ public class UIActions : MonoBehaviour
             {
                 pips[index].SetActive(false);
             }
+            hasActive();
 
 
         }
         else if (TurnStateMachine.Instance.currentState is AttackPlanTurnState)
         {
             hideAllText();
-            endTurnUnitText.gameObject.SetActive(false);
             pips[(pips.Length) - TurnStateMachine.Instance.currentTurnInfo.GetAttackCount()].SetActive(false);
+            hasActive();
 
         }
-        
-       
+
+
 
     }
+
     public bool hasActive()
     {
-       
         foreach (var pip in pips) 
         {
             if (pip.activeSelf) 
             {
+                HideEndPhaseText();
                 return true;
             }
             
         }
-        ShowAllPips();
+        ShowEndPhaseText();
         return false;
     }
+
     public void hideAllText() 
     {
         selectUnit.gameObject.SetActive(true);
@@ -219,13 +233,6 @@ public class UIActions : MonoBehaviour
         {
             endTurnUnitText.gameObject.SetActive(true); 
         }
-    }
-    public void hideAllTextforEndPhase()
-    {
-        selectUnit.gameObject.SetActive(false);
-        attackTileSelect.gameObject.SetActive(false);
-        endTurnUnitText.gameObject.SetActive(true);
-        tileSelect.SetActive(false);
     }
 
     public void HideAll()
@@ -255,5 +262,22 @@ public class UIActions : MonoBehaviour
     }
     private void hideStandbyText(NetUnitResult[] bruh) {
         standbyText.SetActive(false);
+    }
+    private void hideSelectUnitText(NetUnitResult[] bruh) 
+    {
+        selectUnit.SetActive(false);
+    }
+    private void ShowSelectUnitText()
+    {
+        selectUnit.SetActive(true);
+    }
+    private void ShowEndPhaseText()
+    {
+        endTurnUnitText.SetActive(true);
+    }
+    private void HideEndPhaseText()
+    {
+        endTurnUnitText.SetActive(false);
+
     }
 }
