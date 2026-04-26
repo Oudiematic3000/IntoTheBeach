@@ -71,11 +71,10 @@ public class UnitAnimator : MonoBehaviour
             Vector3Int attackerPos = result.finalPos.ToVector3Int();
             List<Vector3Int> hitTiles = attack.attackPattern.GetHitTiles(
                 GameManager.Instance.GridState, attackerPos, attack.direction);
-
-            foreach (var tile in hitTiles)
+            GameManager.Instance.GetVisual(result.unitID).direction = attack.direction;
+                foreach (var tile in hitTiles)
             {
                 saloonTiles.SetTileFlags(tile, TileFlags.None);
-                
                 saloonTiles.SetColor(tile, Color.darkRed);
                 allHitTiles.Add(tile);
             }
