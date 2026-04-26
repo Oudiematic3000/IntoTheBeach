@@ -35,14 +35,26 @@ public class LobbyMenu : MonoBehaviour
         if (!transport) transport = FindAnyObjectByType<UnityTransport>();
         if (!networkManager) networkManager = FindAnyObjectByType<NetworkManager>();
         if (networkManager.IsListening)
-        {
             networkManager.Shutdown();
-        }
+
         string ip = GetIP();
         ushort port = GetPort();
         transport.SetConnectionData(ip, port);
         networkManager.StartClient();
-        LeanTween.delayedCall(0.5f, SetUsername);
+
+        LeanTween.delayedCall(0.1f, WaitForPlayerData);
+    }
+
+    private void WaitForPlayerData()
+    {
+        if (PlayerData.Local != null)
+        {
+            SetUsername();
+        }
+        else
+        {
+            LeanTween.delayedCall(0.1f, WaitForPlayerData);
+        }
     }
     public void StartServerOnly()
     {
@@ -85,13 +97,18 @@ public class LobbyMenu : MonoBehaviour
     }
     public void SetUsername()
     {
-        if (!transport) transport = FindAnyObjectByType<UnityTransport>();
-        if (!networkManager) networkManager = FindAnyObjectByType<NetworkManager>();
-        if (networkManager.IsClient)
-        if(!usernameInput || string.IsNullOrWhiteSpace(usernameInput.text))
-        PlayerData.Local.SetUsernameServerRpc((FixedString64Bytes)("Player"));
-            else
-                PlayerData.Local.SetUsernameServerRpc((FixedString64Bytes)(usernameInput.text));
+        if (!networkManager.IsClient) return;
+        if (PlayerData.Local == null)
+        {
+            Debug.LogWarning("SetUsername called but PlayerData.Local is null");
+            return;
+        }
+
+        FixedString64Bytes name = (!usernameInput || string.IsNullOrWhiteSpace(usernameInput.text))
+            ? "Player"
+            : (FixedString64Bytes)usernameInput.text;
+
+        PlayerData.Local.SetUsernameServerRpc(name);
     }
     public void HideCanvas()
     {
