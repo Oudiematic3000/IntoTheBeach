@@ -2246,7 +2246,7 @@ Transform:
   m_GameObject: {fileID: 464162253}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.017, y: -3.438, z: 0}
+  m_LocalPosition: {x: 0.017, y: -3.188, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -5953,7 +5953,6 @@ MonoBehaviour:
   endTurnUnitText: {fileID: 749435242}
   tileSelect: {fileID: 55404942}
   attackTileSelect: {fileID: 671746720}
-  phaseText: {fileID: 0}
   objectIcon: {fileID: 1177543609}
 --- !u!114 &1014807446
 MonoBehaviour:
@@ -6071,7 +6070,7 @@ Transform:
   m_GameObject: {fileID: 1025419119}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -1, y: -1.25, z: 0}
+  m_LocalPosition: {x: 0.5, y: -1, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -7672,10 +7671,10 @@ Camera:
   m_LensShift: {x: 0, y: 0}
   m_NormalizedViewPortRect:
     serializedVersion: 2
-    x: 0.27031252
-    y: -0.025925925
-    width: 0.25
-    height: 0.25
+    x: 0
+    y: 0
+    width: 1
+    height: 1
   near clip plane: 0.3
   far clip plane: 1000
   field of view: 60
@@ -9839,7 +9838,7 @@ Transform:
   m_GameObject: {fileID: 1936575666}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.48000002, y: -1.9200001, z: 0}
+  m_LocalPosition: {x: 0.98, y: -0.6700001, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -10720,7 +10719,7 @@ Transform:
   m_GameObject: {fileID: 2014543400}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -4.46, y: -1.29, z: 0}
+  m_LocalPosition: {x: -4.46, y: -1.04, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
