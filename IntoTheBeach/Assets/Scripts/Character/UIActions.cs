@@ -40,6 +40,7 @@ public class UIActions : MonoBehaviour
         MovePlanTurnState.OnMovePlanStart += ShowEndTurn;
         GridVisual.onMoveText += hideAllText;
         InputManager.OnRemove += HideAll;
+        StandbyTurnState.OnStandbyStart += ShowStandbyText;
     }
     private void OnDisable()
     {
@@ -55,6 +56,7 @@ public class UIActions : MonoBehaviour
         MovePlanTurnState.OnMovePlanStart -= ShowEndTurn;
         GridVisual.OnUnitAttacked -= HidePip;
         InputManager.OnRemove -= HideAll;
+        StandbyTurnState.OnStandbyStart -=ShowStandbyText;
 
 
     }
@@ -149,6 +151,11 @@ public class UIActions : MonoBehaviour
             standbyText.gameObject.SetActive(true);
         }
 
+
+    }
+    public void ShowStandbyText()
+    {
+        standbyText.gameObject.SetActive(true);
 
     }
     public void ShowAllPips()
