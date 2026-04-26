@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::UnitClass
   moveRange: 2
   health: 5
-  damage: 1
+  damage: 4
   weight: 1
   attackPattern:
     rid: 351225969909432578
