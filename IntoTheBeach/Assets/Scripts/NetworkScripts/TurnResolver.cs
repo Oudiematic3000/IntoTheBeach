@@ -44,13 +44,20 @@ public class TurnResolver
         ApplyMovesToGridState(workingMoves);
         ResolveAttacks(workingMoves, workingAttacks);
 
-        return workingMoves.Select(kvp => NetUnitResult.From(
-            kvp.Key,
-            kvp.Value,
-            workingAttacks.TryGetValue(kvp.Key, out var attack) ? attack : null,
-            pendingDamage.TryGetValue(kvp.Key, out int dmg) ? dmg : 0,
-            reactedTiles.Select(t => NetVector3Int.From(t)).ToArray()
-        )).ToArray();
+        return workingMoves.Select(kvp =>
+        {
+            bool dead = gridState.IsDead(kvp.Key);
+            int dmg = pendingDamage.TryGetValue(kvp.Key, out int d) ? d : 0;
+            Debug.Log($"[Server] Building result for unit {kvp.Key} — dmg: {dmg}, health: {gridState.GetHealth(kvp.Key)}, isDead: {dead}");
+            return NetUnitResult.From(
+                kvp.Key,
+                kvp.Value,
+                workingAttacks.TryGetValue(kvp.Key, out var attack) ? attack : null,
+                dmg,
+                reactedTiles.Select(t => NetVector3Int.From(t)).ToArray(),
+                dead
+            );
+        }).ToArray();
     }
 
     private void ApplyMovesToGridState(Dictionary<int, MoveAction> moves)
@@ -86,7 +93,6 @@ public class TurnResolver
                     reactedTiles.Add(tile);
             }
 
-            // Also trigger reactions on blocked tiles
             List<Vector3Int> blockedTiles = attack.attackPattern.GetBlockedTiles(gridState, attackerPos, attack.direction);
             foreach (var tile in blockedTiles)
             {
@@ -97,7 +103,11 @@ public class TurnResolver
         }
 
         foreach (var kvp in pendingDamage)
+        {
             gridState.ApplyDamage(kvp.Key, kvp.Value);
+            if (gridState.IsDead(kvp.Key))
+                gridState.RemoveDeadUnit(kvp.Key);
+        }
     }
 
     private void ResolveCollisions(Dictionary<int, MoveAction> moves)

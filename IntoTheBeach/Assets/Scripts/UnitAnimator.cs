@@ -101,8 +101,14 @@ public class UnitAnimator : MonoBehaviour
         }
         foreach (var result in results)
         {
+            Debug.Log($"Unit {result.unitID} — damageTaken: {result.damageTaken}, isDead: {result.isDead}");
             if (result.damageTaken > 0 && unitMap.TryGetValue(result.unitID , out var unit))
+            {
                 unit.TakeDamage(result.damageTaken);
+                if (result.isDead)
+                    Destroy(unit.gameObject);
+            }
+
         }
 
         TurnStateMachine.Instance.UpdateState();

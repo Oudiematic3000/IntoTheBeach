@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using Unity.Collections;
 using Unity.Netcode;
 using UnityEditor.PackageManager;
 using UnityEngine;
@@ -163,6 +164,56 @@ public class GameManager : NetworkBehaviour
         float midY = bounds.yMin + bounds.size.y / 2f;
         return tilePos.y >= midY ? 1 : 0;
     }
+    public void CheckWinCondition()
+    {
+        if (!IsServer) return;
+
+        var players = NetworkManager.Singleton.ConnectedClientsList
+            .Select(c => c.PlayerObject?.GetComponent<PlayerData>())
+            .Where(pd => pd != null)
+            .ToList();
+        Debug.Log($"CheckWinCondition — players: {players.Count}, units in visual map: {unitVisuals.Count}");
+        for (int i = 0; i < players.Count; i++)
+        {
+            var player = players[i];
+            Debug.Log($"Checking player {i}, team: {player.TeamIndex.Value}");
+
+            bool hasLivingUnits = false;
+            foreach (var kvp in unitVisuals)
+            {
+                if (kvp.Value == null) continue;
+                bool alive = !GridState.IsDead(kvp.Key);
+                bool sameTeam = kvp.Value.teamIndex == player.TeamIndex.Value;
+                Debug.Log($"  Unit {kvp.Key} team:{kvp.Value.teamIndex} alive:{alive} sameTeam:{sameTeam}");
+                if (sameTeam && alive) { hasLivingUnits = true; break; }
+            }
+
+            Debug.Log($"Player {i} team {player.TeamIndex.Value} hasLivingUnits: {hasLivingUnits}");
+
+            if (!hasLivingUnits)
+            {
+                var winner = players.FirstOrDefault(p => p != player);
+                if (winner != null)
+                {
+                    Debug.Log($"Winner: {winner.Username.Value}");
+                    BroadcastWinnerClientRpc(winner.Username.Value);
+                }
+                return;
+            }
+        }
+    }
+
+    [ClientRpc]
+    private void BroadcastWinnerClientRpc(FixedString64Bytes winnerUsername)
+    {
+        Debug.Log($"Game over! Winner: {winnerUsername}");
+    }
+
+    public void RemoveUnit(int unitID)
+    {
+        Debug.Log("RemovedUnit ID: " + unitID);
+        unitVisuals.Remove(unitID);
+    }
 }
 public struct UnitSyncData : INetworkSerializable
 {
@@ -256,5 +307,11 @@ public class GridState
     public EnvironmentalObject GetEnvironmentalObject(Vector3Int position)
     {
         return environmentalObjects.TryGetValue(position, out var obj) ? obj : null;
+    }
+    public void RemoveDeadUnit(int unitID)
+    {
+        Vector3Int? pos = GetUnitPosition(unitID);
+        if (pos.HasValue)
+            unitPositions.Remove(pos.Value);
     }
 }

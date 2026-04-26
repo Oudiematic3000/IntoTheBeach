@@ -60,6 +60,11 @@ public class CharacterVisual : MonoBehaviour, Iinteractable
 
     public void SetHearts(int health)
     {
+        if (health <= 0)
+        {
+            Destroy(heartObject);
+            return;
+        }
         if (PlayerData.Local && teamIndex == PlayerData.Local.TeamIndex.Value)
         {
             heartObject.sprite = hearts[health - 1];
