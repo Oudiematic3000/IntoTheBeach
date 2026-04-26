@@ -1,108 +1,98 @@
-using System.Linq;
-using System.Net;
+using System.Threading.Tasks;
 using TMPro;
 using Unity.Collections;
 using Unity.Netcode;
 using Unity.Netcode.Transports.UTP;
+using Unity.Services.Authentication;
+using Unity.Services.Core;
+using Unity.Services.Relay;
+using Unity.Services.Relay.Models;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using UnityEngine.UI;
 
 public class LobbyMenu : MonoBehaviour
 {
-    [SerializeField] TMP_InputField ipInput, portInput, usernameInput;
-    [SerializeField] TextMeshProUGUI yourIP;
-    string defaultIP = "127.0.0.1";
-    ushort defaultPort = 7777;
+    [SerializeField] TMP_InputField joinCodeInput, usernameInput;
+    [SerializeField] TextMeshProUGUI joinCodeDisplay, statusText;
+    [SerializeField] UnityTransport transport;
+    [SerializeField] NetworkManager networkManager;
 
-    [SerializeField]UnityTransport transport;
-    [SerializeField]NetworkManager networkManager;
-
-    private void Awake()
+    private async void Awake()
     {
-        if(ipInput) ipInput.text = defaultIP;
-        if(portInput) portInput.text = defaultPort.ToString();
-        if (yourIP) yourIP.text = GetLocalIPv4();
+        await UnityServices.InitializeAsync();
+        if (!AuthenticationService.Instance.IsSignedIn)
+            await AuthenticationService.Instance.SignInAnonymouslyAsync();
     }
 
     public void StartGame()
     {
-       
         networkManager.SceneManager.LoadScene("Level", LoadSceneMode.Single);
     }
-    public void JoinGame()
+
+    public async void StartHost()
     {
         if (!transport) transport = FindAnyObjectByType<UnityTransport>();
         if (!networkManager) networkManager = FindAnyObjectByType<NetworkManager>();
-        if (networkManager.IsListening)
-            networkManager.Shutdown();
 
-        string ip = GetIP();
-        ushort port = GetPort();
-        transport.SetConnectionData(ip, port);
-        networkManager.StartClient();
+        try
+        {
+            Allocation allocation = await RelayService.Instance.CreateAllocationAsync(1);
+            string joinCode = await RelayService.Instance.GetJoinCodeAsync(allocation.AllocationId);
 
-        LeanTween.delayedCall(0.1f, WaitForPlayerData);
+            transport.SetRelayServerData(AllocationUtils.ToRelayServerData(allocation, "udp"));
+
+            networkManager.StartHost();
+            SetUsername();
+
+            if (joinCodeDisplay) joinCodeDisplay.text = joinCode;
+            Debug.Log($"Relay join code: {joinCode}");
+        }
+        catch (System.Exception e)
+        {
+            Debug.LogError($"Failed to start host with relay: {e}");
+            if (statusText) statusText.text = "Failed to create session";
+        }
+    }
+
+    public async void JoinGame()
+    {
+        if (!transport) transport = FindAnyObjectByType<UnityTransport>();
+        if (!networkManager) networkManager = FindAnyObjectByType<NetworkManager>();
+
+        string code = joinCodeInput ? joinCodeInput.text.Trim() : "";
+        if (string.IsNullOrEmpty(code))
+        {
+            if (statusText) statusText.text = "Enter a join code";
+            return;
+        }
+
+        try
+        {
+            JoinAllocation allocation = await RelayService.Instance.JoinAllocationAsync(code);
+            transport.SetRelayServerData(AllocationUtils.ToRelayServerData(allocation, "udp"));
+
+            networkManager.StartClient();
+            LeanTween.delayedCall(0.1f, WaitForPlayerData);
+        }
+        catch (System.Exception e)
+        {
+            Debug.LogError($"Failed to join relay: {e}");
+            if (statusText) statusText.text = "Invalid join code";
+        }
     }
 
     private void WaitForPlayerData()
     {
         if (PlayerData.Local != null)
-        {
             SetUsername();
-        }
         else
-        {
             LeanTween.delayedCall(0.1f, WaitForPlayerData);
-        }
-    }
-    public void StartServerOnly()
-    {
-        ushort port=GetPort();
-        transport.SetConnectionData("0.0.0.0", port);
-        networkManager.StartServer();
-    }
-    string GetIP()
-    {
-        if (!ipInput || string.IsNullOrWhiteSpace(ipInput.text)) return defaultIP;
-
-        return ipInput.text.Trim();
-    }
-    ushort GetPort()
-    {
-        if(!portInput || !ushort.TryParse(portInput.text, out ushort port))return defaultPort;
-
-        return port;
-    }
-    public string GetLocalIPv4()
-    {
-        return Dns.GetHostEntry(Dns.GetHostName())
-        .AddressList.First(
-        f => f.AddressFamily == System.Net.Sockets.AddressFamily.InterNetwork)
-        .ToString();
     }
 
-    public void StartHost()
-    {
-        if (!transport) transport = FindAnyObjectByType<UnityTransport>();
-        if (!networkManager) networkManager = FindAnyObjectByType<NetworkManager>();
-        if (networkManager.IsListening)
-        {
-            networkManager.Shutdown();
-        }
-        ushort port = GetPort();
-        transport.SetConnectionData("0.0.0.0", port);
-        networkManager.StartHost();
-        SetUsername();
-    }
     public void SetUsername()
     {
         if (!networkManager.IsClient) return;
-        if (PlayerData.Local == null)
-        {
-            Debug.LogWarning("SetUsername called but PlayerData.Local is null");
-            return;
-        }
+        if (PlayerData.Local == null) return;
 
         FixedString64Bytes name = (!usernameInput || string.IsNullOrWhiteSpace(usernameInput.text))
             ? "Player"
@@ -110,9 +100,9 @@ public class LobbyMenu : MonoBehaviour
 
         PlayerData.Local.SetUsernameServerRpc(name);
     }
+
     public void HideCanvas()
     {
         transform.parent.gameObject.SetActive(false);
     }
- 
 }
