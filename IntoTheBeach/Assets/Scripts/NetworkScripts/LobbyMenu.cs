@@ -44,7 +44,7 @@ public class LobbyMenu : MonoBehaviour
             networkManager.StartHost();
             SetUsername();
 
-            if (joinCodeDisplay) joinCodeDisplay.text = "Join Code: " + joinCode;
+            if (joinCodeDisplay) joinCodeDisplay.text = joinCode;
             Debug.Log($"Relay join code: {joinCode}");
         }
         catch (System.Exception e)
