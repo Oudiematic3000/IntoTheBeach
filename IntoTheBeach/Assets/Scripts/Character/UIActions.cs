@@ -22,6 +22,7 @@ public class UIActions : MonoBehaviour
     public GameObject endTurnUnitText;
     public GameObject tileSelect;
     public GameObject attackTileSelect;
+    public GameObject phaseText;
     public Image objectIcon;
     private void OnEnable()
     {
@@ -127,7 +128,7 @@ public class UIActions : MonoBehaviour
             buttonsUIHolder.SetActive(true);
             attackButton.gameObject.SetActive(true);
             attackText.gameObject.SetActive(true);
-            moveUnitText.gameObject.SetActive(false);
+            moveText.gameObject.SetActive(false);
             print("AttackState");
            
 
@@ -135,6 +136,7 @@ public class UIActions : MonoBehaviour
             else attackButton.interactable = true;
 
         }
+        
 
     }
     public void ShowAllPips()
@@ -143,6 +145,17 @@ public class UIActions : MonoBehaviour
     }
     public void HidePip()
     {
+        if (hasActive() == false)
+        {
+            hideAllText();
+            selectUnit.SetActive(false);
+            phaseText.gameObject.SetActive(true);
+
+        }
+        else 
+        {
+            hideAllText();
+        }
         if (TurnStateMachine.Instance.currentState is MovePlanTurnState)
         {
             if (TurnStateMachine.Instance.currentTurnInfo.GetMoveCount() > 2) return;
@@ -152,6 +165,18 @@ public class UIActions : MonoBehaviour
             pips[(pips.Length) - TurnStateMachine.Instance.currentTurnInfo.GetAttackCount()].SetActive(false);
         }
 
+    }
+    public bool hasActive()
+    {
+        foreach (var pip in pips) 
+        {
+            if (pip.activeSelf) 
+            {
+                return true;
+            }
+            
+        }
+        return false;
     }
     public void hideAllText() 
     {
