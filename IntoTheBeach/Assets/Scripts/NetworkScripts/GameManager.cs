@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using Unity.Collections;
 using Unity.Netcode;
 using UnityEditor.PackageManager;
 using UnityEngine;
@@ -163,6 +164,46 @@ public class GameManager : NetworkBehaviour
         float midY = bounds.yMin + bounds.size.y / 2f;
         return tilePos.y >= midY ? 1 : 0;
     }
+    public void CheckWinCondition()
+    {
+        if (!IsServer) return;
+
+        var players = NetworkManager.Singleton.ConnectedClientsList
+            .Select(c => c.PlayerObject?.GetComponent<PlayerData>())
+            .Where(pd => pd != null)
+            .ToList();
+        Debug.Log($"CheckWinCondition — players: {players.Count}, units in visual map: {unitVisuals.Count}");
+        foreach (var player in players)
+        {
+            bool hasLivingUnits = unitVisuals.Any(kvp =>
+            {
+                var visual = kvp.Value;
+                if (visual == null) return false;
+                int unitTeam = visual.teamIndex;
+                return unitTeam == player.TeamIndex.Value && !GridState.IsDead(kvp.Key);
+            });
+
+            if (!hasLivingUnits)
+            {
+                var winner = players.FirstOrDefault(p => p != player);
+                if (winner != null)
+                    BroadcastWinnerClientRpc(winner.Username.Value);
+                return;
+            }
+        }
+    }
+
+    [ClientRpc]
+    private void BroadcastWinnerClientRpc(FixedString64Bytes winnerUsername)
+    {
+        Debug.Log($"Game over! Winner: {winnerUsername}");
+    }
+
+    public void RemoveUnit(int unitID)
+    {
+        Debug.Log("RemovedUnit ID: " + unitID);
+        unitVisuals.Remove(unitID);
+    }
 }
 public struct UnitSyncData : INetworkSerializable
 {
@@ -256,5 +297,11 @@ public class GridState
     public EnvironmentalObject GetEnvironmentalObject(Vector3Int position)
     {
         return environmentalObjects.TryGetValue(position, out var obj) ? obj : null;
+    }
+    public void RemoveDeadUnit(int unitID)
+    {
+        Vector3Int? pos = GetUnitPosition(unitID);
+        if (pos.HasValue)
+            unitPositions.Remove(pos.Value);
     }
 }
