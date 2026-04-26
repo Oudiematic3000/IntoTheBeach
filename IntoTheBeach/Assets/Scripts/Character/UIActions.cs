@@ -100,6 +100,7 @@ public class UIActions : MonoBehaviour
     {
         //hideAllText();
         attackTileSelect.SetActive(true);
+        attackUnitText.SetActive(false);
         selectUnit.SetActive(false);
         OnAttack?.Invoke();
     }
@@ -191,7 +192,8 @@ public class UIActions : MonoBehaviour
     {
         selectUnit.gameObject.SetActive(true);
         attackTileSelect.gameObject.SetActive(false);
-        moveUnitText.gameObject.SetActive(false);    
+        moveUnitText.gameObject.SetActive(false);
+        attackUnitText.gameObject.SetActive(false);
         endTurnUnitText.gameObject.SetActive(false);
         tileSelect.SetActive(false);
         if (!hasActive()) 
