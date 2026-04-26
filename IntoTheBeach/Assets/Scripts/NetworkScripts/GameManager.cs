@@ -42,8 +42,11 @@ public class GameManager : NetworkBehaviour
     private void InitialiseMatch()
     {
         if (!IsServer) return;
+        registeredPlayers.Clear();
+        // ... existing code ...
 
-        var allVisuals = FindObjectsByType<CharacterVisual>(FindObjectsSortMode.None);
+
+            var allVisuals = FindObjectsByType<CharacterVisual>(FindObjectsSortMode.None);
         unitVisuals.Clear();
         nextUnitID = 0;
 
@@ -73,11 +76,12 @@ public class GameManager : NetworkBehaviour
             .Select(c => c.PlayerObject?.GetComponent<PlayerData>())
             .Where(pd => pd != null)
             .ToList();
+        registeredPlayers.Clear();
 
         for (int i = 0; i < players.Count; i++)
         {
-            players[i].SetTeam(i);  
-
+            players[i].SetTeam(i);
+            registeredPlayers.Add(players[i]);
             ClientRpcParams clientRpcParams = new ClientRpcParams
             {
                 Send = new ClientRpcSendParams
@@ -125,6 +129,8 @@ public class GameManager : NetworkBehaviour
         for (int i = 0; i < players.Count; i++)
         {
             players[i].SetTeam(i);
+            if (!registeredPlayers.Contains(players[i]))
+                registeredPlayers.Add(players[i]);
             if (players[i].OwnerClientId == clientId)
                 newClientTeamIndex = i;
         }
@@ -164,43 +170,57 @@ public class GameManager : NetworkBehaviour
         float midY = bounds.yMin + bounds.size.y / 2f;
         return tilePos.y >= midY ? 1 : 0;
     }
+    private List<PlayerData> registeredPlayers = new();
+
+    public void RegisterPlayer(PlayerData player)
+    {
+        if (!registeredPlayers.Contains(player))
+            registeredPlayers.Add(player);
+    }
+
     public void CheckWinCondition()
     {
         if (!IsServer) return;
 
-        var players = NetworkManager.Singleton.ConnectedClientsList
-            .Select(c => c.PlayerObject?.GetComponent<PlayerData>())
-            .Where(pd => pd != null)
-            .ToList();
-        Debug.Log($"CheckWinCondition — players: {players.Count}, units in visual map: {unitVisuals.Count}");
-        for (int i = 0; i < players.Count; i++)
-        {
-            var player = players[i];
-            Debug.Log($"Checking player {i}, team: {player.TeamIndex.Value}");
+        Debug.Log($"CheckWinCondition — players: {registeredPlayers.Count}, units: {unitVisuals.Count}");
 
-            bool hasLivingUnits = false;
-            foreach (var kvp in unitVisuals)
+        for (int i = 0; i < registeredPlayers.Count; i++)
+        {
+            Debug.Log($"Iteration {i}");
+            var player = registeredPlayers[i];
+
+            if (player == null)
             {
-                if (kvp.Value == null) continue;
-                bool alive = !GridState.IsDead(kvp.Key);
-                bool sameTeam = kvp.Value.teamIndex == player.TeamIndex.Value;
-                Debug.Log($"  Unit {kvp.Key} team:{kvp.Value.teamIndex} alive:{alive} sameTeam:{sameTeam}");
-                if (sameTeam && alive) { hasLivingUnits = true; break; }
+                Debug.LogError($"Player {i} is null in registeredPlayers!");
+                continue;
             }
 
-            Debug.Log($"Player {i} team {player.TeamIndex.Value} hasLivingUnits: {hasLivingUnits}");
+            Debug.Log($"Player {i} team: {player.TeamIndex.Value}");
+
+            bool hasLivingUnits = unitVisuals.Any(kvp =>
+                kvp.Value != null &&
+                kvp.Value.teamIndex == player.TeamIndex.Value &&
+                !GridState.IsDead(kvp.Key));
+
+            Debug.Log($"Player {i} hasLivingUnits: {hasLivingUnits}");
 
             if (!hasLivingUnits)
             {
-                var winner = players.FirstOrDefault(p => p != player);
+                var winner = registeredPlayers.FirstOrDefault(p => p != null && p != player);
                 if (winner != null)
                 {
                     Debug.Log($"Winner: {winner.Username.Value}");
                     BroadcastWinnerClientRpc(winner.Username.Value);
                 }
+                else
+                {
+                    Debug.LogError("No winner found — winner is null");
+                }
                 return;
             }
         }
+
+        Debug.Log("No loser found this turn");
     }
 
     [ClientRpc]
