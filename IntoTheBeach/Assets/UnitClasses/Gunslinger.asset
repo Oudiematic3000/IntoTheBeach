@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4e9351d6d47506e4cbfe0551240eb57e, type: 3}
   m_Name: Gunslinger
   m_EditorClassIdentifier: Assembly-CSharp::UnitClass
-  moveRange: 2
+  moveRange: 3
   health: 5
   damage: 4
   weight: 1
