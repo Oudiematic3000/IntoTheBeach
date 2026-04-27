@@ -8647,6 +8647,7 @@ MonoBehaviour:
   attackRangeText: {fileID: 977667882}
   selectATileToAttackText: {fileID: 671746720}
   moveAttackUI: {fileID: 816927709}
+  HowToCancelText: {fileID: 1206975978}
   moveButton: {fileID: 839608923}
   endPhaseButton: {fileID: 2084816748}
   attackButton: {fileID: 839256000}
@@ -9532,10 +9533,10 @@ Camera:
   m_LensShift: {x: 0, y: 0}
   m_NormalizedViewPortRect:
     serializedVersion: 2
-    x: 0.034849953
-    y: 0.034423407
-    width: 0.9293321
-    height: 0.92943203
+    x: 0.02093719
+    y: 0.021267168
+    width: 0.95712864
+    height: 0.95702255
   near clip plane: 0.3
   far clip plane: 1000
   field of view: 60

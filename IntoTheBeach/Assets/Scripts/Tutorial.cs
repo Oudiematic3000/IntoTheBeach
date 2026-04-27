@@ -118,7 +118,7 @@ public class Tutorial : MonoBehaviour
         blackScreen.SetActive(true);
         TryRaiseUnits();
         HighlightUI(SelectUnitText);
-        endPhaseButton.SetActive(false);
+        endPhaseButton.SetActive(true);
         currentPhase = TutorialPhases.SelectAUnit2;
     }
     void RunViewAttackRange(CharacterVisual visual)
@@ -127,6 +127,7 @@ public class Tutorial : MonoBehaviour
         ResetAllHighlights();
         LeanTween.delayedCall(0f, () =>
         {
+            HighlightGameObject(InputManager.Instance.GetCurrentSelection().gameObject);
             HowToCancelText.SetActive(true);
             HighlightUI(HowToCancelText);
             HighlightUI(attackButton);
@@ -141,6 +142,10 @@ public class Tutorial : MonoBehaviour
         ResetAllHighlights();
         HowToCancelText.SetActive(false);
         HighlightGameObject(InputManager.Instance.GetCurrentSelection().gameObject);
+        LeanTween.delayedCall(0f, () =>
+        {
+            HighlightGameObject(InputManager.Instance.GetCurrentSelection().ghost.gameObject);
+        });
         HighlightGameObject(board);
         HighlightUI(selectATileToAttackText);
         currentPhase = TutorialPhases.LockInAttack;
