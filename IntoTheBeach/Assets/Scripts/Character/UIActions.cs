@@ -16,6 +16,7 @@ public class UIActions : MonoBehaviour
     [SerializeField] Image attackText, moveText;
     [SerializeField] GameObject endPhaseButton;
     [SerializeField] GameObject[] pips;
+    public GameObject movePhaseIndicator, attackPhaseIndicator;
     public GameObject selectUnit;
     public GameObject winPanel;
     public GameObject losePanel;
@@ -50,6 +51,9 @@ public class UIActions : MonoBehaviour
         StandbyTurnState.OnStandbyStart += HideAllPips;
         MovePlanTurnState.OnMovePlanStart += ShowAllPips;
         GameManager.winnerBroadcast += ShowWinner;
+        AttackPlanTurnState.OnAttackPlanStart += showAttackState;
+        MovePlanTurnState.OnMovePlanStart += showMoveState;
+        StandbyTurnState.OnStandbyStart += standbystate;
 
     }
     private void OnDisable()
@@ -74,6 +78,9 @@ public class UIActions : MonoBehaviour
         StandbyTurnState.OnStandbyStart -= HideAllPips;
         MovePlanTurnState.OnMovePlanStart -= ShowAllPips;
         GameManager.winnerBroadcast -= ShowWinner;
+        AttackPlanTurnState.OnAttackPlanStart -= showAttackState;
+        MovePlanTurnState.OnMovePlanStart -= showMoveState;
+        StandbyTurnState.OnStandbyStart -= standbystate;
 
     }
     public void updateIcon(CharacterVisual character)
@@ -142,6 +149,7 @@ public class UIActions : MonoBehaviour
 
         if(TurnStateMachine.Instance.currentState is MovePlanTurnState)
         {
+          
             buttonsUIHolder.SetActive(true);
             moveButton.gameObject.SetActive(true);
             moveUnitText.gameObject.SetActive(true);
@@ -159,6 +167,7 @@ public class UIActions : MonoBehaviour
 
         if(TurnStateMachine.Instance.currentState is AttackPlanTurnState)
         { 
+           
             buttonsUIHolder.SetActive(true);
             attackButton.gameObject.SetActive(true);
             attackUnitText.gameObject.SetActive(true);
@@ -277,6 +286,21 @@ public class UIActions : MonoBehaviour
         attackText.gameObject.SetActive(true);
         moveText.gameObject.SetActive(false);
 
+    }
+    private void showAttackState() 
+    {
+        movePhaseIndicator.SetActive(false);
+        attackPhaseIndicator.SetActive(true);
+    }
+    private void showMoveState() 
+    {
+        movePhaseIndicator.SetActive(true);
+        attackPhaseIndicator.SetActive(false);
+    }
+    private void standbystate() 
+    {
+        movePhaseIndicator.SetActive(false);
+        attackPhaseIndicator.SetActive(false);
     }
     private void hideStandbyText(NetUnitResult[] bruh) {
         standbyText.SetActive(false);
