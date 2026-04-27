@@ -111,9 +111,13 @@ public class UnitAnimator : MonoBehaviour
             if (result.damageTaken > 0 && unitMap.TryGetValue(result.unitID , out var unit))
             {
                 unit.TakeDamage(result.damageTaken);
+                if (result.isDead) 
+                { 
+                    Destroy(unit.gameObject); 
+                    continue;
+                }
+                    
                 GameManager.Instance.GetVisual(result.unitID).FlashWhite();
-                if (result.isDead)
-                    Destroy(unit.gameObject);
             }
 
         }
