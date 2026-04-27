@@ -26,6 +26,8 @@ public class UIActions : MonoBehaviour
     public GameObject tileSelect;
     public GameObject attackTileSelect;
     public GameObject standbyText;
+    [SerializeField] GameObject DamageBar;
+    [SerializeField] TextMeshProUGUI DamageBarNumber;
 
     public Image objectIcon;
     private void OnEnable()
@@ -146,7 +148,7 @@ public class UIActions : MonoBehaviour
     public void ShowUnitInfo()
     {
         classUIHolder.SetActive(true);
-
+        ShowDamageBar();
         if(TurnStateMachine.Instance.currentState is MovePlanTurnState)
         {
           
@@ -273,7 +275,7 @@ public class UIActions : MonoBehaviour
         attackButton.gameObject.SetActive(false);
         classUIHolder.SetActive(false);
         buttonsUIHolder.SetActive(false);
-       
+       HideDamageBar();
     }
     private void showMoveText() 
     {
@@ -322,5 +324,17 @@ public class UIActions : MonoBehaviour
     {
         endTurnUnitText.SetActive(false);
 
+    }
+    void ShowDamageBar()
+    {
+        DamageBar.SetActive(true);
+        LeanTween.delayedCall(0f, () =>
+        {
+            DamageBarNumber.text = InputManager.Instance.GetCurrentSelection().unitClass.damage.ToString();
+        });
+    }
+    void HideDamageBar()
+    {
+        DamageBar.SetActive(false);
     }
 }

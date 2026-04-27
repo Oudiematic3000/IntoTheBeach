@@ -149,10 +149,10 @@ public class InputManager : MonoBehaviour
             { 
                  return;
             }
-        if (ray.collider == null)
+            if (ray.collider == null)
             {
                 OnClickNothing?.Invoke();
-            pressUnselect();
+                 pressUnselect();
                 return;
             }
            
@@ -162,15 +162,13 @@ public class InputManager : MonoBehaviour
            
             if (ray.collider.GetComponent<CharacterVisual>())
             {
+                pressUnselect();
                 if (ray.collider.GetComponent<CharacterVisual>().teamIndex != PlayerData.Local.TeamIndex.Value)
                 {
                     if(teamExclusiveSelection)
                     return; 
                 }
-                if (currentState == TurnStates.Attacking || currentState == TurnStates.Moving)
-                {
-                  //  return;
-                }
+                
             }
 
             hoverObject.OnPress(ray.point);
