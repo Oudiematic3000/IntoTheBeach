@@ -8411,7 +8411,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::InputManager
   CurrentSelection: {fileID: 0}
-  teamExclusiveSelection: 0
+  teamExclusiveSelection: 1
   currentState: 0
 --- !u!1 &1363794716
 GameObject:
