@@ -7,7 +7,7 @@ public class UIActions : MonoBehaviour
 {
     public static event Action OnMovement;
     public static event Action OnAttack;
-    
+
 
     [SerializeField] CharacterVisual selectedCharacter;
 
@@ -19,21 +19,20 @@ public class UIActions : MonoBehaviour
     public GameObject selectUnit;
     public GameObject winPanel;
     public GameObject losePanel;
-    
     public GameObject moveUnitText;
     public GameObject attackUnitText;
     public GameObject endTurnUnitText;
     public GameObject tileSelect;
     public GameObject attackTileSelect;
     public GameObject standbyText;
-  
+
     public Image objectIcon;
     private void OnEnable()
     {
-       
+
         CharacterVisual.OnClick += SetSelectedCharacter;
         CharacterVisual.OnClick += updateIcon;
-      
+
         InputManager.OnClickNothing += HideAll;
         GridVisual.OnGridClick += HideAll;
         GridVisual.OnResetPip += ShowAllPips;
@@ -50,11 +49,13 @@ public class UIActions : MonoBehaviour
         MovePlanTurnState.OnMovePlanStart += HideEndPhaseText;
         StandbyTurnState.OnStandbyStart += HideAllPips;
         MovePlanTurnState.OnMovePlanStart += ShowAllPips;
+        GameManager.winnerBroadcast += ShowWinner;
+
     }
     private void OnDisable()
     {
         CharacterVisual.OnClick -= SetSelectedCharacter;
-       
+
         CharacterVisual.OnClick -= updateIcon;
         GridVisual.OnGridClick -= HideAll;
         GridVisual.OnResetPip -= ShowAllPips;
@@ -65,55 +66,56 @@ public class UIActions : MonoBehaviour
         MovePlanTurnState.OnMovePlanStart -= ShowEndTurn;
         GridVisual.OnUnitAttacked -= HidePip;
         InputManager.OnRemove -= HideAll;
-        StandbyTurnState.OnStandbyStart -=ShowStandbyText;
+        StandbyTurnState.OnStandbyStart -= ShowStandbyText;
         BoardSyncTurnState.OnSyncStart -= hideStandbyText;
         BoardSyncTurnState.OnSyncStart -= hideSelectUnitText;
         MovePlanTurnState.OnMovePlanStart -= ShowSelectUnitText;
         MovePlanTurnState.OnMovePlanStart -= HideEndPhaseText;
         StandbyTurnState.OnStandbyStart -= HideAllPips;
         MovePlanTurnState.OnMovePlanStart -= ShowAllPips;
+        GameManager.winnerBroadcast -= ShowWinner;
 
     }
-    public void updateIcon(CharacterVisual character) 
+    public void updateIcon(CharacterVisual character)
     {
-        if(character == null) return;
+        if (character == null) return;
 
         objectIcon.sprite = character.unitClass.icon;
         objectIcon.enabled = true;
     }
     public void SetSelectedCharacter(CharacterVisual selectedCharacter)
-    {    
+    {
         this.selectedCharacter = selectedCharacter;
         ShowUnitInfo();
     }
-    public void EndTurn() 
+    public void EndTurn()
     {
         TurnStateMachine.Instance.UpdateState();
         HideAll();
 
         GridVisual.resetPip();
 
-        if(TurnStateMachine.Instance.currentState is StandbyTurnState) 
+        if (TurnStateMachine.Instance.currentState is StandbyTurnState)
         {
             endPhaseButton.SetActive(false);
         }
 
     }
-    public void ShowEndTurn() 
+    public void ShowEndTurn()
     {
         endPhaseButton.SetActive(true);
-        
+
     }
 
-    public void MoveButtonPressed() 
+    public void MoveButtonPressed()
     {
-        
+
         moveUnitText.SetActive(false);
         tileSelect.SetActive(true);
         OnMovement?.Invoke();
     }
 
-    public void AttackButtonPressed() 
+    public void AttackButtonPressed()
     {
         //hideAllText();
         attackTileSelect.SetActive(true);
@@ -121,14 +123,19 @@ public class UIActions : MonoBehaviour
         selectUnit.SetActive(false);
         OnAttack?.Invoke();
     }
-    private void showWinPanel() 
+    public void ShowWinner(string winnerName, int teamIndex)
     {
-        winPanel.SetActive(true);
-    }
-    private void showLosePanel() 
-    {
-        losePanel.SetActive(true);
-    }
+        if (PlayerData.Local.TeamIndex.Value == teamIndex)
+        {
+            winPanel.SetActive(true);
+        }
+        else 
+        {
+            losePanel.SetActive(true);
+        }
+    } 
+   
+  
     public void ShowUnitInfo()
     {
         classUIHolder.SetActive(true);
