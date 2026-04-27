@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Runtime.ConstrainedExecution;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
@@ -48,7 +49,7 @@ public class GridVisual : MonoBehaviour, Iinteractable
         Vector3 worldPos = saloonTiles.CellToWorld(tilePos);
         var currentSelection = InputManager.Instance.GetCurrentSelection();
         //print(tilePos);
-
+        if (!currentSelection) return;
         if (InputManager.Instance.GetState() == InputManager.TurnStates.Moving)
         {
             if(!ghost) return;
@@ -60,6 +61,7 @@ public class GridVisual : MonoBehaviour, Iinteractable
         }
         if (InputManager.Instance.GetState() == InputManager.TurnStates.Attacking)
         {
+            
             Vector3Int pos = currentSelection.GetTilePos(saloonTiles);
             if (currentSelection.ghost) pos = currentSelection.ghost.GetTilePos(saloonTiles);
 
@@ -69,14 +71,20 @@ public class GridVisual : MonoBehaviour, Iinteractable
 
             List<Vector3Int> hitTiles = pattern.GetHitTiles(gridState, pos, direction);
 
-            if (!hitTiles.Contains(tilePos))
+            foreach (var tile in HighlightedTiles)
             {
-                foreach (var tile in HighlightedTiles) saloonTiles.SetColor(tile, Color.darkRed);
-                return;
+                saloonTiles.SetTileFlags(tile, TileFlags.None);
+                saloonTiles.SetColor(tile, Color.darkRed);
             }
 
+            if (!hitTiles.Contains(tilePos)) return;
+
+            // Then highlight only this direction's tiles green
             foreach (var tile in hitTiles)
+            {
+                saloonTiles.SetTileFlags(tile, TileFlags.None);
                 saloonTiles.SetColor(tile, Color.darkGreen);
+            }
 
         }
     }
