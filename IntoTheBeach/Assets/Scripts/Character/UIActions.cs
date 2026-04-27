@@ -17,6 +17,9 @@ public class UIActions : MonoBehaviour
     [SerializeField] GameObject endPhaseButton;
     [SerializeField] GameObject[] pips;
     public GameObject selectUnit;
+    public GameObject winPanel;
+    public GameObject losePanel;
+    
     public GameObject moveUnitText;
     public GameObject attackUnitText;
     public GameObject endTurnUnitText;
@@ -118,7 +121,14 @@ public class UIActions : MonoBehaviour
         selectUnit.SetActive(false);
         OnAttack?.Invoke();
     }
-
+    private void showWinPanel() 
+    {
+        winPanel.SetActive(true);
+    }
+    private void showLosePanel() 
+    {
+        losePanel.SetActive(true);
+    }
     public void ShowUnitInfo()
     {
         classUIHolder.SetActive(true);
