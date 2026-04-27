@@ -909,6 +909,10 @@ MonoBehaviour:
   statusText: {fileID: 0}
   transport: {fileID: 1244717415}
   networkManager: {fileID: 1244717416}
+  audioSource: {fileID: 0}
+  canvasGroup: {fileID: 0}
+  startButton: {fileID: 0}
+  fadeTime: 1
 --- !u!4 &203585286
 Transform:
   m_ObjectHideFlags: 0
@@ -8286,10 +8290,10 @@ Camera:
   m_LensShift: {x: 0, y: 0}
   m_NormalizedViewPortRect:
     serializedVersion: 2
-    x: 0
-    y: 0
-    width: 1
-    height: 1
+    x: 0.034849953
+    y: 0.034423407
+    width: 0.9293321
+    height: 0.92943203
   near clip plane: 0.3
   far clip plane: 1000
   field of view: 60
