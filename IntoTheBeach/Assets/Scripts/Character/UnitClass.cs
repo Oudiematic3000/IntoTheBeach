@@ -15,6 +15,7 @@ public class UnitClass : ScriptableObject
     public GameObject unitGhost;
     public UnitAnimations animations;
     public Sprite icon;
+    public AudioClip attackSound;
    
 
 }
