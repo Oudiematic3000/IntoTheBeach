@@ -7,7 +7,7 @@ public class UIActions : MonoBehaviour
 {
     public static event Action OnMovement;
     public static event Action OnAttack;
-
+    public static event Action OnNoPipsLeft;
 
     [SerializeField] CharacterVisual selectedCharacter;
 
@@ -236,6 +236,7 @@ public class UIActions : MonoBehaviour
             
         }
         ShowEndPhaseText();
+        OnNoPipsLeft?.Invoke();
         return false;
     }
 
