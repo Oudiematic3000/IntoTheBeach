@@ -7,7 +7,7 @@ public class BouncerAttackPattern : AttackPattern
 {
     public override int TypeID => AttackPatternRegistry.BouncerAttack;
     static int rows = 2;
-    static int width = 2;
+    static int width = 1;
 
     private static readonly Vector3Int[] DirectionVectors =
     {
@@ -32,7 +32,7 @@ public class BouncerAttackPattern : AttackPattern
         for (int row = 1; row <= rows; row++)
         {
 
-            int spread = (width - 1) + (row - 1);
+            int spread = width;
             Vector3Int rowCenter = new Vector3Int(position.x - row, position.y);
 
             for (int s = -spread; s <= spread; s++)
@@ -52,7 +52,7 @@ public class BouncerAttackPattern : AttackPattern
 
         for (int row = 1; row <= rows; row++)
         {
-            int spread = (width - 1) + (row - 1);
+            int spread = width;
             Vector3Int rowCenter = position + dir * row;
 
             for (int s = -spread; s <= spread; s++)

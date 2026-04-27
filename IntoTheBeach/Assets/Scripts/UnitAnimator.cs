@@ -7,7 +7,7 @@ using UnityEngine.Tilemaps;
 public class UnitAnimator : MonoBehaviour
 {
     public Tilemap saloonTiles;
-    [SerializeField] private float attackDisplayDuration = 1.5f;
+    [SerializeField] private float attackDisplayDuration = 2f;
 
     private Dictionary<int, CharacterVisual> unitMap;
     CameraEdgePanner cameraEdgePanner;
