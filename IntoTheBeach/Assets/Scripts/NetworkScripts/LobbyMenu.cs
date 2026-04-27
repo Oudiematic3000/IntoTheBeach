@@ -26,6 +26,11 @@ public class LobbyMenu : MonoBehaviour
 
     private async void Awake()
     {
+        if (NetworkManager.Singleton != null && NetworkManager.Singleton.IsListening)
+        {
+            NetworkManager.Singleton.Shutdown();
+            await Task.Yield();
+        }
         await UnityServices.InitializeAsync();
         if (!AuthenticationService.Instance.IsSignedIn)
             await AuthenticationService.Instance.SignInAnonymouslyAsync();
@@ -33,8 +38,11 @@ public class LobbyMenu : MonoBehaviour
     }
     private void Start()
     {
-        if(startButton)
-        startButton.SetActive(false);
+        if (startButton) startButton.SetActive(false);
+        if (joinCodeDisplay) joinCodeDisplay.text = "";
+        if (statusText) statusText.text = "";
+        if (joinCodeInput) joinCodeInput.text = "";
+
     }
     public void StartGame()
     {

@@ -46,6 +46,7 @@ public class PlayerData : NetworkBehaviour
         if (IsOwner) Local = null;
         Username.OnValueChanged -= _onUsernameChanged; 
         if (IsServer) ClearUnits();
+        unitOwnerMap.Clear(); 
     }
 
     [ServerRpc]
