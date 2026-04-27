@@ -1,3 +1,4 @@
+using System;
 using System.Threading.Tasks;
 using TMPro;
 using Unity.Collections;
@@ -20,6 +21,8 @@ public class LobbyMenu : MonoBehaviour
     [SerializeField] CanvasGroup canvasGroup;
     [SerializeField] GameObject startButton;
     [SerializeField] float fadeTime=1f;
+
+    public static event Action OnClientStart;
 
     private async void Awake()
     {
@@ -60,6 +63,7 @@ public class LobbyMenu : MonoBehaviour
                 joinCodeDisplay.text = joinCode;
                 if(startButton)
                 startButton.SetActive(true);
+                OnClientStart?.Invoke();
             }
                 Debug.Log($"Relay join code: {joinCode}");
         }
