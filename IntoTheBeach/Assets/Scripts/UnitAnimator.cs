@@ -11,6 +11,7 @@ public class UnitAnimator : MonoBehaviour
 
     private Dictionary<int, CharacterVisual> unitMap;
     CameraEdgePanner cameraEdgePanner;
+    [SerializeField] AudioClip[] nobodyMove, draw;
     private void Awake()
     {
         cameraEdgePanner = FindAnyObjectByType<CameraEdgePanner>();
@@ -66,6 +67,11 @@ public class UnitAnimator : MonoBehaviour
 
         var allHitTiles = new List<Vector3Int>();
 
+        var attackingUnits = attackResults
+        .Select(r => unitMap.TryGetValue(r.unitID, out var u) ? u : null)
+        .Where(u => u != null)
+        .ToList();
+        AudioManager.instance.PlaySFX(nobodyMove[Random.Range(0, nobodyMove.Length)]);
         foreach (var result in attackResults)
         {
 
@@ -89,40 +95,50 @@ public class UnitAnimator : MonoBehaviour
             yield return new WaitForSeconds(attackDisplayDuration);
         }
 
-        foreach (var tile in allHitTiles)
-        {
-            saloonTiles.SetTileFlags(tile, TileFlags.None);
-            saloonTiles.SetColor(tile, Color.white);
-        }
-        var reactedTiles = results
-       .Where(r => r.reactedTiles != null)
-       .SelectMany(r => r.reactedTiles)
-       .Select(t => t.ToVector3Int())
-       .Distinct();
-
-        foreach (var tile in reactedTiles)
-        {
-            var envObj = GameManager.Instance.GridState.GetEnvironmentalObject(tile);
-            Debug.Log($"Reacted tile {tile} — envObj: {envObj != null}, visual: {envObj?.AttackReactionVisual != null}");
-            envObj?.AttackReactionVisual?.PlayReactionVisual();
-        }
-        foreach (var result in results)
-        {
-            Debug.Log($"Unit {result.unitID} — damageTaken: {result.damageTaken}, isDead: {result.isDead}");
-            if (result.damageTaken > 0 && unitMap.TryGetValue(result.unitID , out var unit))
+       
+        AudioManager.instance.PlaySFX(draw[Random.Range(0, nobodyMove.Length)]);
+        LeanTween.delayedCall(0.5f, () => {
+            foreach (var tile in allHitTiles)
             {
-                unit.TakeDamage(result.damageTaken);
-                if (result.isDead) 
+                saloonTiles.SetTileFlags(tile, TileFlags.None);
+                saloonTiles.SetColor(tile, Color.white);
+            }
+            var reactedTiles = results
+           .Where(r => r.reactedTiles != null)
+           .SelectMany(r => r.reactedTiles)
+           .Select(t => t.ToVector3Int())
+           .Distinct();
+            foreach (var tile in reactedTiles)
+            {
+                var envObj = GameManager.Instance.GridState.GetEnvironmentalObject(tile);
+                Debug.Log($"Reacted tile {tile} — envObj: {envObj != null}, visual: {envObj?.AttackReactionVisual != null}");
+                envObj?.AttackReactionVisual?.PlayReactionVisual();
+            }
+            foreach (var result in results)
+            {
+                Debug.Log($"Unit {result.unitID} — damageTaken: {result.damageTaken}, isDead: {result.isDead}");
+                if (result.damageTaken > 0 && unitMap.TryGetValue(result.unitID, out var unit))
                 {
-                    unitMap.Remove(result.unitID);
-                    Destroy(unit.gameObject); 
-                    continue;
+                    unit.TakeDamage(result.damageTaken);
+                    AudioManager.instance.PlayHitSound(volume: 0.3f);
+                    if (result.isDead)
+                    {
+                        AudioManager.instance.PlayRandomDeathSound(volume: 0.3f);
+                        unitMap.Remove(result.unitID);
+                        Destroy(unit.gameObject);
+                        continue;
+                    }
+
+                    GameManager.Instance.GetVisual(result.unitID).FlashWhite();
                 }
-                    
-                GameManager.Instance.GetVisual(result.unitID).FlashWhite();
+                foreach (var attacker in attackingUnits)
+                {
+                    AudioManager.instance.PlaySFX(attacker.unitClass.attackSound, volume: 0.3f);
+                }
             }
 
-        }
+        });
+        
 
         TurnStateMachine.Instance.UpdateState();
         cameraEdgePanner.ToggleLockAndCenter();

@@ -21,6 +21,7 @@ MonoBehaviour:
   unitGhost: {fileID: 9012563408507327037, guid: 455f3842a6dde624d9eb166e082d5bb4, type: 3}
   animations: {fileID: 11400000, guid: 67e3f09af94bdfc48becfe3c30d9e91a, type: 2}
   icon: {fileID: 21300000, guid: d923af582eb870c4d978504ca36aa7ea, type: 3}
+  attackSound: {fileID: 8300000, guid: 3483c6b91e92e824cb52b91b0674e35e, type: 3}
   references:
     version: 2
     RefIds:
