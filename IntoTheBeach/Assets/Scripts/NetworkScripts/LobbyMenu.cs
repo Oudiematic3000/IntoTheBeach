@@ -18,6 +18,7 @@ public class LobbyMenu : MonoBehaviour
     [SerializeField] NetworkManager networkManager;
     [SerializeField] AudioSource audioSource;
     [SerializeField] CanvasGroup canvasGroup;
+    [SerializeField] GameObject startButton;
     [SerializeField] float fadeTime=1f;
 
     private async void Awake()
@@ -25,8 +26,13 @@ public class LobbyMenu : MonoBehaviour
         await UnityServices.InitializeAsync();
         if (!AuthenticationService.Instance.IsSignedIn)
             await AuthenticationService.Instance.SignInAnonymouslyAsync();
-    }
 
+    }
+    private void Start()
+    {
+        if(startButton)
+        startButton.SetActive(false);
+    }
     public void StartGame()
     {
         FadeMusic();
@@ -49,8 +55,13 @@ public class LobbyMenu : MonoBehaviour
             networkManager.StartHost();
             SetUsername();
 
-            if (joinCodeDisplay) joinCodeDisplay.text = joinCode;
-            Debug.Log($"Relay join code: {joinCode}");
+            if (joinCodeDisplay)
+            {
+                joinCodeDisplay.text = joinCode;
+                if(startButton)
+                startButton.SetActive(true);
+            }
+                Debug.Log($"Relay join code: {joinCode}");
         }
         catch (System.Exception e)
         {
