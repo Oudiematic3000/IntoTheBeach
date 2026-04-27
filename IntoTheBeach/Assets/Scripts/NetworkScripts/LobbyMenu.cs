@@ -16,6 +16,9 @@ public class LobbyMenu : MonoBehaviour
     [SerializeField] TextMeshProUGUI joinCodeDisplay, statusText;
     [SerializeField] UnityTransport transport;
     [SerializeField] NetworkManager networkManager;
+    [SerializeField] AudioSource audioSource;
+    [SerializeField] CanvasGroup canvasGroup;
+    [SerializeField] float fadeTime=1f;
 
     private async void Awake()
     {
@@ -26,7 +29,9 @@ public class LobbyMenu : MonoBehaviour
 
     public void StartGame()
     {
-        networkManager.SceneManager.LoadScene("Level", LoadSceneMode.Single);
+        FadeMusic();
+        LeanTween.delayedCall(fadeTime, () => { networkManager.SceneManager.LoadScene("Level", LoadSceneMode.Single); });         
+
     }
 
     public async void StartHost()
@@ -104,5 +109,23 @@ public class LobbyMenu : MonoBehaviour
     public void HideCanvas()
     {
         transform.parent.gameObject.SetActive(false);
+    }
+
+    void FadeMusic()
+    {
+        float startVolume = audioSource.volume;
+
+        LeanTween.value(gameObject, startVolume, 0f, fadeTime)
+            .setEase(LeanTweenType.linear)
+            .setOnUpdate((float val) =>
+            {
+                audioSource.volume = val;
+            });
+        LeanTween.value(gameObject, 0f, 1f, fadeTime)
+           .setEase(LeanTweenType.linear)
+           .setOnUpdate((float val) =>
+           {
+               canvasGroup.alpha = val;
+           });
     }
 }
