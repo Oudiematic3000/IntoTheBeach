@@ -63,6 +63,14 @@ public class CameraEdgePanner : MonoBehaviour
         float snappedY = Mathf.Round(internalPosition.y * pixelsPerUnit) / pixelsPerUnit;
         LeanTween.move(gameObject, new Vector3(snappedX, snappedY, initialZ), 0.2f).setEase(LeanTweenType.easeInOutCirc);
     }
+    public void PanToCenter(Tilemap tilemap)
+    {
+        internalPosition.x = Mathf.Clamp(startPos.x, startPos.x + minPanLimit.x, startPos.x + maxPanLimit.x);
+        internalPosition.y = Mathf.Clamp(startPos.y, startPos.y + minPanLimit.y, startPos.y + maxPanLimit.y);
+        float snappedX = Mathf.Round(internalPosition.x * pixelsPerUnit) / pixelsPerUnit;
+        float snappedY = Mathf.Round(internalPosition.y * pixelsPerUnit) / pixelsPerUnit;
+        LeanTween.move(gameObject, new Vector3(snappedX, snappedY, initialZ), 0.2f).setEase(LeanTweenType.easeInOutCirc);
+    }
     public void ToggleLockAndCenter()
     {
         locked = !locked;

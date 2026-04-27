@@ -95,7 +95,7 @@ public class UnitAnimator : MonoBehaviour
             yield return new WaitForSeconds(attackDisplayDuration);
         }
 
-       
+        cameraEdgePanner.PanToCenter(saloonTiles);
         AudioManager.instance.PlaySFX(draw[Random.Range(0, nobodyMove.Length)]);
         LeanTween.delayedCall(0.5f, () => {
             foreach (var tile in allHitTiles)

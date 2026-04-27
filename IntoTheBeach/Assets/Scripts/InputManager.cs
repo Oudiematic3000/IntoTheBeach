@@ -37,6 +37,8 @@ public class InputManager : MonoBehaviour
    
     private void OnEnable()
     {
+        MovePlanTurnState.OnMovePlanStart += pressUnselect;
+        AttackPlanTurnState.OnAttackPlanStart += pressUnselect;
         CharacterVisual.OnClick += SetCurrentSelection;
         UIActions.OnMovement += enterMoveMode;
         UIActions.OnAttack += enterAttackMode;
@@ -44,6 +46,8 @@ public class InputManager : MonoBehaviour
     }
     private void OnDisable()
     {
+        MovePlanTurnState.OnMovePlanStart -= pressUnselect;
+        AttackPlanTurnState.OnAttackPlanStart -= pressUnselect;
         CharacterVisual.OnClick -= SetCurrentSelection;
         UIActions.OnMovement -= enterMoveMode;
         UIActions.OnAttack -= enterAttackMode;
@@ -78,6 +82,7 @@ public class InputManager : MonoBehaviour
 
     public void pressUnselect() 
     {
+        if(CurrentSelection)
         CurrentSelection.RemoveOutline();
         CurrentSelection = null;
         currentState = TurnStates.None;

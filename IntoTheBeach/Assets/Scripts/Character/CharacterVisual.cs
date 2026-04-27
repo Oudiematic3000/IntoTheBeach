@@ -183,7 +183,7 @@ public class CharacterVisual : MonoBehaviour, Iinteractable
             transform.position = Vector3.Lerp(startPos, targetPos, time / duration);
 
             animTimer += Time.deltaTime;
-            if (animTimer >= 0.5f)
+            if (animTimer >= 0.1f)
             {
                 useWalkSprite = !useWalkSprite;
                 animTimer = 0f;
