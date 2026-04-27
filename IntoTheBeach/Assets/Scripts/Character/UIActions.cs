@@ -7,7 +7,7 @@ public class UIActions : MonoBehaviour
 {
     public static event Action OnMovement;
     public static event Action OnAttack;
-
+    public static event Action OnNoPipsLeft;
 
     [SerializeField] CharacterVisual selectedCharacter;
 
@@ -16,6 +16,7 @@ public class UIActions : MonoBehaviour
     [SerializeField] Image attackText, moveText;
     [SerializeField] GameObject endPhaseButton;
     [SerializeField] GameObject[] pips;
+    public GameObject movePhaseIndicator, attackPhaseIndicator;
     public GameObject selectUnit;
     public GameObject winPanel;
     public GameObject losePanel;
@@ -25,6 +26,8 @@ public class UIActions : MonoBehaviour
     public GameObject tileSelect;
     public GameObject attackTileSelect;
     public GameObject standbyText;
+    [SerializeField] GameObject DamageBar;
+    [SerializeField] TextMeshProUGUI DamageBarNumber;
 
     public Image objectIcon;
     private void OnEnable()
@@ -50,6 +53,9 @@ public class UIActions : MonoBehaviour
         StandbyTurnState.OnStandbyStart += HideAllPips;
         MovePlanTurnState.OnMovePlanStart += ShowAllPips;
         GameManager.winnerBroadcast += ShowWinner;
+        AttackPlanTurnState.OnAttackPlanStart += showAttackState;
+        MovePlanTurnState.OnMovePlanStart += showMoveState;
+        StandbyTurnState.OnStandbyStart += standbystate;
 
     }
     private void OnDisable()
@@ -74,6 +80,9 @@ public class UIActions : MonoBehaviour
         StandbyTurnState.OnStandbyStart -= HideAllPips;
         MovePlanTurnState.OnMovePlanStart -= ShowAllPips;
         GameManager.winnerBroadcast -= ShowWinner;
+        AttackPlanTurnState.OnAttackPlanStart -= showAttackState;
+        MovePlanTurnState.OnMovePlanStart -= showMoveState;
+        StandbyTurnState.OnStandbyStart -= standbystate;
 
     }
     public void updateIcon(CharacterVisual character)
@@ -139,9 +148,10 @@ public class UIActions : MonoBehaviour
     public void ShowUnitInfo()
     {
         classUIHolder.SetActive(true);
-
+        ShowDamageBar();
         if(TurnStateMachine.Instance.currentState is MovePlanTurnState)
         {
+          
             buttonsUIHolder.SetActive(true);
             moveButton.gameObject.SetActive(true);
             moveUnitText.gameObject.SetActive(true);
@@ -159,6 +169,7 @@ public class UIActions : MonoBehaviour
 
         if(TurnStateMachine.Instance.currentState is AttackPlanTurnState)
         { 
+           
             buttonsUIHolder.SetActive(true);
             attackButton.gameObject.SetActive(true);
             attackUnitText.gameObject.SetActive(true);
@@ -236,6 +247,7 @@ public class UIActions : MonoBehaviour
             
         }
         ShowEndPhaseText();
+        OnNoPipsLeft?.Invoke();
         return false;
     }
 
@@ -263,7 +275,7 @@ public class UIActions : MonoBehaviour
         attackButton.gameObject.SetActive(false);
         classUIHolder.SetActive(false);
         buttonsUIHolder.SetActive(false);
-       
+       HideDamageBar();
     }
     private void showMoveText() 
     {
@@ -277,6 +289,21 @@ public class UIActions : MonoBehaviour
         attackText.gameObject.SetActive(true);
         moveText.gameObject.SetActive(false);
 
+    }
+    private void showAttackState() 
+    {
+        movePhaseIndicator.SetActive(false);
+        attackPhaseIndicator.SetActive(true);
+    }
+    private void showMoveState() 
+    {
+        movePhaseIndicator.SetActive(true);
+        attackPhaseIndicator.SetActive(false);
+    }
+    private void standbystate() 
+    {
+        movePhaseIndicator.SetActive(false);
+        attackPhaseIndicator.SetActive(false);
     }
     private void hideStandbyText(NetUnitResult[] bruh) {
         standbyText.SetActive(false);
@@ -297,5 +324,17 @@ public class UIActions : MonoBehaviour
     {
         endTurnUnitText.SetActive(false);
 
+    }
+    void ShowDamageBar()
+    {
+        DamageBar.SetActive(true);
+        LeanTween.delayedCall(0f, () =>
+        {
+            DamageBarNumber.text = InputManager.Instance.GetCurrentSelection().unitClass.damage.ToString();
+        });
+    }
+    void HideDamageBar()
+    {
+        DamageBar.SetActive(false);
     }
 }

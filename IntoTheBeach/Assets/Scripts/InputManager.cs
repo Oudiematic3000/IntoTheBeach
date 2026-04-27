@@ -42,7 +42,7 @@ public class InputManager : MonoBehaviour
         CharacterVisual.OnClick += SetCurrentSelection;
         UIActions.OnMovement += enterMoveMode;
         UIActions.OnAttack += enterAttackMode;
-       
+        GridVisual.OnGridClick += pressUnselect;
     }
     private void OnDisable()
     {
@@ -51,7 +51,7 @@ public class InputManager : MonoBehaviour
         CharacterVisual.OnClick -= SetCurrentSelection;
         UIActions.OnMovement -= enterMoveMode;
         UIActions.OnAttack -= enterAttackMode;
-        
+        GridVisual.OnGridClick -= pressUnselect;
     }
     private void enterMoveMode()
     {
@@ -149,30 +149,26 @@ public class InputManager : MonoBehaviour
             { 
                  return;
             }
-        if (ray.collider == null)
+            if (ray.collider == null)
             {
-                OnClickNothing?.Invoke(); 
-            CurrentSelection = null;
+                OnClickNothing?.Invoke();
+                 pressUnselect();
                 return;
             }
            
             if (ray.collider.TryGetComponent<Iinteractable>(out var hoverObject))
             {
                 if (hoverObject==null) return;
-            if (CurrentSelection)
-            CurrentSelection.RemoveOutline();
-
+           
             if (ray.collider.GetComponent<CharacterVisual>())
             {
+                pressUnselect();
                 if (ray.collider.GetComponent<CharacterVisual>().teamIndex != PlayerData.Local.TeamIndex.Value)
                 {
                     if(teamExclusiveSelection)
                     return; 
                 }
-                if (currentState == TurnStates.Attacking || currentState == TurnStates.Moving)
-                {
-                  //  return;
-                }
+                
             }
 
             hoverObject.OnPress(ray.point);
