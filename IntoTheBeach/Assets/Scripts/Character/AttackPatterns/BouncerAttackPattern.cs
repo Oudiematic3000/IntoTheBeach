@@ -86,7 +86,7 @@ public class BouncerAttackPattern : AttackPattern
 
         for (int row = 1; row <= rows; row++)
         {
-            int spread = (width - 1) + (row - 1);
+            int spread = width;
             Vector3Int rowCenter = position + dir * row;
             for (int s = -spread; s <= spread; s++)
             {
