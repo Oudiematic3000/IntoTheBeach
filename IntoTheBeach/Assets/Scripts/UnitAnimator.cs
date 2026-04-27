@@ -72,6 +72,7 @@ public class UnitAnimator : MonoBehaviour
         .Select(r => unitMap.TryGetValue(r.unitID, out var u) ? u : null)
         .Where(u => u != null)
         .ToList();
+        if(attackResults.Count > 0)
         AudioManager.instance.PlaySFX(nobodyMove[Random.Range(0, nobodyMove.Length)]);
         foreach (var result in attackResults)
         {
@@ -104,7 +105,8 @@ public class UnitAnimator : MonoBehaviour
         }
 
         cameraEdgePanner.PanToCenter(saloonTiles);
-        AudioManager.instance.PlaySFX(draw[Random.Range(0, nobodyMove.Length)]);
+        if (attackResults.Count > 0)
+            AudioManager.instance.PlaySFX(draw[Random.Range(0, nobodyMove.Length)]);
         LeanTween.delayedCall(0.5f, () => {
             foreach (var tile in allHitTiles)
             {
