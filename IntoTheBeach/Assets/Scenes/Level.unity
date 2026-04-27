@@ -9566,10 +9566,10 @@ Camera:
   m_LensShift: {x: 0, y: 0}
   m_NormalizedViewPortRect:
     serializedVersion: 2
-    x: 0.079920076
-    y: 0.18641812
-    width: 0.47952047
-    height: 0.47936088
+    x: 0
+    y: 0
+    width: 1
+    height: 1
   near clip plane: 0.3
   far clip plane: 1000
   field of view: 60
@@ -10075,6 +10075,8 @@ MonoBehaviour:
   draw:
   - {fileID: 8300000, guid: e4eb5eecab5161f4aa4aa6074b6ed7bb, type: 3}
   - {fileID: 8300000, guid: 92b848fb1146f8045851d3c1d79c48c3, type: 3}
+  walk:
+  - {fileID: 8300000, guid: 3c93c760b770a4a47be9b58a8e29d1df, type: 3}
 --- !u!4 &1526136653
 Transform:
   m_ObjectHideFlags: 0

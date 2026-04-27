@@ -11,7 +11,7 @@ public class UnitAnimator : MonoBehaviour
 
     private Dictionary<int, CharacterVisual> unitMap;
     CameraEdgePanner cameraEdgePanner;
-    [SerializeField] AudioClip[] nobodyMove, draw;
+    [SerializeField] AudioClip[] nobodyMove, draw, walk;
     private void Awake()
     {
         cameraEdgePanner = FindAnyObjectByType<CameraEdgePanner>();
@@ -45,6 +45,7 @@ public class UnitAnimator : MonoBehaviour
         }
 
         int remaining = movingResults.Count;
+        if (movingResults.Count > 0) AudioManager.instance.PlaySFX(walk[0]);
         foreach (var result in movingResults)
         {
             unitMap.TryGetValue(result.unitID, out var unit);
