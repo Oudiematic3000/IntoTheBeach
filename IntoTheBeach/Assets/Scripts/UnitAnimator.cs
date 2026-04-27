@@ -74,8 +74,9 @@ public class UnitAnimator : MonoBehaviour
             cameraEdgePanner.PanToTile(attackerPos, saloonTiles);
             List<Vector3Int> hitTiles = attack.attackPattern.GetHitTiles(
                 GameManager.Instance.GridState, attackerPos, attack.direction);
-            GameManager.Instance.GetVisual(result.unitID).direction = attack.direction;
-                foreach (var tile in hitTiles)
+            var visual = GameManager.Instance.GetVisual(result.unitID);
+            if (visual != null) visual.direction = attack.direction;
+            foreach (var tile in hitTiles)
             {
                 saloonTiles.SetTileFlags(tile, TileFlags.None);
                 saloonTiles.SetColor(tile, Color.red);
@@ -112,7 +113,8 @@ public class UnitAnimator : MonoBehaviour
             {
                 unit.TakeDamage(result.damageTaken);
                 if (result.isDead) 
-                { 
+                {
+                    unitMap.Remove(result.unitID);
                     Destroy(unit.gameObject); 
                     continue;
                 }
