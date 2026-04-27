@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Unity.Collections;
@@ -12,7 +13,7 @@ public class GameManager : NetworkBehaviour
     public GridState GridState { get; private set; } = new();
     [SerializeField] private Tilemap floorTilemap;
     private Dictionary<int, CharacterVisual> unitVisuals = new();
-
+    public static event Action<string, int> winnerBroadcast;
     private int nextUnitID = 0;
 
     private void Awake()
@@ -208,7 +209,7 @@ public class GameManager : NetworkBehaviour
                 if (winner != null)
                 {
                     Debug.Log($"Winner: {winner.Username.Value}");
-                    BroadcastWinnerClientRpc(winner.Username.Value);
+                    BroadcastWinnerClientRpc(winner.Username.Value, winner.TeamIndex.Value);
                 }
                 else
                 {
@@ -222,9 +223,10 @@ public class GameManager : NetworkBehaviour
     }
 
     [ClientRpc]
-    private void BroadcastWinnerClientRpc(FixedString64Bytes winnerUsername)
+    private void BroadcastWinnerClientRpc(FixedString64Bytes winnerUsername, int teamIndex)
     {
         Debug.Log($"Game over! Winner: {winnerUsername}");
+        winnerBroadcast?.Invoke(winnerUsername.ToString(),teamIndex);
     }
 
     public void RemoveUnit(int unitID)

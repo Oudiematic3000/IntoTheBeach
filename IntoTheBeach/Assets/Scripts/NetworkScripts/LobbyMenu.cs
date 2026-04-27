@@ -16,17 +16,28 @@ public class LobbyMenu : MonoBehaviour
     [SerializeField] TextMeshProUGUI joinCodeDisplay, statusText;
     [SerializeField] UnityTransport transport;
     [SerializeField] NetworkManager networkManager;
+    [SerializeField] AudioSource audioSource;
+    [SerializeField] CanvasGroup canvasGroup;
+    [SerializeField] GameObject startButton;
+    [SerializeField] float fadeTime=1f;
 
     private async void Awake()
     {
         await UnityServices.InitializeAsync();
         if (!AuthenticationService.Instance.IsSignedIn)
             await AuthenticationService.Instance.SignInAnonymouslyAsync();
-    }
 
+    }
+    private void Start()
+    {
+        if(startButton)
+        startButton.SetActive(false);
+    }
     public void StartGame()
     {
-        networkManager.SceneManager.LoadScene("Level", LoadSceneMode.Single);
+        FadeMusic();
+        LeanTween.delayedCall(fadeTime, () => { networkManager.SceneManager.LoadScene("Level", LoadSceneMode.Single); });         
+
     }
 
     public async void StartHost()
@@ -44,8 +55,13 @@ public class LobbyMenu : MonoBehaviour
             networkManager.StartHost();
             SetUsername();
 
-            if (joinCodeDisplay) joinCodeDisplay.text = joinCode;
-            Debug.Log($"Relay join code: {joinCode}");
+            if (joinCodeDisplay)
+            {
+                joinCodeDisplay.text = joinCode;
+                if(startButton)
+                startButton.SetActive(true);
+            }
+                Debug.Log($"Relay join code: {joinCode}");
         }
         catch (System.Exception e)
         {
@@ -104,5 +120,23 @@ public class LobbyMenu : MonoBehaviour
     public void HideCanvas()
     {
         transform.parent.gameObject.SetActive(false);
+    }
+
+    void FadeMusic()
+    {
+        float startVolume = audioSource.volume;
+
+        LeanTween.value(gameObject, startVolume, 0f, fadeTime)
+            .setEase(LeanTweenType.linear)
+            .setOnUpdate((float val) =>
+            {
+                audioSource.volume = val;
+            });
+        LeanTween.value(gameObject, 0f, 1f, fadeTime)
+           .setEase(LeanTweenType.linear)
+           .setOnUpdate((float val) =>
+           {
+               canvasGroup.alpha = val;
+           });
     }
 }
