@@ -14,10 +14,10 @@ EditorBuildSettings:
   - enabled: 0
     path: Assets/Scenes/SampleScene.unity
     guid: 8c9cfa26abfee488c85f1582747f6a02
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/SpriteTesting.unity
     guid: 5cef8cdc661e6a34c87ec4947caf261f
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/WinLoseCOn.unity
     guid: 5ea6fc08fb5bc904f9210cd0ab3f92da
   m_configObjects:

@@ -72,8 +72,8 @@ public class UnitAnimator : MonoBehaviour
         .Select(r => unitMap.TryGetValue(r.unitID, out var u) ? u : null)
         .Where(u => u != null)
         .ToList();
-        if(attackResults.Count > 0)
-        AudioManager.instance.PlaySFX(nobodyMove[Random.Range(0, nobodyMove.Length)]);
+        if (attackResults.Count > 0)
+            AudioManager.instance.PlaySFX(nobodyMove[Random.Range(0, nobodyMove.Length)]);
         foreach (var result in attackResults)
         {
 
@@ -89,13 +89,16 @@ public class UnitAnimator : MonoBehaviour
                 saloonTiles.SetTileFlags(tile, TileFlags.None);
                 saloonTiles.SetColor(tile, Color.red);
                 GameManager.Instance.GetVisual(result.unitID).ShowAttackOwner();
-                LeanTween.delayedCall(0.33f, () => {                    
+                LeanTween.delayedCall(0.33f, () =>
+                {
                     saloonTiles.SetColor(tile, Color.darkRed);
                 });
-                LeanTween.delayedCall(0.66f, () => {
+                LeanTween.delayedCall(0.66f, () =>
+                {
                     saloonTiles.SetColor(tile, Color.red);
                 });
-                LeanTween.delayedCall(0.99f, () => {
+                LeanTween.delayedCall(0.99f, () =>
+                {
                     saloonTiles.SetColor(tile, Color.darkRed);
                 });
                 allHitTiles.Add(tile);
@@ -107,30 +110,33 @@ public class UnitAnimator : MonoBehaviour
         cameraEdgePanner.PanToCenter(saloonTiles);
         if (attackResults.Count > 0)
             AudioManager.instance.PlaySFX(draw[Random.Range(0, nobodyMove.Length)]);
-        LeanTween.delayedCall(0.5f, () => {
+        LeanTween.delayedCall(0.5f, () =>
+        {
             foreach (var tile in allHitTiles)
             {
                 saloonTiles.SetTileFlags(tile, TileFlags.None);
                 saloonTiles.SetColor(tile, Color.white);
             }
+
             var reactedTiles = results
-           .Where(r => r.reactedTiles != null)
-           .SelectMany(r => r.reactedTiles)
-           .Select(t => t.ToVector3Int())
-           .Distinct();
+                .Where(r => r.reactedTiles != null)
+                .SelectMany(r => r.reactedTiles)
+                .Select(t => t.ToVector3Int())
+                .Distinct();
+
             foreach (var tile in reactedTiles)
             {
                 var envObj = GameManager.Instance.GridState.GetEnvironmentalObject(tile);
-                Debug.Log($"Reacted tile {tile} — envObj: {envObj != null}, visual: {envObj?.AttackReactionVisual != null}");
                 envObj?.AttackReactionVisual?.PlayReactionVisual();
             }
+
             foreach (var result in results)
             {
-                Debug.Log($"Unit {result.unitID} — damageTaken: {result.damageTaken}, isDead: {result.isDead}");
                 if (result.damageTaken > 0 && unitMap.TryGetValue(result.unitID, out var unit))
                 {
                     unit.TakeDamage(result.damageTaken);
                     AudioManager.instance.PlayHitSound(volume: 0.3f);
+
                     if (result.isDead)
                     {
                         AudioManager.instance.PlayRandomDeathSound(volume: 0.3f);
@@ -139,19 +145,17 @@ public class UnitAnimator : MonoBehaviour
                         continue;
                     }
 
-                    GameManager.Instance.GetVisual(result.unitID).FlashWhite();
-                }
-                foreach (var attacker in attackingUnits)
-                {
-                    AudioManager.instance.PlaySFX(attacker.unitClass.attackSound, volume: 0.3f);
+                    unit.FlashWhite();
                 }
             }
 
+            // Play attack sounds once, outside the results loop
+            foreach (var attacker in attackingUnits)
+                AudioManager.instance.PlaySFX(attacker.unitClass.attackSound, volume: 0.3f);
+
+            // State advance happens last, after all death/damage is resolved
+            TurnStateMachine.Instance.UpdateState();
+            cameraEdgePanner.ToggleLockAndCenter();
         });
-        
-
-        TurnStateMachine.Instance.UpdateState();
-        cameraEdgePanner.ToggleLockAndCenter();
-
     }
 }
