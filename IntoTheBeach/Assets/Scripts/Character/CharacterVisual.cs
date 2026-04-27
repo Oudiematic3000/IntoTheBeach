@@ -1,6 +1,8 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Netcode;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
@@ -26,6 +28,7 @@ public class CharacterVisual : MonoBehaviour, Iinteractable
 
     public event Action<Sprite> OnAnimUpdate;
 
+  
     private void Start()
     {
         objRenderer = GetComponent<Renderer>();
@@ -34,7 +37,8 @@ public class CharacterVisual : MonoBehaviour, Iinteractable
          turnState = FindAnyObjectByType<TurnStateMachine>();
         MoveToNearestTile();
         health = unitClass.health;
-        SetHearts(unitClass.health);
+        SetHearts();
+        SetEnemyOutline();
     }
     public void MoveToNearestTile()
     {
@@ -47,6 +51,8 @@ public class CharacterVisual : MonoBehaviour, Iinteractable
         MovePlanTurnState.OnMovePlanStart += AnimUpdate;
         AttackPlanTurnState.OnAttackPlanStart += AnimUpdate;
         BoardSyncTurnState.OnSyncEnd += ResetMoves;
+
+
     }
     private void OnDisable()
     {
@@ -58,23 +64,33 @@ public class CharacterVisual : MonoBehaviour, Iinteractable
     {
     }
 
-    public void SetHearts(int health)
+    public void SetHearts()
     {
-        if (health <= 0)
+        if (PlayerData.Local != null && PlayerData.Local.TeamIndex.Value != -1)
         {
-            Destroy(heartObject);
-            return;
-        }
-        if (PlayerData.Local && teamIndex == PlayerData.Local.TeamIndex.Value)
-        {
-            heartObject.sprite = hearts[health - 1];
+            if (health <= 0)
+            {
+                Destroy(heartObject);
+                return;
+            }
+            if (PlayerData.Local && teamIndex == PlayerData.Local.TeamIndex.Value)
+            {
+                heartObject.sprite = hearts[health - 1];
+            }
+            else
+            {
+                heartObject.sprite = OppHearts[health - 1];
+
+            }
         }
         else
         {
-            heartObject.sprite = OppHearts[health - 1];
+            LeanTween.delayedCall(0.1f, SetHearts);
 
         }
+        
     }
+
     public void ResetMoves()
     {
         hasMoved=false;
@@ -83,7 +99,7 @@ public class CharacterVisual : MonoBehaviour, Iinteractable
     public void TakeDamage(int damage)
     {
         health-=damage;
-        SetHearts(health);
+        SetHearts();
     }
 
     void DebugID()
@@ -252,10 +268,38 @@ public class CharacterVisual : MonoBehaviour, Iinteractable
         var moveGhost = Instantiate(unitClass.unitGhost,pos,Quaternion.identity);
         return moveGhost.GetComponent<UnitGhost>();
     }
+    public void SetEnemyOutline()
+    {
 
+    
+        if (PlayerData.Local != null && PlayerData.Local.TeamIndex.Value!=-1)
+        {
+            if (teamIndex != PlayerData.Local.TeamIndex.Value)
+            {
+                objRenderer.material.SetFloat("_OutlineThickness", 1.5f);
+                objRenderer.material.SetColor("_OutlineColour", Color.red);
+            }
+        }
+        else
+        {
+            LeanTween.delayedCall(0.1f, SetEnemyOutline);
+
+        }
+
+
+
+    }
+    public void SetEnemyOutline(ulong shite)
+    {
+        if (teamIndex != PlayerData.Local.TeamIndex.Value)
+        {
+            objRenderer.material.SetFloat("_OutlineThickness", 1.5f);
+            objRenderer.material.SetColor("_OutlineColour", Color.red);
+        }
+    }
     public void ShowOutline()
     {
-        objRenderer.material.SetFloat("_OutlineThickness", 1f);
+        objRenderer.material.SetFloat("_OutlineThickness", 1.5f);
         objRenderer.material.SetColor("_OutlineColour", Color.green);
     }
     public void RemoveOutline()
