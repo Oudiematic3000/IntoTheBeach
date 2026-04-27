@@ -1,11 +1,16 @@
+using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class RetryQuitButton : MonoBehaviour
+public class RetryQuitButton : NetworkBehaviour
 {
     public void Retry() 
     {
-        SceneManager.LoadScene("Lobby");
+        if (NetworkManager.Singleton.IsServer)
+        {
+            NetworkManager.Singleton.SceneManager.LoadScene("Lobby", LoadSceneMode.Single);
+        }
+       
     }
     public void Quit() 
     {
