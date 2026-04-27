@@ -85,7 +85,7 @@ public class TurnResolver
                 {
                     if (!pendingDamage.ContainsKey(hitUnitID.Value))
                         pendingDamage[hitUnitID.Value] = 0;
-                    pendingDamage[hitUnitID.Value]++;
+                    pendingDamage[hitUnitID.Value]+=GameManager.Instance.GetVisual(attackerID).unitClass.damage;
                 }
 
                 gridState.TriggerAttackReaction(tile, attackerID);
