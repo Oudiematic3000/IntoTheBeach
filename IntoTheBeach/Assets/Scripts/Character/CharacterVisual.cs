@@ -276,7 +276,7 @@ public class CharacterVisual : MonoBehaviour, Iinteractable
         {
             if (teamIndex != PlayerData.Local.TeamIndex.Value)
             {
-                objRenderer.material.SetFloat("_OutlineThickness", 1.5f);
+                objRenderer.material.SetFloat("_OutlineThickness", 1f);
                 objRenderer.material.SetColor("_OutlineColour", Color.red);
             }
         }
@@ -293,25 +293,24 @@ public class CharacterVisual : MonoBehaviour, Iinteractable
     {
         if (teamIndex != PlayerData.Local.TeamIndex.Value)
         {
-            objRenderer.material.SetFloat("_OutlineThickness", 1.5f);
-            objRenderer.material.SetColor("_OutlineColour", Color.red);
+            objRenderer.material.SetFloat("_OutlineThickness", 1f);
+            objRenderer.material.SetColor("_OutlineColor", Color.red);
         }
     }
     public void ShowOutline()
     {
-        objRenderer.material.SetFloat("_OutlineThickness", 1.5f);
-        objRenderer.material.SetColor("_OutlineColour", Color.green);
+        objRenderer.material.SetFloat("_OutlineThickness", 1f);
+        objRenderer.material.SetColor("_OutlineColor", Color.green);
     }
     public void RemoveOutline()
     {
         objRenderer.material.SetFloat("_OutlineThickness", 0f);
-        objRenderer.material.SetColor("_OutlineColour", Color.black);
+        objRenderer.material.SetColor("_OutlineColor", Color.black);
     }
 
     public void FlashWhite()
     {
         Debug.Log("FLASHAAAAAAAAAAA");
-        objRenderer.material.SetColor("_FlashColour", Color.white);
         objRenderer.material.SetFloat("_FlashAmount", 1f);
         LeanTween.delayedCall(0.2f, () =>
         {
