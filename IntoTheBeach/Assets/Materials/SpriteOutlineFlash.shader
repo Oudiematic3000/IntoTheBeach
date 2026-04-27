@@ -1,13 +1,14 @@
 Shader "Custom/SpriteOutlineFlash"
 {
     Properties
-    {
-        _MainTex ("Texture", 2D) = "white" {}
-        _OutlineColor ("Outline Color", Color) = (0,1,0,1)
-        _OutlineThickness ("Outline Thickness", Float) = 1
-        _FlashAmount ("Flash Amount", Float) = 0
-        _Alpha ("Alpha", Float) = 1
-    }
+{
+    _MainTex ("Texture", 2D) = "white" {}
+    _OutlineColor ("Outline Color", Color) = (0,1,0,1)
+    _OutlineThickness ("Outline Thickness", Float) = 1
+    _FlashAmount ("Flash Amount", Float) = 0
+    _FlashColor ("Flash Color", Color) = (1,1,1,1)
+    _Alpha ("Alpha", Float) = 1
+}
 
     SubShader
     {
@@ -49,13 +50,14 @@ Shader "Custom/SpriteOutlineFlash"
             SAMPLER(sampler_MainTex);
 
             CBUFFER_START(UnityPerMaterial)
-                float4 _MainTex_ST;
-                float4 _MainTex_TexelSize; 
-                float4 _OutlineColor;
-                float _OutlineThickness;
-                float _FlashAmount;
-                float _Alpha;
-            CBUFFER_END
+    float4 _MainTex_ST;
+    float4 _MainTex_TexelSize;
+    float4 _OutlineColor;
+    float4 _FlashColor;
+    float _OutlineThickness;
+    float _FlashAmount;
+    float _Alpha;
+CBUFFER_END
 
             Varyings vert(Attributes IN)
             {
@@ -86,7 +88,7 @@ Shader "Custom/SpriteOutlineFlash"
 
                 float outlineOnly = step(0.01, outlineMask - mainAlpha);
 
-                float4 flashedColor = lerp(mainSample, float4(1,1,1,1), _FlashAmount);
+                float4 flashedColor = lerp(mainSample, _FlashColor, _FlashAmount);
 
                 float4 maskedSprite = flashedColor * mainAlpha;
 

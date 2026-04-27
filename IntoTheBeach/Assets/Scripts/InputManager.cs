@@ -82,6 +82,13 @@ public class InputManager : MonoBehaviour
 
     public void pressUnselect() 
     {
+        if (FindAnyObjectByType<Tutorial>())
+        {
+            var tutorial= FindAnyObjectByType<Tutorial>();
+            if(tutorial.currentPhase!=Tutorial.TutorialPhases.ViewAttackRange)
+                return;
+        }
+
         if(CurrentSelection)
         CurrentSelection.RemoveOutline();
         CurrentSelection = null;

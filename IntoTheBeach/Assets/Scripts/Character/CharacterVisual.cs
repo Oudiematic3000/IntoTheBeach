@@ -310,11 +310,34 @@ public class CharacterVisual : MonoBehaviour, Iinteractable
 
     public void FlashWhite()
     {
-        Debug.Log("FLASHAAAAAAAAAAA");
         objRenderer.material.SetFloat("_FlashAmount", 1f);
+        objRenderer.material.SetColor("_FlashColor", Color.white);
         LeanTween.delayedCall(0.2f, () =>
         {
             objRenderer.material.SetFloat("_FlashAmount", 0f);
+        });
+    }
+    public void ShowAttackOwner()
+    {
+        objRenderer.material.SetFloat("_FlashAmount", 0.5f);
+        objRenderer.material.SetColor("_FlashColor", Color.red);
+        LeanTween.delayedCall(0.33f, () =>
+        {
+            objRenderer.material.SetFloat("_FlashAmount", 0f);
+            objRenderer.material.SetColor("_FlashColor", Color.white);
+
+        });
+        LeanTween.delayedCall(0.66f, () =>
+        {
+            objRenderer.material.SetFloat("_FlashAmount", 0.5f);
+            objRenderer.material.SetColor("_FlashColor", Color.red);
+
+        });
+        LeanTween.delayedCall(0.99f, () =>
+        {
+            objRenderer.material.SetFloat("_FlashAmount", 0f);
+            objRenderer.material.SetColor("_FlashColor", Color.white);
+
         });
     }
 }

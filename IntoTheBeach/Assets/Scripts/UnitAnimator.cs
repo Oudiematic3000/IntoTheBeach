@@ -7,7 +7,7 @@ using UnityEngine.Tilemaps;
 public class UnitAnimator : MonoBehaviour
 {
     public Tilemap saloonTiles;
-    [SerializeField] private float attackDisplayDuration = 2f;
+    [SerializeField] private float attackDisplayDuration = 4f;
 
     private Dictionary<int, CharacterVisual> unitMap;
     CameraEdgePanner cameraEdgePanner;
@@ -87,7 +87,14 @@ public class UnitAnimator : MonoBehaviour
             {
                 saloonTiles.SetTileFlags(tile, TileFlags.None);
                 saloonTiles.SetColor(tile, Color.red);
-                LeanTween.delayedCall(0.5f, () => {
+                GameManager.Instance.GetVisual(result.unitID).ShowAttackOwner();
+                LeanTween.delayedCall(0.33f, () => {                    
+                    saloonTiles.SetColor(tile, Color.darkRed);
+                });
+                LeanTween.delayedCall(0.66f, () => {
+                    saloonTiles.SetColor(tile, Color.red);
+                });
+                LeanTween.delayedCall(0.99f, () => {
                     saloonTiles.SetColor(tile, Color.darkRed);
                 });
                 allHitTiles.Add(tile);
