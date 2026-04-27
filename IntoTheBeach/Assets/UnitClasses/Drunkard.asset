@@ -12,9 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4e9351d6d47506e4cbfe0551240eb57e, type: 3}
   m_Name: Drunkard
   m_EditorClassIdentifier: Assembly-CSharp::UnitClass
-  moveRange: 2
+  moveRange: 10
   health: 5
-  damage: 3
+  damage: 10
   weight: 1
   attackPattern:
     rid: 2080953899596644437
