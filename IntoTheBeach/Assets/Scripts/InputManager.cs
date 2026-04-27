@@ -160,8 +160,10 @@ public class InputManager : MonoBehaviour
             {
                 if (hoverObject==null) return;
             if (CurrentSelection)
-            CurrentSelection.RemoveOutline();
-
+            {
+                CurrentSelection.RemoveOutline();
+                pressUnselect();
+            }
             if (ray.collider.GetComponent<CharacterVisual>())
             {
                 if (ray.collider.GetComponent<CharacterVisual>().teamIndex != PlayerData.Local.TeamIndex.Value)
