@@ -10,10 +10,10 @@ public class UnitAnimator : MonoBehaviour
     [SerializeField] private float attackDisplayDuration = 1f;
 
     private Dictionary<int, CharacterVisual> unitMap;
-
+    CameraEdgePanner cameraEdgePanner;
     private void Awake()
     {
-        
+        cameraEdgePanner = FindAnyObjectByType<CameraEdgePanner>();
     }
 
     private void OnEnable() => BoardSyncTurnState.OnSyncStart += PlayResults;
@@ -59,6 +59,7 @@ public class UnitAnimator : MonoBehaviour
 
     private IEnumerator ShowAttackIntents(NetUnitResult[] results)
     {
+        cameraEdgePanner.ToggleLockAndCenter();
         var attackResults = results
             .Where(r => r.hasAttackAction && unitMap.ContainsKey(r.unitID))
             .ToList();
@@ -67,8 +68,10 @@ public class UnitAnimator : MonoBehaviour
 
         foreach (var result in attackResults)
         {
+
             AttackAction attack = result.ToAttackAction();
             Vector3Int attackerPos = result.finalPos.ToVector3Int();
+            cameraEdgePanner.PanToTile(attackerPos, saloonTiles);
             List<Vector3Int> hitTiles = attack.attackPattern.GetHitTiles(
                 GameManager.Instance.GridState, attackerPos, attack.direction);
             GameManager.Instance.GetVisual(result.unitID).direction = attack.direction;
@@ -105,6 +108,7 @@ public class UnitAnimator : MonoBehaviour
             if (result.damageTaken > 0 && unitMap.TryGetValue(result.unitID , out var unit))
             {
                 unit.TakeDamage(result.damageTaken);
+                GameManager.Instance.GetVisual(result.unitID).FlashWhite();
                 if (result.isDead)
                     Destroy(unit.gameObject);
             }
@@ -112,5 +116,7 @@ public class UnitAnimator : MonoBehaviour
         }
 
         TurnStateMachine.Instance.UpdateState();
+        cameraEdgePanner.ToggleLockAndCenter();
+
     }
 }

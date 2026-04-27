@@ -307,4 +307,15 @@ public class CharacterVisual : MonoBehaviour, Iinteractable
         objRenderer.material.SetFloat("_OutlineThickness", 0f);
         objRenderer.material.SetColor("_OutlineColour", Color.black);
     }
+
+    public void FlashWhite()
+    {
+        Debug.Log("FLASHAAAAAAAAAAA");
+        objRenderer.material.SetColor("_FlashColour", Color.white);
+        objRenderer.material.SetFloat("_FlashAmount", 1f);
+        LeanTween.delayedCall(0.2f, () =>
+        {
+            objRenderer.material.SetFloat("_FlashAmount", 0f);
+        });
+    }
 }

@@ -17,12 +17,14 @@ public class TurnStateMachine : MonoBehaviour
     {
         BoardSyncTurnState.OnSyncStart += CreateTurnInfo;
         BoardSyncTurnState.OnGameStart += CreateTurnInfo;
+        MovePlanTurnState.OnMovePlanStart += CreateTurnInfo;
         StandbyTurnState.OnStandbyStart += ClearGhosts;
     }
     private void OnDisable()
     {
         BoardSyncTurnState.OnSyncStart -= CreateTurnInfo;
         BoardSyncTurnState.OnGameStart -= CreateTurnInfo;
+        MovePlanTurnState.OnMovePlanStart -= CreateTurnInfo;
         StandbyTurnState.OnStandbyStart -= ClearGhosts;
     }
     void Start()

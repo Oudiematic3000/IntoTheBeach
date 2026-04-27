@@ -44,6 +44,7 @@ public class UIActions : MonoBehaviour
         BoardSyncTurnState.OnSyncStart += hideStandbyText;
         BoardSyncTurnState.OnSyncStart += hideSelectUnitText;
         MovePlanTurnState.OnMovePlanStart += ShowSelectUnitText;
+        MovePlanTurnState.OnMovePlanStart += HideEndPhaseText;
         StandbyTurnState.OnStandbyStart += HideAllPips;
         MovePlanTurnState.OnMovePlanStart += ShowAllPips;
     }
@@ -65,6 +66,7 @@ public class UIActions : MonoBehaviour
         BoardSyncTurnState.OnSyncStart -= hideStandbyText;
         BoardSyncTurnState.OnSyncStart -= hideSelectUnitText;
         MovePlanTurnState.OnMovePlanStart -= ShowSelectUnitText;
+        MovePlanTurnState.OnMovePlanStart -= HideEndPhaseText;
         StandbyTurnState.OnStandbyStart -= HideAllPips;
         MovePlanTurnState.OnMovePlanStart -= ShowAllPips;
 
@@ -169,7 +171,6 @@ public class UIActions : MonoBehaviour
     }
     public void ShowAllPips()
     {
-        if(TurnStateMachine.Instance.currentState is AttackPlanTurnState || TurnStateMachine.Instance.currentState is MovePlanTurnState )
         foreach(var pip in pips)pip.SetActive(true);
     }
     void HideAllPips()
