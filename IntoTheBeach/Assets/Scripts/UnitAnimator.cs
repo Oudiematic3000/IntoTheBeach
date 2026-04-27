@@ -76,31 +76,27 @@ public class UnitAnimator : MonoBehaviour
             AudioManager.instance.PlaySFX(nobodyMove[Random.Range(0, nobodyMove.Length)]);
         foreach (var result in attackResults)
         {
-
             AttackAction attack = result.ToAttackAction();
             Vector3Int attackerPos = result.finalPos.ToVector3Int();
             cameraEdgePanner.PanToTile(attackerPos, saloonTiles);
+
             List<Vector3Int> hitTiles = attack.attackPattern.GetHitTiles(
                 GameManager.Instance.GridState, attackerPos, attack.direction);
+
             var visual = GameManager.Instance.GetVisual(result.unitID);
             if (visual != null) visual.direction = attack.direction;
+
             foreach (var tile in hitTiles)
             {
                 saloonTiles.SetTileFlags(tile, TileFlags.None);
                 saloonTiles.SetColor(tile, Color.red);
-                GameManager.Instance.GetVisual(result.unitID).ShowAttackOwner();
-                LeanTween.delayedCall(0.33f, () =>
-                {
-                    saloonTiles.SetColor(tile, Color.darkRed);
-                });
-                LeanTween.delayedCall(0.66f, () =>
-                {
-                    saloonTiles.SetColor(tile, Color.red);
-                });
-                LeanTween.delayedCall(0.99f, () =>
-                {
-                    saloonTiles.SetColor(tile, Color.darkRed);
-                });
+
+                visual?.ShowAttackOwner(); 
+
+                LeanTween.delayedCall(0.33f, () => saloonTiles.SetColor(tile, Color.darkRed));
+                LeanTween.delayedCall(0.66f, () => saloonTiles.SetColor(tile, Color.red));
+                LeanTween.delayedCall(0.99f, () => saloonTiles.SetColor(tile, Color.darkRed));
+
                 allHitTiles.Add(tile);
             }
 
