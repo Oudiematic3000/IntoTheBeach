@@ -40,6 +40,10 @@ public class Tutorial : MonoBehaviour
 
 
     }
+    private void Start()
+    {
+        if (PlayerData.Local != null) RunSelectUnit();
+    }
     public enum TutorialPhases
     {
         None,
