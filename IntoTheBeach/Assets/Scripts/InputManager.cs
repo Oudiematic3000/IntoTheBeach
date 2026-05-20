@@ -142,17 +142,28 @@ public class InputManager : MonoBehaviour
         return Physics2D.Raycast(mousePos2D, Vector2.zero);
     }
 }
-    public void HoverInteract() 
+    private Iinteractable currentHovered;
+
+    public void HoverInteract()
     {
         RaycastHit2D ray = InteractMouse();
 
-        if (ray.collider == null) return;
+        Iinteractable newHovered = null;
+        if (ray.collider != null && ray.collider.TryGetComponent<Iinteractable>(out var hoverObject))
+        {
+            newHovered = hoverObject;
+        }
 
-        if (ray.collider.TryGetComponent<Iinteractable>(out var hoverObject))
-            {
-                hoverObject.OnHover(ray.point);
-            }
-        
+        if (newHovered != currentHovered)
+        {
+            currentHovered?.OnEndHover();
+            newHovered?.OnHover(ray.point);
+            currentHovered = newHovered;
+        }
+        else if (currentHovered != null)
+        {
+            currentHovered.OnHover(ray.point);
+        }
     }
     public void PressInteract() 
     { 
@@ -233,5 +244,5 @@ public interface Iinteractable
     public void OnHover(Vector2 mousePos);
     public void OnPress(Vector2 mousePos);
 
-    
+    public void OnEndHover();
 }

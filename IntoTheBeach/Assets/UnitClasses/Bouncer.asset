@@ -22,6 +22,7 @@ MonoBehaviour:
   animations: {fileID: 11400000, guid: 4744bdef47f0cd54899a5fe9293edcb0, type: 2}
   icon: {fileID: 21300000, guid: b7c35fdd35ff9d94f9789f13560d7a17, type: 3}
   attackSound: {fileID: 8300000, guid: 5c5992c0415672242a28a6623f98facb, type: 3}
+  attackPatternPreview: {fileID: 21300000, guid: d0ccf7d39f555e341abd886d67566752, type: 3}
   references:
     version: 2
     RefIds:
