@@ -355,4 +355,7 @@ public class GridVisual : MonoBehaviour, Iinteractable
         }
     }
 
+    public void OnEndHover()
+    {
+    }
 }

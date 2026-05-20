@@ -5,6 +5,7 @@ using Unity.Netcode;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Tilemaps;
+using static UnityEditor.PlayerSettings;
 
 
 public class CharacterVisual : MonoBehaviour, Iinteractable
@@ -60,10 +61,68 @@ public class CharacterVisual : MonoBehaviour, Iinteractable
         AttackPlanTurnState.OnAttackPlanStart -= AnimUpdate;
         BoardSyncTurnState.OnSyncEnd -= ResetMoves;
     }
+    LTDescr highlight;
+    private bool isHovered = false;
+
     public void OnHover(Vector2 mousePos)
     {
+        if (isHovered) return; 
+        isHovered = true;
+
+        if (teamIndex == PlayerData.Local.TeamIndex.Value)
+        {
+            objRenderer.material.SetFloat("_OutlineThickness", 1f);
+            objRenderer.material.SetColor("_OutlineColor", Color.green);
+        }
+        else
+        {
+            objRenderer.material.SetFloat("_OutlineThickness", 2f);
+
+        }
+
+        highlight = LeanTween.delayedCall(0.5f, () =>
+            {
+                HighlightVisual.instance.PaintOutline(GetMoveRangeTiles());
+            });
     }
 
+    public void OnEndHover()
+    {
+        isHovered = false;
+
+        if (highlight != null)
+        {
+            LeanTween.cancel(highlight.uniqueId);
+            highlight = null;
+        }
+
+        if (teamIndex == PlayerData.Local.TeamIndex.Value)
+            objRenderer.material.SetFloat("_OutlineThickness", 0f);
+        else
+            objRenderer.material.SetFloat("_OutlineThickness", 1f);
+
+
+        HighlightVisual.instance.ClearOutline();
+    }
+    public List<Vector3Int> GetMoveRangeTiles()
+    {
+        List<Vector3Int> highlightedTiles = new List<Vector3Int>();
+        var map = GameObject.Find("FloorVisual").GetComponent<Tilemap>();
+        for (int x = GetTilePos(map).x - unitClass.moveRange; x <= GetTilePos(map).x + unitClass.moveRange; x++)
+        {
+
+            for (int y = GetTilePos(map).y - unitClass.moveRange; y <= GetTilePos(map).y + unitClass.moveRange; y++)
+            {
+                if (Math.Abs(x - GetTilePos(map).x) + Math.Abs(y - GetTilePos(map).y) > unitClass.moveRange) continue;
+                if (Math.Abs(x - GetTilePos(map).x) + Math.Abs(y - GetTilePos(map).y) == 0) continue;
+                if (GameManager.Instance.GridState.IsMovementBlocked(new Vector3Int(x, y))) continue;
+                highlightedTiles.Add(new Vector3Int(x, y, 0));
+               
+
+            }
+        }
+        return highlightedTiles;
+    }
     public void SetHearts()
     {
         if (PlayerData.Local != null && PlayerData.Local.TeamIndex.Value != -1)
@@ -340,4 +399,6 @@ public class CharacterVisual : MonoBehaviour, Iinteractable
 
         });
     }
+
+ 
 }
