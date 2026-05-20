@@ -16,16 +16,18 @@ public class UIActions : MonoBehaviour
     [SerializeField] Image attackText, moveText;
     [SerializeField] GameObject endPhaseButton;
     [SerializeField] GameObject[] pips;
-    public GameObject movePhaseIndicator, attackPhaseIndicator;
-    public GameObject selectUnit;
-    public GameObject winPanel;
-    public GameObject losePanel;
-    public GameObject moveUnitText;
-    public GameObject attackUnitText;
-    public GameObject endTurnUnitText;
-    public GameObject tileSelect;
-    public GameObject attackTileSelect;
-    public GameObject standbyText;
+    [SerializeField] private GameObject movePhaseIndicator, attackPhaseIndicator;
+    [SerializeField] private GameObject selectUnit;
+    [SerializeField] private GameObject winPanel;
+    [SerializeField] private GameObject losePanel;
+    [SerializeField] private GameObject moveUnitText;
+    [SerializeField] private GameObject attackUnitText;
+    [SerializeField] private GameObject endTurnUnitText;
+    [SerializeField] private GameObject tileSelect;
+    [SerializeField] private GameObject attackTileSelect;
+    [SerializeField] private GameObject standbyText;
+    [SerializeField] private GameObject pauseMenu;
+    [SerializeField] private GameObject backGround;
     [SerializeField] GameObject DamageBar;
     [SerializeField] TextMeshProUGUI DamageBarNumber;
 
@@ -45,6 +47,7 @@ public class UIActions : MonoBehaviour
         MovePlanTurnState.OnMovePlanStart += ShowEndTurn;
         GridVisual.onMoveText += hideAllText;
         InputManager.OnRemove += HideAll;
+        InputManager.Pause += HideAll;
         StandbyTurnState.OnStandbyStart += ShowStandbyText;
         BoardSyncTurnState.OnSyncStart += hideStandbyText;
         BoardSyncTurnState.OnSyncStart += hideSelectUnitText;
@@ -72,6 +75,7 @@ public class UIActions : MonoBehaviour
         MovePlanTurnState.OnMovePlanStart -= ShowEndTurn;
         GridVisual.OnUnitAttacked -= HidePip;
         InputManager.OnRemove -= HideAll;
+        InputManager.Pause -= HideAll;
         StandbyTurnState.OnStandbyStart -= ShowStandbyText;
         BoardSyncTurnState.OnSyncStart -= hideStandbyText;
         BoardSyncTurnState.OnSyncStart -= hideSelectUnitText;

@@ -12,6 +12,7 @@ public class InputManager : MonoBehaviour
 
     public static event Action OnClickNothing;
     public static event Action OnRemove;
+    public static event Action Pause;
 
 
     [SerializeField] private TurnStates currentState = TurnStates.None;
@@ -83,6 +84,12 @@ public class InputManager : MonoBehaviour
                     return;
             }
             pressUnselect();
+        }
+
+        if (Input.GetKeyDown(KeyCode.Escape)) 
+        {
+            Pause?.Invoke();
+            print("Is Pausing");
         }
     }
 
