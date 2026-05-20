@@ -5,18 +5,13 @@ using UnityEngine.SceneManagement;
 
 public class RetryQuitButton : NetworkBehaviour
 {
-    public async Task Retry() 
+    public void Retry() 
     {
-        //if (NetworkManager.Singleton.IsServer)
-        //{
-        //    NetworkManager.Singleton.SceneManager.LoadScene("Lobby", LoadSceneMode.Single);
-        //}
-        if (NetworkManager.Singleton != null && NetworkManager.Singleton.IsListening)
+        if (NetworkManager.Singleton.IsServer)
         {
-            NetworkManager.Singleton.Shutdown();
-            await Task.Yield();
+            NetworkManager.Singleton.SceneManager.LoadScene("Lobby", LoadSceneMode.Single);
         }
-        SceneManager.LoadScene("Lobby", LoadSceneMode.Single);
+     
 
     }
     public void Quit() 
