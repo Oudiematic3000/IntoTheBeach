@@ -1,0 +1,533 @@
+fileFormatVersion: 2
+guid: 4be20b44e46ddba42a9b678c7a8dc0da
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: 5161627889402805562
+    second: MovePhase_Anim_0
+  - first:
+      213: 2186233331751068264
+    second: MovePhase_Anim_1
+  - first:
+      213: 8682652660215616030
+    second: MovePhase_Anim_2
+  - first:
+      213: 909120055022839818
+    second: MovePhase_Anim_3
+  - first:
+      213: 7767632077076899283
+    second: MovePhase_Anim_4
+  - first:
+      213: 2531099195984063269
+    second: MovePhase_Anim_5
+  - first:
+      213: -9208689401986941099
+    second: MovePhase_Anim_6
+  - first:
+      213: 8591231117365011709
+    second: MovePhase_Anim_7
+  - first:
+      213: -5777973484910274710
+    second: MovePhase_Anim_8
+  - first:
+      213: 5360969218322423011
+    second: MovePhase_Anim_9
+  - first:
+      213: -6727240363076516172
+    second: MovePhase_Anim_10
+  - first:
+      213: -4289506242184470309
+    second: MovePhase_Anim_11
+  - first:
+      213: -8059665608598062114
+    second: MovePhase_Anim_12
+  - first:
+      213: -8283083666035727389
+    second: MovePhase_Anim_13
+  - first:
+      213: -4733138645722003663
+    second: MovePhase_Anim_14
+  - first:
+      213: 4835859615214946804
+    second: MovePhase_Anim_15
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 0
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 1
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 64
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: MovePhase_Anim_0
+      rect:
+        serializedVersion: 2
+        x: 15
+        y: 31
+        width: 98
+        height: 76
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a3d7a9ac739c1a740800000000000000
+      internalID: 5161627889402805562
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MovePhase_Anim_1
+      rect:
+        serializedVersion: 2
+        x: 143
+        y: 31
+        width: 98
+        height: 66
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 862242fc1af075e10800000000000000
+      internalID: 2186233331751068264
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MovePhase_Anim_2
+      rect:
+        serializedVersion: 2
+        x: 271
+        y: 31
+        width: 98
+        height: 66
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e129040879afe7870800000000000000
+      internalID: 8682652660215616030
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MovePhase_Anim_3
+      rect:
+        serializedVersion: 2
+        x: 399
+        y: 31
+        width: 98
+        height: 66
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a08e1d19fd7dd9c00800000000000000
+      internalID: 909120055022839818
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MovePhase_Anim_4
+      rect:
+        serializedVersion: 2
+        x: 527
+        y: 31
+        width: 98
+        height: 66
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3d5291c283c2ccb60800000000000000
+      internalID: 7767632077076899283
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MovePhase_Anim_5
+      rect:
+        serializedVersion: 2
+        x: 655
+        y: 31
+        width: 98
+        height: 66
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 52b28e3fe45402320800000000000000
+      internalID: 2531099195984063269
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MovePhase_Anim_6
+      rect:
+        serializedVersion: 2
+        x: 783
+        y: 31
+        width: 98
+        height: 66
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 55ff9a357c9243080800000000000000
+      internalID: -9208689401986941099
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MovePhase_Anim_7
+      rect:
+        serializedVersion: 2
+        x: 911
+        y: 31
+        width: 98
+        height: 66
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: df4e2d5de2f2a3770800000000000000
+      internalID: 8591231117365011709
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MovePhase_Anim_8
+      rect:
+        serializedVersion: 2
+        x: 1039
+        y: 31
+        width: 98
+        height: 66
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a671c4e7ab380dfa0800000000000000
+      internalID: -5777973484910274710
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MovePhase_Anim_9
+      rect:
+        serializedVersion: 2
+        x: 1167
+        y: 31
+        width: 98
+        height: 66
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3ec59e5b91df56a40800000000000000
+      internalID: 5360969218322423011
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MovePhase_Anim_10
+      rect:
+        serializedVersion: 2
+        x: 1295
+        y: 31
+        width: 98
+        height: 66
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4b68720488a04a2a0800000000000000
+      internalID: -6727240363076516172
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MovePhase_Anim_11
+      rect:
+        serializedVersion: 2
+        x: 1423
+        y: 31
+        width: 98
+        height: 66
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: bd026ccaccc9874c0800000000000000
+      internalID: -4289506242184470309
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MovePhase_Anim_12
+      rect:
+        serializedVersion: 2
+        x: 1551
+        y: 31
+        width: 98
+        height: 66
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: edb7417b4d0562090800000000000000
+      internalID: -8059665608598062114
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MovePhase_Anim_13
+      rect:
+        serializedVersion: 2
+        x: 1679
+        y: 31
+        width: 98
+        height: 66
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3e3a9199a439c0d80800000000000000
+      internalID: -8283083666035727389
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MovePhase_Anim_14
+      rect:
+        serializedVersion: 2
+        x: 1807
+        y: 31
+        width: 98
+        height: 66
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 137011d9a73805eb0800000000000000
+      internalID: -4733138645722003663
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MovePhase_Anim_15
+      rect:
+        serializedVersion: 2
+        x: 1935
+        y: 31
+        width: 98
+        height: 66
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4f94b84d2bc6c1340800000000000000
+      internalID: 4835859615214946804
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 5e97eb03825dee720800000000000000
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      MovePhase_Anim_0: 5161627889402805562
+      MovePhase_Anim_1: 2186233331751068264
+      MovePhase_Anim_10: -6727240363076516172
+      MovePhase_Anim_11: -4289506242184470309
+      MovePhase_Anim_12: -8059665608598062114
+      MovePhase_Anim_13: -8283083666035727389
+      MovePhase_Anim_14: -4733138645722003663
+      MovePhase_Anim_15: 4835859615214946804
+      MovePhase_Anim_2: 8682652660215616030
+      MovePhase_Anim_3: 909120055022839818
+      MovePhase_Anim_4: 7767632077076899283
+      MovePhase_Anim_5: 2531099195984063269
+      MovePhase_Anim_6: -9208689401986941099
+      MovePhase_Anim_7: 8591231117365011709
+      MovePhase_Anim_8: -5777973484910274710
+      MovePhase_Anim_9: 5360969218322423011
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
