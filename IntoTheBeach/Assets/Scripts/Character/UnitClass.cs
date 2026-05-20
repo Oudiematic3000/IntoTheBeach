@@ -16,6 +16,6 @@ public class UnitClass : ScriptableObject
     public UnitAnimations animations;
     public Sprite icon;
     public AudioClip attackSound;
-   
+    public Sprite attackPatternPreview;
 
 }
