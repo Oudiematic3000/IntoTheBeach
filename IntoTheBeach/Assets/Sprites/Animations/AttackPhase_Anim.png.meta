@@ -1,0 +1,533 @@
+fileFormatVersion: 2
+guid: 35a307b2b0fa7ef46a87985eee62d67e
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: -5200182698135531853
+    second: AttackPhase_Anim_0
+  - first:
+      213: -154533201245965970
+    second: AttackPhase_Anim_1
+  - first:
+      213: 2618498261934307747
+    second: AttackPhase_Anim_2
+  - first:
+      213: -696230648293714091
+    second: AttackPhase_Anim_3
+  - first:
+      213: -2627349989801657471
+    second: AttackPhase_Anim_4
+  - first:
+      213: 8912793834079634600
+    second: AttackPhase_Anim_5
+  - first:
+      213: 9132019478715268663
+    second: AttackPhase_Anim_6
+  - first:
+      213: 4552757978021833077
+    second: AttackPhase_Anim_7
+  - first:
+      213: -5896875601830104346
+    second: AttackPhase_Anim_8
+  - first:
+      213: -6727858116111101123
+    second: AttackPhase_Anim_9
+  - first:
+      213: -289668684016353573
+    second: AttackPhase_Anim_10
+  - first:
+      213: 3852609480984872613
+    second: AttackPhase_Anim_11
+  - first:
+      213: -6078015136571798185
+    second: AttackPhase_Anim_12
+  - first:
+      213: 8138973715789258579
+    second: AttackPhase_Anim_13
+  - first:
+      213: 6545171128233092577
+    second: AttackPhase_Anim_14
+  - first:
+      213: 7792254093880487651
+    second: AttackPhase_Anim_15
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: AttackPhase_Anim_0
+      rect:
+        serializedVersion: 2
+        x: 15
+        y: 31
+        width: 98
+        height: 66
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3becf76436d35d7b0800000000000000
+      internalID: -5200182698135531853
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: AttackPhase_Anim_1
+      rect:
+        serializedVersion: 2
+        x: 143
+        y: 31
+        width: 98
+        height: 66
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e61fab94fdcfaddf0800000000000000
+      internalID: -154533201245965970
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: AttackPhase_Anim_2
+      rect:
+        serializedVersion: 2
+        x: 271
+        y: 31
+        width: 98
+        height: 66
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3a9729bbb46c65420800000000000000
+      internalID: 2618498261934307747
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: AttackPhase_Anim_3
+      rect:
+        serializedVersion: 2
+        x: 399
+        y: 31
+        width: 98
+        height: 66
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 55796b60aed7656f0800000000000000
+      internalID: -696230648293714091
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: AttackPhase_Anim_4
+      rect:
+        serializedVersion: 2
+        x: 527
+        y: 31
+        width: 98
+        height: 66
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 18bfe35ca17c98bd0800000000000000
+      internalID: -2627349989801657471
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: AttackPhase_Anim_5
+      rect:
+        serializedVersion: 2
+        x: 655
+        y: 31
+        width: 98
+        height: 66
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8a4cb9425ca90bb70800000000000000
+      internalID: 8912793834079634600
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: AttackPhase_Anim_6
+      rect:
+        serializedVersion: 2
+        x: 783
+        y: 31
+        width: 98
+        height: 66
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 73e75c615537bbe70800000000000000
+      internalID: 9132019478715268663
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: AttackPhase_Anim_7
+      rect:
+        serializedVersion: 2
+        x: 911
+        y: 31
+        width: 98
+        height: 66
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 579215c6245ae2f30800000000000000
+      internalID: 4552757978021833077
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: AttackPhase_Anim_8
+      rect:
+        serializedVersion: 2
+        x: 1039
+        y: 31
+        width: 98
+        height: 66
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6e2bf3412e61a2ea0800000000000000
+      internalID: -5896875601830104346
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: AttackPhase_Anim_9
+      rect:
+        serializedVersion: 2
+        x: 1167
+        y: 31
+        width: 98
+        height: 66
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d3318f960b8d1a2a0800000000000000
+      internalID: -6727858116111101123
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: AttackPhase_Anim_10
+      rect:
+        serializedVersion: 2
+        x: 1295
+        y: 31
+        width: 98
+        height: 66
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: bde76aaddd3eafbf0800000000000000
+      internalID: -289668684016353573
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: AttackPhase_Anim_11
+      rect:
+        serializedVersion: 2
+        x: 1423
+        y: 31
+        width: 98
+        height: 66
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5a6c76439e7377530800000000000000
+      internalID: 3852609480984872613
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: AttackPhase_Anim_12
+      rect:
+        serializedVersion: 2
+        x: 1551
+        y: 31
+        width: 98
+        height: 66
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 75dc03d9f6d86aba0800000000000000
+      internalID: -6078015136571798185
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: AttackPhase_Anim_13
+      rect:
+        serializedVersion: 2
+        x: 1679
+        y: 31
+        width: 98
+        height: 66
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 35f1cdde87173f070800000000000000
+      internalID: 8138973715789258579
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: AttackPhase_Anim_14
+      rect:
+        serializedVersion: 2
+        x: 1807
+        y: 31
+        width: 98
+        height: 66
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1e5e97c967e15da50800000000000000
+      internalID: 6545171128233092577
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: AttackPhase_Anim_15
+      rect:
+        serializedVersion: 2
+        x: 1935
+        y: 31
+        width: 98
+        height: 66
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3ee645130d5a32c60800000000000000
+      internalID: 7792254093880487651
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      AttackPhase_Anim_0: -5200182698135531853
+      AttackPhase_Anim_1: -154533201245965970
+      AttackPhase_Anim_10: -289668684016353573
+      AttackPhase_Anim_11: 3852609480984872613
+      AttackPhase_Anim_12: -6078015136571798185
+      AttackPhase_Anim_13: 8138973715789258579
+      AttackPhase_Anim_14: 6545171128233092577
+      AttackPhase_Anim_15: 7792254093880487651
+      AttackPhase_Anim_2: 2618498261934307747
+      AttackPhase_Anim_3: -696230648293714091
+      AttackPhase_Anim_4: -2627349989801657471
+      AttackPhase_Anim_5: 8912793834079634600
+      AttackPhase_Anim_6: 9132019478715268663
+      AttackPhase_Anim_7: 4552757978021833077
+      AttackPhase_Anim_8: -5896875601830104346
+      AttackPhase_Anim_9: -6727858116111101123
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
