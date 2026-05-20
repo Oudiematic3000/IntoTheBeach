@@ -4,8 +4,17 @@ public class AttackPatternHover : Interactable
 {
     protected override TooltipContent GetTooltipContent()
     {
-        var unitClass = InputManager.Instance.GetCurrentSelection().unitClass;
+        UnitClass unitClass;
         TooltipContent content = new TooltipContent();
+        if (TryGetComponent<CharacterVisual>(out CharacterVisual character))
+        {
+            unitClass = character.unitClass;
+        }
+        else
+        {
+            unitClass = InputManager.Instance.GetCurrentSelection().unitClass;
+        }
+   
         content.sprite = unitClass.attackPatternPreview;
         return content;
     }

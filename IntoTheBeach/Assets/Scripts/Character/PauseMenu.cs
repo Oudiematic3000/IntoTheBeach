@@ -9,14 +9,14 @@ public class PauseMenu : MonoBehaviour
     [SerializeField] private GameObject pauseMenu;
     [SerializeField] private GameObject background;
 
-
+    bool open = false;
     private void OnEnable()
     {
-        InputManager.Pause += pauseGame;
+        InputManager.Pause += PauseGame;
     }
     private void OnDisable()
     {
-        InputManager.Pause -= pauseGame;
+        InputManager.Pause -= PauseGame;
     }
 
     void Start()
@@ -68,13 +68,21 @@ public class PauseMenu : MonoBehaviour
         compendium.SetActive(false);
         pauseMenu.SetActive(false);
     }
-    public void pauseGame() 
+    public void PauseGame() 
     {
-        
-        controls.SetActive(false);
-        settings.SetActive(false);
-        compendium.SetActive(false);
-        pauseMenu.SetActive(true);
-        background.SetActive(true);
+        if (!open)
+        {
+            controls.SetActive(false);
+            settings.SetActive(false);
+            compendium.SetActive(false);
+            pauseMenu.SetActive(true);
+            background.SetActive(true);
+            open=true;
+        }
+        else
+        {
+            open = false;
+            BackToGame();
+        }
     }
 }

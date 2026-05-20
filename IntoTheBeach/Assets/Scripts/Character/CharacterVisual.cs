@@ -61,7 +61,7 @@ public class CharacterVisual : MonoBehaviour, Iinteractable
         AttackPlanTurnState.OnAttackPlanStart -= AnimUpdate;
         BoardSyncTurnState.OnSyncEnd -= ResetMoves;
     }
-    LTDescr highlight;
+    LTDescr highlight, delay;
     private bool isHovered = false;
 
     public void OnHover(Vector2 mousePos)
@@ -79,7 +79,10 @@ public class CharacterVisual : MonoBehaviour, Iinteractable
             objRenderer.material.SetFloat("_OutlineThickness", 2f);
 
         }
-
+        delay = LeanTween.delayedCall(0.45f, () =>
+        {
+            TooltipManager.instance.Show(Camera.main.ScreenToWorldPoint(Input.mousePosition), GetTooltipContent());
+        });
         highlight = LeanTween.delayedCall(0.5f, () =>
             {
                 HighlightVisual.instance.PaintOutline(GetMoveRangeTiles());
@@ -95,7 +98,8 @@ public class CharacterVisual : MonoBehaviour, Iinteractable
             LeanTween.cancel(highlight.uniqueId);
             highlight = null;
         }
-
+        LeanTween.cancel(delay.uniqueId);
+        TooltipManager.instance.Hide();
         if (teamIndex == PlayerData.Local.TeamIndex.Value)
             objRenderer.material.SetFloat("_OutlineThickness", 0f);
         else
@@ -103,6 +107,13 @@ public class CharacterVisual : MonoBehaviour, Iinteractable
 
 
         HighlightVisual.instance.ClearOutline();
+    }
+
+    TooltipContent GetTooltipContent()
+    {
+        TooltipContent content = new TooltipContent();
+        content.sprite = unitClass.attackPatternPreview;
+        return content;
     }
     public List<Vector3Int> GetMoveRangeTiles()
     {

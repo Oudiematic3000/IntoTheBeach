@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.Tilemaps;
@@ -112,20 +113,40 @@ public class InputManager : MonoBehaviour
         CurrentSelection = current;
         
     }
-   
 
+    private bool IsPointerOverPauseUI()
+    {
+        PointerEventData pointerData = new PointerEventData(EventSystem.current);
+        pointerData.position = Input.mousePosition;
+
+        List<RaycastResult> results = new List<RaycastResult>();
+        EventSystem.current.RaycastAll(pointerData, results);
+
+        foreach (RaycastResult result in results)
+        {
+            if (result.gameObject.layer == LayerMask.NameToLayer("Pause"))
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
     private RaycastHit2D InteractMouse()
-{
+    {
+        if(IsPointerOverPauseUI())return new RaycastHit2D();
     int unitLayer = LayerMask.NameToLayer("Unit");
     int furnitureLayer = LayerMask.NameToLayer("Furniture");
-    int unitLayerMask = 1 << unitLayer;
+
+        int unitLayerMask = 1 << unitLayer;
     int invertedMaskInt = ~unitLayerMask;
         unitLayerMask &= ~(1<<furnitureLayer);
         int furnitureLayerMask = 1 << furnitureLayer;
         int invertedfurnitureLayer = ~furnitureLayer;
     Vector3 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
     Vector2 mousePos2D = new Vector2(mousePos.x, mousePos.y);
-    
+     
+
     if (currentState == TurnStates.Attacking || currentState == TurnStates.Moving)
     {
         return Physics2D.Raycast(mousePos2D, Vector2.zero, Mathf.Infinity, invertedMaskInt);
@@ -141,7 +162,7 @@ public class InputManager : MonoBehaviour
 
         return Physics2D.Raycast(mousePos2D, Vector2.zero);
     }
-}
+    }
     private Iinteractable currentHovered;
 
     public void HoverInteract()
