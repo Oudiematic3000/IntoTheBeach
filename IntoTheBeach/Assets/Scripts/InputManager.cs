@@ -71,6 +71,12 @@ public class InputManager : MonoBehaviour
    
     void Update()
     {
+        if (Input.GetKey(KeyCode.LeftShift))
+        {
+            LineGenerator.Instance.engaged = true;
+            return;
+        }
+        LineGenerator.Instance.engaged = false;
         HoverInteract();
         if (Input.GetMouseButtonDown(0))
         {
