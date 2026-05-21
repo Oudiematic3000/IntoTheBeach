@@ -9,7 +9,7 @@ public class PauseMenu : MonoBehaviour
     [SerializeField] private GameObject pauseMenu;
     [SerializeField] private GameObject background;
 
-    bool open = false;
+   [SerializeField] bool open = false;
     private void OnEnable()
     {
         InputManager.Pause += PauseGame;
