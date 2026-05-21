@@ -10,6 +10,7 @@ public class Tooltip : MonoBehaviour
     public CanvasGroup canvasGroup;
     RectTransform rectTransform;
     [SerializeField] float offsetMult  = 1f;
+    [SerializeField] bool isStatic = false;
     private void Awake()
     {
         canvasGroup = GetComponent<CanvasGroup>();
@@ -24,6 +25,7 @@ public class Tooltip : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if(!isStatic)
         SetPosition();
     }
 

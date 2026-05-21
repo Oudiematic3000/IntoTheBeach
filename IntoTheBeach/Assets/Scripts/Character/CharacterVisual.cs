@@ -81,7 +81,7 @@ public class CharacterVisual : MonoBehaviour, Iinteractable
         }
         delay = LeanTween.delayedCall(0.45f, () =>
         {
-            TooltipManager.instance.Show(Camera.main.ScreenToWorldPoint(Input.mousePosition), GetTooltipContent());
+            TooltipManager.instance.ShowStatic(GetTooltipContent());
         });
         highlight = LeanTween.delayedCall(0.5f, () =>
             {
@@ -99,7 +99,7 @@ public class CharacterVisual : MonoBehaviour, Iinteractable
             highlight = null;
         }
         LeanTween.cancel(delay.uniqueId);
-        TooltipManager.instance.Hide();
+        TooltipManager.instance.HideStatic();
         if (teamIndex == PlayerData.Local.TeamIndex.Value)
             objRenderer.material.SetFloat("_OutlineThickness", 0f);
         else
