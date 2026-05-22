@@ -1,22 +1,28 @@
 using UnityEngine;
+using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
 public class Compendium : MonoBehaviour
 {
    [SerializeField] private GameObject compendium;
     [SerializeField] private GameObject gunSlinger;
     [SerializeField] private GameObject gunSlingerButton;
+    [SerializeField] private bool isgunstarted;
     [SerializeField] private GameObject drunkard;
     [SerializeField] private GameObject drunkardButton;
     [SerializeField] private GameObject bouncer;
     [SerializeField] private GameObject bouncerButton;
 
+   
 
     // Update is called once per frame
     void Update()
     {
+        
         if (gunSlinger.activeInHierarchy)
         {
             ResetButtons();
+           isgunstarted = true;
             gunSlingerButton.GetComponent<RectTransform>().anchoredPosition =
                 new Vector2(-600, gunSlingerButton.GetComponent<RectTransform>().anchoredPosition.y);
         }
@@ -33,6 +39,16 @@ public class Compendium : MonoBehaviour
             ResetButtons();
             bouncerButton.GetComponent<RectTransform>().anchoredPosition =
                 new Vector2(-600, bouncerButton.GetComponent<RectTransform>().anchoredPosition.y);
+        }
+        if (!compendium.activeInHierarchy)
+        {
+            isgunstarted = false;
+            ResetButtons();
+            GunslingerSelection();
+        }
+        if (!isgunstarted)
+        {
+            gunSlingerButton.GetComponent<Button>().Select();
         }
     }
    

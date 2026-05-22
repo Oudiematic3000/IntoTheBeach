@@ -5045,7 +5045,7 @@ MonoBehaviour:
   m_SpriteState:
     m_HighlightedSprite: {fileID: 21300000, guid: 2ab82f2ea6898d54a8c8b2011e83d625, type: 3}
     m_PressedSprite: {fileID: 0}
-    m_SelectedSprite: {fileID: 0}
+    m_SelectedSprite: {fileID: 21300000, guid: d479a84a133008245b47e4171d5a03c4, type: 3}
     m_DisabledSprite: {fileID: 0}
   m_AnimationTriggers:
     m_NormalTrigger: Normal
@@ -11071,7 +11071,7 @@ MonoBehaviour:
   m_SpriteState:
     m_HighlightedSprite: {fileID: 21300000, guid: 7e8764c625a86014593970c186693af0, type: 3}
     m_PressedSprite: {fileID: 0}
-    m_SelectedSprite: {fileID: 0}
+    m_SelectedSprite: {fileID: 21300000, guid: e76020ac4c510d54ba5b13ffdfdd3329, type: 3}
     m_DisabledSprite: {fileID: 0}
   m_AnimationTriggers:
     m_NormalTrigger: Normal
@@ -12018,7 +12018,7 @@ MonoBehaviour:
   m_SpriteState:
     m_HighlightedSprite: {fileID: 21300000, guid: 23937083570699c4a932bf92b3899b3d, type: 3}
     m_PressedSprite: {fileID: 0}
-    m_SelectedSprite: {fileID: 0}
+    m_SelectedSprite: {fileID: 21300000, guid: 8f38320bc7d409340b547498ff9b1532, type: 3}
     m_DisabledSprite: {fileID: 0}
   m_AnimationTriggers:
     m_NormalTrigger: Normal
@@ -18588,6 +18588,7 @@ MonoBehaviour:
   compendium: {fileID: 1505714556}
   gunSlinger: {fileID: 1541693071}
   gunSlingerButton: {fileID: 1335093556}
+  isgunstarted: 0
   drunkard: {fileID: 1084158891}
   drunkardButton: {fileID: 1244967895}
   bouncer: {fileID: 157085387}
