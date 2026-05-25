@@ -145,11 +145,9 @@ public class UnitAnimator : MonoBehaviour
                 }
             }
 
-            // Play attack sounds once, outside the results loop
             foreach (var attacker in attackingUnits)
                 AudioManager.instance.PlaySFX(attacker.unitClass.attackSound, volume: 0.3f);
 
-            // State advance happens last, after all death/damage is resolved
             TurnStateMachine.Instance.UpdateState();
             cameraEdgePanner.ToggleLockAndCenter();
         });

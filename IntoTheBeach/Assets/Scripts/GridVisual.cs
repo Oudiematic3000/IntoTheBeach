@@ -202,7 +202,7 @@ public class GridVisual : MonoBehaviour, Iinteractable
         InputManager.Instance.SetState(InputManager.TurnStates.None);
         
         OnUnitMoved?.Invoke();
-        MoveAction moveAction = new MoveAction(currentSelection.GetTilePos(saloonTiles),ghost.GetTilePos(saloonTiles));
+        MoveAction moveAction = new MoveAction(currentSelection.GetTilePos(saloonTiles),ghost.GetTilePos(saloonTiles),GameManager.Instance.GridState,saloonTiles);
         TurnStateMachine.Instance.currentTurnInfo.turnPlan.ModifyUnitPlanMoveAction(currentSelection.unitID, moveAction);
         ResetTiles();
         currentSelection.RemoveOutline();

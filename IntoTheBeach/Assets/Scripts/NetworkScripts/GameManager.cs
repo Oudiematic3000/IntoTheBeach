@@ -12,6 +12,7 @@ public class GameManager : NetworkBehaviour
 
     public GridState GridState { get; private set; } = new();
     [SerializeField] private Tilemap floorTilemap;
+    public Tilemap FloorTilemap => floorTilemap;
     private Dictionary<int, CharacterVisual> unitVisuals = new();
     public static event Action<string, int> winnerBroadcast;
     private int nextUnitID = 0;

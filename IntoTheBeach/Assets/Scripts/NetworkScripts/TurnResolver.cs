@@ -20,11 +20,11 @@ public class TurnResolver
         foreach (var plan in allPlans)
         {
             if (plan.hasMoveAction)
-                workingMoves[plan.unitID] = plan.ToMoveAction();
+                workingMoves[plan.unitID] = plan.ToMoveAction(gridState);
             else
             {
                 Vector3Int currentPos = gridState.GetUnitPosition(plan.unitID) ?? Vector3Int.zero;
-                workingMoves[plan.unitID] = new MoveAction(currentPos, currentPos);
+                workingMoves[plan.unitID] = new MoveAction(currentPos, currentPos, gridState, GameManager.Instance.FloorTilemap);
             }
 
             if (plan.hasAttackAction)
@@ -36,7 +36,7 @@ public class TurnResolver
             if (!workingMoves.ContainsKey(unitID))
             {
                 Vector3Int currentPos = gridState.GetUnitPosition(unitID) ?? Vector3Int.zero;
-                workingMoves[unitID] = new MoveAction(currentPos, currentPos);
+                workingMoves[unitID] = new MoveAction(currentPos, currentPos, gridState,GameManager.Instance.FloorTilemap);
             }
         }
 

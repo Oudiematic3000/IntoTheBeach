@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Unity.Netcode;
 using UnityEngine;
+using UnityEngine.Tilemaps;
 
 public class NetworkTurnManager : NetworkBehaviour
 {
@@ -159,8 +160,8 @@ public struct NetUnitPlan : INetworkSerializable
         attackAction = plan.attackAction != null ? NetAttackAction.From(plan.attackAction) : default
     };
 
-    public MoveAction ToMoveAction() =>
-        hasMoveAction ? new MoveAction(startPos.ToVector3Int(), resultant.ToVector3Int())
+    public MoveAction ToMoveAction(GridState gridState= null, Tilemap floorTilemap = null) =>
+        hasMoveAction ? new MoveAction(startPos.ToVector3Int(), resultant.ToVector3Int(), gridState, floorTilemap)
         { paths = paths.Select(p => p.ToPath()).ToList() } : null;
 
     public AttackAction ToAttackAction() =>
@@ -214,9 +215,9 @@ public struct NetUnitResult : INetworkSerializable
 
     };
 
-    public MoveAction ToMoveAction()
+    public MoveAction ToMoveAction(GridState gridstate=null, Tilemap floorTilemap = null)
     {
-        var action = new MoveAction(startPos.ToVector3Int(), finalPos.ToVector3Int());
+        var action = new MoveAction(startPos.ToVector3Int(), finalPos.ToVector3Int(), gridstate, floorTilemap);
         action.paths = paths.Select(p => p.ToPath()).ToList();
         return action;
     }
