@@ -2,7 +2,7 @@ using System;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.Pool;
-
+using UnityEngine.UI;
 using Random = UnityEngine.Random;
 
 public class AudioManager : MonoBehaviour
@@ -19,12 +19,30 @@ public class AudioManager : MonoBehaviour
     [SerializeField] AudioClip[] deathSounds;
     [SerializeField] AudioClip hitSound;
 
+    [SerializeField] private Slider musicSlider;
+    [SerializeField] private Slider sfxSlider;
+    private float sfxSound = 1f;
+
     private ObjectPool<AudioSource> sfxPool;
 
     private void Awake()
     {
           instance = this;
           InitializePool();
+
+        musicSlider.onValueChanged.AddListener(ChangeMusicVolume);
+        sfxSlider.onValueChanged.AddListener(ChangeSFXVolume);
+
+        ChangeMusicVolume(musicSlider.value);
+        ChangeSFXVolume(sfxSlider.value);
+    }
+    public void ChangeMusicVolume(float volume) 
+    {
+        musicSource.volume = volume;
+    }
+    public void ChangeSFXVolume(float volume)
+    {
+        sfxSound = volume;
     }
 
     private void InitializePool()
@@ -129,7 +147,7 @@ public class AudioManager : MonoBehaviour
     private IEnumerator PlayAndRelease(AudioSource src, AudioClip clip, Vector3? position, float volume, float pitch, float spatial)
     {
         src.clip = clip;
-        src.volume = Mathf.Clamp01(volume);
+        src.volume = Mathf.Clamp01(volume * sfxSound);
         src.pitch = Mathf.Max(0.01f, pitch);
         src.spatialBlend = Mathf.Clamp01(spatial);
 
