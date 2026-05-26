@@ -98,6 +98,7 @@ public class CharacterVisual : MonoBehaviour, Iinteractable
             LeanTween.cancel(highlight.uniqueId);
             highlight = null;
         }
+        if(delay != null)
         LeanTween.cancel(delay.uniqueId);
         TooltipManager.instance.HideStatic();
         HighlightVisual.instance.ClearOutline();

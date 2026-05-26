@@ -36,11 +36,20 @@ public class GunslingerAttackPattern : AttackPattern
         {
             Vector3Int current = position + dir * i;
 
-            if (gridState.IsAttackBlocked(current, dir)) break;
+            if (gridState.IsAttackBlocked(current, dir))
+            {
+                tiles.Add(current);
+                break;
+            }
 
+
+            if (gridState.GetUnitAtPosition(current).HasValue)
+            {
+                tiles.Add(current);
+                break;
+            }
             tiles.Add(current);
 
-            if (gridState.GetUnitAtPosition(current).HasValue) break;
         }
         return tiles;
     }
