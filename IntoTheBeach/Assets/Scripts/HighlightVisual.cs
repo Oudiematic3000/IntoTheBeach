@@ -9,21 +9,26 @@ public class HighlightVisual : MonoBehaviour
     [SerializeField] Tilemap gridVisual;
     [SerializeField] TileBase outlineTile;
 
+    private List<Vector3Int> currentTiles = new List<Vector3Int>();
+
     private void Awake()
     {
-        if (instance == null)
-            instance = this;
-        else
-            Destroy(gameObject);
+        if (instance == null) instance = this;
+        else Destroy(gameObject);
     }
+
     public void PaintOutline(List<Vector3Int> tiles)
     {
+        if (TilesMatch(tiles)) return;
+
+        currentTiles = new List<Vector3Int>(tiles);
+
+        LeanTween.cancel(gameObject);
         highlightVisual.ClearAllTiles();
+
         foreach (var tile in tiles)
-        {
             if (gridVisual.HasTile(tile))
                 highlightVisual.SetTile(tile, outlineTile);
-        }
 
         highlightVisual.color = new Color(1f, 1f, 1f, 0f);
         LeanTween.value(gameObject, 0f, 1f, 0.5f)
@@ -35,8 +40,18 @@ public class HighlightVisual : MonoBehaviour
 
     public void ClearOutline()
     {
+        if (currentTiles.Count == 0) return; 
+        currentTiles.Clear();
         LeanTween.cancel(gameObject);
         highlightVisual.color = new Color(1f, 1f, 1f, 1f);
         highlightVisual.ClearAllTiles();
+    }
+
+    private bool TilesMatch(List<Vector3Int> tiles)
+    {
+        if (tiles.Count != currentTiles.Count) return false;
+        for (int i = 0; i < tiles.Count; i++)
+            if (tiles[i] != currentTiles[i]) return false;
+        return true;
     }
 }

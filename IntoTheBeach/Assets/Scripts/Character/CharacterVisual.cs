@@ -98,15 +98,17 @@ public class CharacterVisual : MonoBehaviour, Iinteractable
             LeanTween.cancel(highlight.uniqueId);
             highlight = null;
         }
+        if(delay != null)
         LeanTween.cancel(delay.uniqueId);
         TooltipManager.instance.HideStatic();
+        HighlightVisual.instance.ClearOutline();
+        if (InputManager.Instance.GetCurrentSelection() == this) return;
         if (teamIndex == PlayerData.Local.TeamIndex.Value)
             objRenderer.material.SetFloat("_OutlineThickness", 0f);
         else
             objRenderer.material.SetFloat("_OutlineThickness", 1f);
 
 
-        HighlightVisual.instance.ClearOutline();
     }
 
     TooltipContent GetTooltipContent()
@@ -242,7 +244,7 @@ public class CharacterVisual : MonoBehaviour, Iinteractable
 
         SetDirection(step.move);
 
-        float duration = 1f;
+        float duration = 0.6f;
         float time = 0f;
         float animTimer = 0f;
         bool useWalkSprite = true;

@@ -64,11 +64,13 @@ public class BouncerAttackPattern : AttackPattern
 
                 if (gridState.IsAttackBlocked(tile, dir))
                 {
+                    tiles.Add(tile);
                     blockedLanes.Add(s);  
                     continue;
                 }
                 if (gridState.GetEnvironmentalObject(tile)!=null)
                 {
+                    tiles.Add(tile);
                     continue;
                 }
                 tiles.Add(tile);

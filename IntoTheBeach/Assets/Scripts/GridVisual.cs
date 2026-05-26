@@ -43,6 +43,7 @@ public class GridVisual : MonoBehaviour, Iinteractable
     {
         OnResetPip?.Invoke();
     }
+    LTDescr highlight;
     public void OnHover(Vector2 mousePos)
     {
         Vector3Int tilePos = saloonTiles.WorldToCell(mousePos);
@@ -70,21 +71,33 @@ public class GridVisual : MonoBehaviour, Iinteractable
             AttackPattern pattern = currentSelection.unitClass.attackPattern;
 
             List<Vector3Int> hitTiles = pattern.GetHitTiles(gridState, pos, direction);
-
             foreach (var tile in HighlightedTiles)
             {
-                saloonTiles.SetTileFlags(tile, TileFlags.None);
+                saloonTiles.SetTileFlags(tile, TileFlags.None); 
                 saloonTiles.SetColor(tile, Color.darkRed);
+                for(int i = 0; i < 4; i++)
+                {
+                    if (pattern.GetBlockedTiles(gridState, pos, i).Contains(tile))
+                        saloonTiles.SetColor(tile, Color.yellow);
+                }
             }
 
-            if (!hitTiles.Contains(tilePos)) return;
+            if (!hitTiles.Contains(tilePos))
+            {
+                HighlightVisual.instance.ClearOutline();
+                return;  
+            }
 
             // Then highlight only this direction's tiles green
             foreach (var tile in hitTiles)
             {
                 saloonTiles.SetTileFlags(tile, TileFlags.None);
                 saloonTiles.SetColor(tile, Color.darkGreen);
+                if (pattern.GetBlockedTiles(gridState, pos, direction).Contains(tile))
+                    saloonTiles.SetColor(tile, Color.yellow);
+                
             }
+            HighlightVisual.instance.PaintOutline(hitTiles);
 
         }
     }
@@ -202,7 +215,7 @@ public class GridVisual : MonoBehaviour, Iinteractable
         InputManager.Instance.SetState(InputManager.TurnStates.None);
         
         OnUnitMoved?.Invoke();
-        MoveAction moveAction = new MoveAction(currentSelection.GetTilePos(saloonTiles),ghost.GetTilePos(saloonTiles));
+        MoveAction moveAction = new MoveAction(currentSelection.GetTilePos(saloonTiles),ghost.GetTilePos(saloonTiles),GameManager.Instance.GridState,saloonTiles);
         TurnStateMachine.Instance.currentTurnInfo.turnPlan.ModifyUnitPlanMoveAction(currentSelection.unitID, moveAction);
         ResetTiles();
         currentSelection.RemoveOutline();
@@ -292,9 +305,13 @@ public class GridVisual : MonoBehaviour, Iinteractable
         AttackPattern pattern = currentSelection.unitClass.attackPattern;
 
         var allTiles = new HashSet<Vector3Int>();
+        var allBlockedTiles= new HashSet<Vector3Int>();
         for (int direction = 0; direction < 4; direction++)
         {
             List<Vector3Int> hitTiles = pattern.GetHitTiles(gridState, pos, direction);
+            List<Vector3Int> blockedTiles = pattern.GetBlockedTiles(gridState, pos, direction);
+            foreach (var tile in blockedTiles)
+                allBlockedTiles.Add(tile);
             foreach (var tile in hitTiles)
                 allTiles.Add(tile);
         }
@@ -304,7 +321,12 @@ public class GridVisual : MonoBehaviour, Iinteractable
             saloonTiles.SetColor(tile, Color.darkRed);
             highlightedTiles.Add(tile);
         }
-
+        foreach(var tile in allBlockedTiles)
+        {
+            saloonTiles.SetColor(tile, Color.yellow);
+            if(!highlightedTiles.Contains(tile))
+            highlightedTiles.Add(tile);
+        }
         HighlightedTiles = highlightedTiles;
     }
     public void HighlightMovableTiles()

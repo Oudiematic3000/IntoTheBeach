@@ -62,18 +62,18 @@ public class UnitAnimator : MonoBehaviour
     private IEnumerator ShowAttackIntents(NetUnitResult[] results)
     {
         cameraEdgePanner.ToggleLockAndCenter();
+
         var attackResults = results
             .Where(r => r.hasAttackAction && unitMap.ContainsKey(r.unitID))
             .ToList();
 
         var allHitTiles = new List<Vector3Int>();
 
-        var attackingUnits = attackResults
-        .Select(r => unitMap.TryGetValue(r.unitID, out var u) ? u : null)
-        .Where(u => u != null)
-        .ToList();
         if (attackResults.Count > 0)
             AudioManager.instance.PlaySFX(nobodyMove[Random.Range(0, nobodyMove.Length)]);
+
+        var animationDataList = new List<(Vector3Int attackerPos, List<Vector3Int> hitTiles, List<NetUnitResult> targetResults, CharacterVisual visual)>();
+
         foreach (var result in attackResults)
         {
             AttackAction attack = result.ToAttackAction();
@@ -90,22 +90,84 @@ public class UnitAnimator : MonoBehaviour
             {
                 saloonTiles.SetTileFlags(tile, TileFlags.None);
                 saloonTiles.SetColor(tile, Color.red);
-
-                visual?.ShowAttackOwner(); 
-
+                visual?.ShowAttackOwner();
                 LeanTween.delayedCall(0.33f, () => saloonTiles.SetColor(tile, Color.darkRed));
                 LeanTween.delayedCall(0.66f, () => saloonTiles.SetColor(tile, Color.red));
                 LeanTween.delayedCall(0.99f, () => saloonTiles.SetColor(tile, Color.darkRed));
-
                 allHitTiles.Add(tile);
+            }
+
+            var targetResultsForThisAttack = new List<NetUnitResult>();
+            foreach (var tile in hitTiles)
+            {
+                var victimData = results.FirstOrDefault(r => r.finalPos.ToVector3Int() == tile);
+                if (!victimData.Equals(null))
+                {
+                    targetResultsForThisAttack.Add(victimData);
+                }
+            }
+
+            if (visual != null && visual.unitClass.attackAnimationPrefab != null)
+            {
+                animationDataList.Add((attackerPos, hitTiles, targetResultsForThisAttack, visual));
             }
 
             yield return new WaitForSeconds(attackDisplayDuration);
         }
 
         cameraEdgePanner.PanToCenter(saloonTiles);
+
         if (attackResults.Count > 0)
-            AudioManager.instance.PlaySFX(draw[Random.Range(0, nobodyMove.Length)]);
+            AudioManager.instance.PlaySFX(draw[Random.Range(0, draw.Length)]);
+        yield return new WaitForSeconds(0.7f);
+
+        if (animationDataList.Count > 0)
+        {
+            int activeAnimationsCount = animationDataList.Count;
+
+            foreach (var animData in animationDataList)
+            {
+                var animGO = Instantiate(animData.visual.unitClass.attackAnimationPrefab);
+                var anim = animGO.GetComponent<AttackAnimation>();
+
+                if (anim != null)
+                {
+                    System.Action impactCallback = () =>
+                    {
+                        foreach (var res in animData.targetResults)
+                        {
+                            if (res.damageTaken > 0 && unitMap.TryGetValue(res.unitID, out var unit))
+                            {
+                                unit.TakeDamage(res.damageTaken);
+                                AudioManager.instance.PlayHitSound(volume: 0.3f);
+
+                                if (res.isDead)
+                                {
+                                    AudioManager.instance.PlayRandomDeathSound(volume: 0.3f);
+                                    unitMap.Remove(res.unitID);
+                                    Destroy(unit.gameObject);
+                                    continue;
+                                }
+
+                                unit.FlashWhite();
+                            }
+                        }
+                    };
+
+                    anim.Play(animData.attackerPos, animData.hitTiles, saloonTiles, impactCallback, () =>
+                    {
+                        activeAnimationsCount--;
+                    });
+                }
+                else
+                {
+                    activeAnimationsCount--;
+                }
+            }
+
+            yield return new WaitUntil(() => activeAnimationsCount <= 0);
+        }
+
         LeanTween.delayedCall(0.5f, () =>
         {
             foreach (var tile in allHitTiles)
@@ -113,8 +175,8 @@ public class UnitAnimator : MonoBehaviour
                 saloonTiles.SetTileFlags(tile, TileFlags.None);
                 saloonTiles.SetColor(tile, Color.white);
             }
-
-            var reactedTiles = results
+        });
+        var reactedTiles = results
                 .Where(r => r.reactedTiles != null)
                 .SelectMany(r => r.reactedTiles)
                 .Select(t => t.ToVector3Int())
@@ -126,32 +188,14 @@ public class UnitAnimator : MonoBehaviour
                 envObj?.AttackReactionVisual?.PlayReactionVisual();
             }
 
-            foreach (var result in results)
-            {
-                if (result.damageTaken > 0 && unitMap.TryGetValue(result.unitID, out var unit))
-                {
-                    unit.TakeDamage(result.damageTaken);
-                    AudioManager.instance.PlayHitSound(volume: 0.3f);
 
-                    if (result.isDead)
-                    {
-                        AudioManager.instance.PlayRandomDeathSound(volume: 0.3f);
-                        unitMap.Remove(result.unitID);
-                        Destroy(unit.gameObject);
-                        continue;
-                    }
+            var attackingUnits = attackResults
+                .Select(r => unitMap.TryGetValue(r.unitID, out var u) ? u : null)
+                .Where(u => u != null)
+                .ToList();
 
-                    unit.FlashWhite();
-                }
-            }
-
-            // Play attack sounds once, outside the results loop
-            foreach (var attacker in attackingUnits)
-                AudioManager.instance.PlaySFX(attacker.unitClass.attackSound, volume: 0.3f);
-
-            // State advance happens last, after all death/damage is resolved
             TurnStateMachine.Instance.UpdateState();
             cameraEdgePanner.ToggleLockAndCenter();
-        });
+      
     }
 }
