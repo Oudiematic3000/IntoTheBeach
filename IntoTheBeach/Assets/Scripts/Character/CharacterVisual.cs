@@ -21,6 +21,7 @@ public class CharacterVisual : MonoBehaviour, Iinteractable
     public int health = 0;
     [SerializeField] Sprite[] hearts, OppHearts;
     [SerializeField] SpriteRenderer heartObject;
+    [SerializeField] GameObject damageNumber;
     public int direction;
     private UIActions actions;
     private TurnStateMachine turnState;
@@ -388,6 +389,12 @@ public class CharacterVisual : MonoBehaviour, Iinteractable
         {
             objRenderer.material.SetFloat("_FlashAmount", 0f);
         });
+    }
+    public void SpawnDamageNumber(int damage)
+    {
+        var dnGo = Instantiate(damageNumber);
+        var dn = dnGo.GetComponent<DamageNumber>();
+        dn.Animate(damage);
     }
     public void ShowAttackOwner()
     {

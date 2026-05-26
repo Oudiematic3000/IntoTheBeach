@@ -46,10 +46,7 @@ public class Compendium : MonoBehaviour
             ResetButtons();
             GunslingerSelection();
         }
-        if (!isgunstarted)
-        {
-            gunSlingerButton.GetComponent<Button>().Select();
-        }
+
     }
    
     private void ResetButtons() 

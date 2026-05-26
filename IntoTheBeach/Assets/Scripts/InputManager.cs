@@ -68,9 +68,15 @@ public class InputManager : MonoBehaviour
       currentState = TurnStates.Attacking;
     }
 
-   
+    private GameObject lastSelected;
     void Update()
     {
+        var selected = EventSystem.current.currentSelectedGameObject;
+        if (selected != lastSelected)
+        {
+            Debug.Log($"Selection changed: {lastSelected?.name} to {selected?.name}", selected);
+            lastSelected = selected;
+        }
         if (Input.GetKey(KeyCode.LeftShift))
         {
             LineGenerator.Instance.engaged = true;

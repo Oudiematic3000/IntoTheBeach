@@ -139,6 +139,7 @@ public class UnitAnimator : MonoBehaviour
                             if (res.damageTaken > 0 && unitMap.TryGetValue(res.unitID, out var unit))
                             {
                                 unit.TakeDamage(res.damageTaken);
+                                unit.SpawnDamageNumber(res.damageTaken);
                                 AudioManager.instance.PlayHitSound(volume: 0.3f);
 
                                 if (res.isDead)
