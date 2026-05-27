@@ -195,8 +195,12 @@ public class UnitAnimator : MonoBehaviour
                 .Where(u => u != null)
                 .ToList();
 
+        LeanTween.delayedCall(1f, () =>
+        {
             TurnStateMachine.Instance.UpdateState();
             cameraEdgePanner.ToggleLockAndCenter();
+        });
+
       
     }
 }
