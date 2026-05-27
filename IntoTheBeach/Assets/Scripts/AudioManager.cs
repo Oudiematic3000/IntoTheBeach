@@ -37,7 +37,7 @@ public class AudioManager : MonoBehaviour
         musicSlider.onValueChanged.AddListener(ChangeMusicVolume);
    
         sfxSlider.onValueChanged.AddListener(ChangeSFXVolume);
-
+        musicSlider.value = 0.8f;
         ChangeMusicVolume(musicSlider.value);
         ChangeSFXVolume(sfxSlider.value);
     }
