@@ -7,6 +7,6 @@ public abstract class AttackAnimation : MonoBehaviour
 {
     public AudioClip onStartClip;
 
-    public abstract void Play(Vector3Int attackerPos, List<Vector3Int> hitTiles, 
+    public abstract void Play(Vector3Int attackerPos, int direction,List<Vector3Int> hitTiles, 
         Tilemap tilemap, Action onHitImpact, Action onComplete);
 }
