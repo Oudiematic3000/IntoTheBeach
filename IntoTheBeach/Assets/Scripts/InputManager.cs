@@ -122,8 +122,9 @@ public class InputManager : MonoBehaviour
     }
     public void SetCurrentSelection(CharacterVisual current) 
     {
+        if(current==CurrentSelection)return;
         CurrentSelection = current;
-        
+        AudioManager.instance.PlaySFX(current.unitClass.GetRandomSelectSound());
     }
 
     private bool IsPointerOverPauseUI()

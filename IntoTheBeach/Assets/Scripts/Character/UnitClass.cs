@@ -18,5 +18,10 @@ public class UnitClass : ScriptableObject
     public AudioClip attackSound;
     public Sprite attackPatternPreview;
     public GameObject attackAnimationPrefab;
+    public AudioClip[] onSelectVoicelines;
 
+    public AudioClip GetRandomSelectSound()
+    {
+        return onSelectVoicelines[Random.Range(0,onSelectVoicelines.Length)];
+    }
 }
