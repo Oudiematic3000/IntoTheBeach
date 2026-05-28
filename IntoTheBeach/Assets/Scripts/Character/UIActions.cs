@@ -158,8 +158,9 @@ public class UIActions : MonoBehaviour
           
             buttonsUIHolder.SetActive(true);
             moveButton.gameObject.SetActive(true);
-            moveUnitText.gameObject.SetActive(true);
-           moveText.gameObject.SetActive(true);
+            if (TurnStateMachine.Instance.currentState is MovePlanTurnState && TurnStateMachine.Instance.currentTurnInfo.CanMove())
+                moveUnitText.gameObject.SetActive(true);
+            moveText.gameObject.SetActive(true);
             attackText.gameObject.SetActive(false);
             hasActive();
             print("Movestate");
@@ -176,6 +177,7 @@ public class UIActions : MonoBehaviour
            
             buttonsUIHolder.SetActive(true);
             attackButton.gameObject.SetActive(true);
+            if (TurnStateMachine.Instance.currentState is AttackPlanTurnState && TurnStateMachine.Instance.currentTurnInfo.CanAttack())
             attackUnitText.gameObject.SetActive(true);
             attackText.gameObject.SetActive(true);
             moveText.gameObject.SetActive(false);
@@ -301,6 +303,7 @@ public class UIActions : MonoBehaviour
     }
     private void showMoveState() 
     {
+
         movePhaseIndicator.SetActive(true);
         attackPhaseIndicator.SetActive(false);
     }
