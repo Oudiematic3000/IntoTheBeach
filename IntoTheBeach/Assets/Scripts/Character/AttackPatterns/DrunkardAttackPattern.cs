@@ -53,5 +53,23 @@ public class DrunkardAttackPattern : AttackPattern
     }
 
     public override List<Vector3Int> GetBlockedTiles(GridState gridState, Vector3Int position, int direction)
-        => new List<Vector3Int>();
+    {
+        List<Vector3Int> tiles = new();
+        Vector3Int dir = DirectionVectors[direction];
+        Vector3Int perp = PerpVectors[direction];
+
+        Vector3Int center = position + dir * range;
+
+
+        for (int d = -1; d <= 1; d++)
+            for (int s = -1; s <= 1; s++)
+            {
+                Vector3Int tile = center + dir * d + perp * s;
+                if(gridState.IsMovementBlocked(tile))
+                tiles.Add(tile);
+            }
+
+        return tiles;
+    }
+       
 }

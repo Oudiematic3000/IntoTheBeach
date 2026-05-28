@@ -22,6 +22,9 @@ public class AudioManager : MonoBehaviour
     [SerializeField] private Slider musicSlider;
     [SerializeField] private Slider sfxSlider;
     private float sfxSound = 1f;
+    private float musicVolume = 1f;
+    public bool musicMuted = false;
+    public bool sfxMuted = false;
 
     private ObjectPool<AudioSource> sfxPool;
 
@@ -30,15 +33,39 @@ public class AudioManager : MonoBehaviour
           instance = this;
           InitializePool();
 
+        if(!musicSlider)return;
         musicSlider.onValueChanged.AddListener(ChangeMusicVolume);
+   
         sfxSlider.onValueChanged.AddListener(ChangeSFXVolume);
-
+        musicSlider.value = 0.8f;
         ChangeMusicVolume(musicSlider.value);
         ChangeSFXVolume(sfxSlider.value);
     }
+    public void UnmuteMusic()
+    {
+        musicMuted = false;
+        ChangeMusicVolume(musicVolume);   
+    }
+    public void MuteMusic()
+    {
+        musicMuted=true;
+        musicSource.volume = 0;
+    }
+    public void UnmuteSfx()
+    {
+        sfxMuted=false;
+        ChangeSFXVolume(sfxSound);
+    }
+    public void MuteSfx()
+    {
+        sfxMuted = true;
+    }
     public void ChangeMusicVolume(float volume) 
     {
+        musicVolume = volume;
+        if(!musicMuted)
         musicSource.volume = volume;
+        
     }
     public void ChangeSFXVolume(float volume)
     {
@@ -147,7 +174,7 @@ public class AudioManager : MonoBehaviour
     private IEnumerator PlayAndRelease(AudioSource src, AudioClip clip, Vector3? position, float volume, float pitch, float spatial)
     {
         src.clip = clip;
-        src.volume = Mathf.Clamp01(volume * sfxSound);
+        src.volume = sfxMuted? 0: Mathf.Clamp01(volume * sfxSound);
         src.pitch = Mathf.Max(0.01f, pitch);
         src.spatialBlend = Mathf.Clamp01(spatial);
 

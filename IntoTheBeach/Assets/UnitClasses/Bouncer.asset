@@ -23,6 +23,12 @@ MonoBehaviour:
   icon: {fileID: 21300000, guid: b7c35fdd35ff9d94f9789f13560d7a17, type: 3}
   attackSound: {fileID: 8300000, guid: 5c5992c0415672242a28a6623f98facb, type: 3}
   attackPatternPreview: {fileID: 21300000, guid: d0ccf7d39f555e341abd886d67566752, type: 3}
+  attackAnimationPrefab: {fileID: 7182232834327480002, guid: 7ed3ed18268e50040a68d8e4d86c8374, type: 3}
+  onSelectVoicelines:
+  - {fileID: 8300000, guid: cb980a0ff42a1c1449433d23d7e0d22d, type: 3}
+  - {fileID: 8300000, guid: b0ac3beb4c62ec84394a59c3ed8ae9d7, type: 3}
+  - {fileID: 8300000, guid: de65acc6f410d6d4597d2c839fca4d73, type: 3}
+  - {fileID: 8300000, guid: 077c9bba93f8d2047b7d7efd13163f47, type: 3}
   references:
     version: 2
     RefIds:

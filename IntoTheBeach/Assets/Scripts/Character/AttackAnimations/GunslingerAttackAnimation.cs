@@ -8,9 +8,9 @@ using UnityEngine.Tilemaps;
 public class GunslingerAttackAnimation : AttackAnimation
 {
     [SerializeField] LineRenderer lineRenderer;
-    [SerializeField] float duration = 0.03f;
+    [SerializeField] float duration = 0.01f;
 
-    public override void Play(Vector3Int attackerPos, List<Vector3Int> hitTiles, 
+    public override void Play(Vector3Int attackerPos, int direction, List<Vector3Int> hitTiles, 
         Tilemap tilemap, Action onHitImpact, Action onComplete)
     {
         if (hitTiles.Count == 0) { onComplete?.Invoke(); Destroy(gameObject); return; }

@@ -127,7 +127,7 @@ public class UnitAnimator : MonoBehaviour
 
             foreach (var animData in animationDataList)
             {
-                var animGO = Instantiate(animData.visual.unitClass.attackAnimationPrefab);
+                var animGO = Instantiate(animData.visual.unitClass.attackAnimationPrefab,animData.visual.transform);
                 var anim = animGO.GetComponent<AttackAnimation>();
 
                 if (anim != null)
@@ -139,8 +139,9 @@ public class UnitAnimator : MonoBehaviour
                             if (res.damageTaken > 0 && unitMap.TryGetValue(res.unitID, out var unit))
                             {
                                 unit.TakeDamage(res.damageTaken);
+                                unit.SpawnDamageNumber(res.damageTaken);
                                 AudioManager.instance.PlayHitSound(volume: 0.3f);
-
+                                
                                 if (res.isDead)
                                 {
                                     AudioManager.instance.PlayRandomDeathSound(volume: 0.3f);
@@ -154,7 +155,7 @@ public class UnitAnimator : MonoBehaviour
                         }
                     };
 
-                    anim.Play(animData.attackerPos, animData.hitTiles, saloonTiles, impactCallback, () =>
+                    anim.Play(animData.attackerPos, animData.visual.direction, animData.hitTiles, saloonTiles, impactCallback, () =>
                     {
                         activeAnimationsCount--;
                     });
@@ -194,8 +195,12 @@ public class UnitAnimator : MonoBehaviour
                 .Where(u => u != null)
                 .ToList();
 
+        LeanTween.delayedCall(1f, () =>
+        {
             TurnStateMachine.Instance.UpdateState();
             cameraEdgePanner.ToggleLockAndCenter();
+        });
+
       
     }
 }
