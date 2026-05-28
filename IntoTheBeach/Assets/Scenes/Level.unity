@@ -7245,7 +7245,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &793206918
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8700,6 +8700,7 @@ MonoBehaviour:
   obstacles: {fileID: 0}
   HighlightedTiles: []
   LockedAttackTiles: []
+  furnitureColour: {r: 0.21960784, g: 0.2509804, b: 0.43529412, a: 1}
 --- !u!483693784 &997449353
 TilemapRenderer:
   serializedVersion: 2

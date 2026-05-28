@@ -14,7 +14,7 @@ public class GridVisual : MonoBehaviour, Iinteractable
     public static event Action OnResetPip;
     public List<Vector3Int> HighlightedTiles = new List<Vector3Int>();
     public List<Vector3Int> LockedAttackTiles = new List<Vector3Int>();
-   
+    [SerializeField] Color furnitureColour;
     //CharacterVisual selectedUnit; TODO: Use event to update this rather than referencing singleton.
     UnitGhost ghost;
 
@@ -78,7 +78,7 @@ public class GridVisual : MonoBehaviour, Iinteractable
                 for(int i = 0; i < 4; i++)
                 {
                     if (pattern.GetBlockedTiles(gridState, pos, i).Contains(tile))
-                        saloonTiles.SetColor(tile, Color.HSVToRGB(0.5f,0f,0.5f));
+                        saloonTiles.SetColor(tile, furnitureColour);
                 }
             }
 
@@ -94,7 +94,7 @@ public class GridVisual : MonoBehaviour, Iinteractable
                 saloonTiles.SetTileFlags(tile, TileFlags.None);
                 saloonTiles.SetColor(tile, Color.darkGreen);
                 if (pattern.GetBlockedTiles(gridState, pos, direction).Contains(tile))
-                    saloonTiles.SetColor(tile, Color.HSVToRGB(0.5f, 0f, 0.5f));
+                    saloonTiles.SetColor(tile, furnitureColour);
                 
             }
             HighlightVisual.instance.PaintOutline(hitTiles);
@@ -322,8 +322,8 @@ public class GridVisual : MonoBehaviour, Iinteractable
             highlightedTiles.Add(tile);
         }
         foreach(var tile in allBlockedTiles)
-        {
-            saloonTiles.SetColor(tile, Color.HSVToRGB(0.5f, 0f, 0.5f));
+        {   
+            saloonTiles.SetColor(tile, furnitureColour);
             if(!highlightedTiles.Contains(tile))
             highlightedTiles.Add(tile);
         }

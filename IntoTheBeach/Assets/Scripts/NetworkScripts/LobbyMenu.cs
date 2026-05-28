@@ -41,7 +41,7 @@ public class LobbyMenu : MonoBehaviour
         if (startButton) startButton.SetActive(false);
         if (joinCodeDisplay) joinCodeDisplay.text = "";
         if (statusText) statusText.text = "";
-        if (joinCodeInput) joinCodeInput.text = "booba";
+        if (joinCodeInput) joinCodeInput.text = "";
 
     }
     public void StartGame()
