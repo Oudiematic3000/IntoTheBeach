@@ -78,7 +78,7 @@ public class GridVisual : MonoBehaviour, Iinteractable
                 for(int i = 0; i < 4; i++)
                 {
                     if (pattern.GetBlockedTiles(gridState, pos, i).Contains(tile))
-                        saloonTiles.SetColor(tile, Color.yellow);
+                        saloonTiles.SetColor(tile, Color.HSVToRGB(0.5f,0f,0.5f));
                 }
             }
 
@@ -94,7 +94,7 @@ public class GridVisual : MonoBehaviour, Iinteractable
                 saloonTiles.SetTileFlags(tile, TileFlags.None);
                 saloonTiles.SetColor(tile, Color.darkGreen);
                 if (pattern.GetBlockedTiles(gridState, pos, direction).Contains(tile))
-                    saloonTiles.SetColor(tile, Color.yellow);
+                    saloonTiles.SetColor(tile, Color.HSVToRGB(0.5f, 0f, 0.5f));
                 
             }
             HighlightVisual.instance.PaintOutline(hitTiles);
@@ -323,7 +323,7 @@ public class GridVisual : MonoBehaviour, Iinteractable
         }
         foreach(var tile in allBlockedTiles)
         {
-            saloonTiles.SetColor(tile, Color.yellow);
+            saloonTiles.SetColor(tile, Color.HSVToRGB(0.5f, 0f, 0.5f));
             if(!highlightedTiles.Contains(tile))
             highlightedTiles.Add(tile);
         }

@@ -123,6 +123,7 @@ public class InputManager : MonoBehaviour
     public void SetCurrentSelection(CharacterVisual current) 
     {
         if(current==CurrentSelection)return;
+        if(TurnStateMachine.Instance.currentTurnInfo.GetMoveCount() <= 0|| TurnStateMachine.Instance.currentTurnInfo.GetAttackCount() <= 0)
         CurrentSelection = current;
         AudioManager.instance.PlaySFX(current.unitClass.GetRandomSelectSound());
     }
