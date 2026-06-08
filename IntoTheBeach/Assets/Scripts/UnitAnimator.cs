@@ -128,7 +128,6 @@ public class UnitAnimator : MonoBehaviour
 
             foreach (var animData in animationDataList)
             {
-                // Capture local reference — animData.visual may be destroyed by the time callbacks fire
                 var visualRef = animData.visual;
                 var attackerPos = animData.attackerPos;
                 var hitTiles = animData.hitTiles;
@@ -140,7 +139,6 @@ public class UnitAnimator : MonoBehaviour
                     continue;
                 }
 
-                // Spawn on the tilemap root, not on the unit — unit may be destroyed mid-animation
                 var animGO = Instantiate(visualRef.unitClass.attackAnimationPrefab,
                     saloonTiles.transform);
                 animGO.transform.position = saloonTiles.GetCellCenterWorld(attackerPos);
@@ -186,7 +184,6 @@ public class UnitAnimator : MonoBehaviour
                 anim.Play(attackerPos, visualRef.direction, hitTiles, saloonTiles,
                     impactCallback, completeCallback);
 
-                // Safety fallback - if animation somehow never completes, force decrement after 15s
                 LeanTween.delayedCall(15f, () =>
                 {
                     if (activeAnimationsCount > 0)
