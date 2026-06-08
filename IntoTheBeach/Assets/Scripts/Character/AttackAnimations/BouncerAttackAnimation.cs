@@ -39,8 +39,10 @@ public class BouncerAttackAnimation : AttackAnimation
         LeanTween.delayedCall(speed * 5, () =>
         {
             onComplete?.Invoke();
-            Destroy(gameObject);
+            transform.localScale = Vector3.zero;
         });
+        LeanTween.delayedCall(10f, () => { Destroy(gameObject); });
+
     }
 
     private void AdvanceFrame()

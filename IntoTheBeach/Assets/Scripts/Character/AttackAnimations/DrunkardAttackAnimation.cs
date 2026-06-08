@@ -68,8 +68,10 @@ public class DrunkardAttackAnimation : AttackAnimation
                 LeanTween.delayedCall(speed * animationFrames.Length, () =>
                 {
                     onComplete?.Invoke();
-                    Destroy(gameObject);
+                    transform.localScale=Vector3.zero;
                 });
+                LeanTween.delayedCall(10f, () => { Destroy(gameObject); });
+
             });
     }
 

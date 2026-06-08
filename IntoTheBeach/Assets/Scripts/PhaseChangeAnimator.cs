@@ -71,6 +71,7 @@ public class PhaseChangeAnimator : MonoBehaviour
         announceImage.gameObject.SetActive(true);
         currentFrame = 0;
         AdvanceFrame();
+        LeanTween.delayedCall(5f, () => { announceImage.gameObject.SetActive(false); });
     }
 
     private void AdvanceFrame()
