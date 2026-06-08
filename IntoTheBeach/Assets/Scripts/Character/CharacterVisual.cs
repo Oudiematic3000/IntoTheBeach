@@ -5,7 +5,6 @@ using Unity.Netcode;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Tilemaps;
-using static UnityEditor.PlayerSettings;
 
 
 public class CharacterVisual : MonoBehaviour, Iinteractable

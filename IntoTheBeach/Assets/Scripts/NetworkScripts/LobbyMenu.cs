@@ -50,9 +50,11 @@ public class LobbyMenu : MonoBehaviour
         LeanTween.delayedCall(fadeTime, () => { networkManager.SceneManager.LoadScene("Level", LoadSceneMode.Single); });         
 
     }
-
+    bool hostStarted = false;
     public async void StartHost()
     {
+        if (hostStarted) return;
+        hostStarted = true;
         if (!transport) transport = FindAnyObjectByType<UnityTransport>();
         if (!networkManager) networkManager = FindAnyObjectByType<NetworkManager>();
 
