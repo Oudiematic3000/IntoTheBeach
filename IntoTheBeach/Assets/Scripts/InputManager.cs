@@ -125,13 +125,24 @@ public class InputManager : MonoBehaviour
     {
         return CurrentSelection;
     }
-    public void SetCurrentSelection(CharacterVisual current) 
+    public void SetCurrentSelection(CharacterVisual current)
     {
-        if(current==CurrentSelection)return;
+        if (current == CurrentSelection) return;
+
         if (TurnStateMachine.Instance.currentTurnInfo.CanAttack() || TurnStateMachine.Instance.currentTurnInfo.CanMove())
         {
+            var oldselection = CurrentSelection;
             CurrentSelection = current;
-            AudioManager.instance.PlaySFX(current.unitClass.GetRandomSelectSound());
+            if (oldselection != null)
+            {
+                oldselection.OnEndHover();
+            }
+
+
+            if (AudioManager.instance != null && current.unitClass != null)
+            {
+                AudioManager.instance.PlaySFX(current.unitClass.GetRandomSelectSound());
+            }
         }
     }
 

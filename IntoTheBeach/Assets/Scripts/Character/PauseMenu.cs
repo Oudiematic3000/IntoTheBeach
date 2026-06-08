@@ -8,6 +8,7 @@ public class PauseMenu : MonoBehaviour
     [SerializeField] private GameObject compendium;
     [SerializeField] private GameObject pauseMenu;
     [SerializeField] private GameObject background;
+    [SerializeField] GameObject fullMenu,lobbyScreen;
 
     bool open = false;
     private void OnEnable()
@@ -36,10 +37,15 @@ public class PauseMenu : MonoBehaviour
     }
     public void Back() 
     {
+        if(controls)
         controls.SetActive(false);
         settings.SetActive(false);
         compendium.SetActive(false);
         pauseMenu.SetActive(true);
+        if (lobbyScreen)
+            lobbyScreen.SetActive(false);
+        if (fullMenu)
+            fullMenu.SetActive(true);
     }
     public void BackToGame() 
     {
@@ -56,6 +62,7 @@ public class PauseMenu : MonoBehaviour
     }
     public void Compendium()
     {
+        if (controls)
         controls.SetActive(false);
         settings.SetActive(false);
         compendium.SetActive(true);
@@ -63,6 +70,7 @@ public class PauseMenu : MonoBehaviour
     }
     public void Settings()
     {
+        if(controls)
         controls.SetActive(false);
         settings.SetActive(true);
         compendium.SetActive(false);
@@ -84,5 +92,10 @@ public class PauseMenu : MonoBehaviour
             open = false;
             BackToGame();
         }
+    }
+    public void ShowLobby()
+    {
+        fullMenu.SetActive(false);
+        lobbyScreen.SetActive(true);
     }
 }
