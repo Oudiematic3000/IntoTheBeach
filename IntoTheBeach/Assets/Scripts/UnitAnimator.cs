@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -70,7 +71,7 @@ public class UnitAnimator : MonoBehaviour
         var allHitTiles = new List<Vector3Int>();
 
         if (attackResults.Count > 0)
-            AudioManager.instance.PlaySFX(nobodyMove[Random.Range(0, nobodyMove.Length)]);
+            AudioManager.instance.PlaySFX(nobodyMove[UnityEngine.Random.Range(0, nobodyMove.Length)]);
 
         var animationDataList = new List<(Vector3Int attackerPos, List<Vector3Int> hitTiles, List<NetUnitResult> targetResults, CharacterVisual visual)>();
 
@@ -118,7 +119,7 @@ public class UnitAnimator : MonoBehaviour
         cameraEdgePanner.PanToCenter(saloonTiles);
 
         if (attackResults.Count > 0)
-            AudioManager.instance.PlaySFX(draw[Random.Range(0, draw.Length)]);
+            AudioManager.instance.PlaySFX(draw[UnityEngine.Random.Range(0, draw.Length)]);
         yield return new WaitForSeconds(0.7f);
 
         if (animationDataList.Count > 0)
@@ -127,43 +128,73 @@ public class UnitAnimator : MonoBehaviour
 
             foreach (var animData in animationDataList)
             {
-                var animGO = Instantiate(animData.visual.unitClass.attackAnimationPrefab,animData.visual.transform);
-                var anim = animGO.GetComponent<AttackAnimation>();
+                // Capture local reference — animData.visual may be destroyed by the time callbacks fire
+                var visualRef = animData.visual;
+                var attackerPos = animData.attackerPos;
+                var hitTiles = animData.hitTiles;
+                var targetResults = animData.targetResults;
 
-                if (anim != null)
-                {
-                    System.Action impactCallback = () =>
-                    {
-                        foreach (var res in animData.targetResults)
-                        {
-                            if (res.damageTaken > 0 && unitMap.TryGetValue(res.unitID, out var unit))
-                            {
-                                unit.TakeDamage(res.damageTaken);
-                                unit.SpawnDamageNumber(res.damageTaken);
-                                AudioManager.instance.PlayHitSound(volume: 0.3f);
-                                
-                                if (res.isDead)
-                                {
-                                    AudioManager.instance.PlayRandomDeathSound(volume: 0.3f);
-                                    unitMap.Remove(res.unitID);
-                                    Destroy(unit.gameObject);
-                                    continue;
-                                }
-
-                                unit.FlashWhite();
-                            }
-                        }
-                    };
-
-                    anim.Play(animData.attackerPos, animData.visual.direction, animData.hitTiles, saloonTiles, impactCallback, () =>
-                    {
-                        activeAnimationsCount--;
-                    });
-                }
-                else
+                if (visualRef == null || visualRef.unitClass.attackAnimationPrefab == null)
                 {
                     activeAnimationsCount--;
+                    continue;
                 }
+
+                // Spawn on the tilemap root, not on the unit — unit may be destroyed mid-animation
+                var animGO = Instantiate(visualRef.unitClass.attackAnimationPrefab,
+                    saloonTiles.transform);
+                animGO.transform.position = saloonTiles.GetCellCenterWorld(attackerPos);
+
+                var anim = animGO.GetComponent<AttackAnimation>();
+
+                if (anim == null)
+                {
+                    activeAnimationsCount--;
+                    Destroy(animGO);
+                    continue;
+                }
+
+                Action impactCallback = () =>
+                {
+                    foreach (var res in targetResults)
+                    {
+                        if (res.damageTaken > 0 && unitMap.TryGetValue(res.unitID, out var unit)
+                            && unit != null)
+                        {
+                            unit.TakeDamage(res.damageTaken);
+                            unit.SpawnDamageNumber(res.damageTaken);
+                            AudioManager.instance.PlayHitSound(volume: 0.3f);
+
+                            if (res.isDead)
+                            {
+                                AudioManager.instance.PlayRandomDeathSound(volume: 0.3f);
+                                unitMap.Remove(res.unitID);
+                                Destroy(unit.gameObject);
+                                continue;
+                            }
+
+                            unit.FlashWhite();
+                        }
+                    }
+                };
+
+                Action completeCallback = () =>
+                {
+                    activeAnimationsCount--;
+                };
+
+                anim.Play(attackerPos, visualRef.direction, hitTiles, saloonTiles,
+                    impactCallback, completeCallback);
+
+                // Safety fallback - if animation somehow never completes, force decrement after 15s
+                LeanTween.delayedCall(15f, () =>
+                {
+                    if (activeAnimationsCount > 0)
+                    {
+                        Debug.LogWarning("Animation safety timeout triggered");
+                        activeAnimationsCount--;
+                    }
+                });
             }
 
             yield return new WaitUntil(() => activeAnimationsCount <= 0);
