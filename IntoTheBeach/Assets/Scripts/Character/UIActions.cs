@@ -146,47 +146,43 @@ public class UIActions : MonoBehaviour
         {
             losePanel.SetActive(true);
         }
-    } 
-   
-  
+    }
+
+
     public void ShowUnitInfo()
     {
+        if (selectedCharacter == null) return;
+
         classUIHolder.SetActive(true);
         ShowDamageBar();
-        if(TurnStateMachine.Instance.currentState is MovePlanTurnState)
+
+        if (TurnStateMachine.Instance.currentState is MovePlanTurnState)
         {
-          
             buttonsUIHolder.SetActive(true);
             moveButton.gameObject.SetActive(true);
-            if (TurnStateMachine.Instance.currentState is MovePlanTurnState && TurnStateMachine.Instance.currentTurnInfo.CanMove())
+            attackButton.gameObject.SetActive(false); 
+            if (TurnStateMachine.Instance.currentTurnInfo.CanMove())
                 moveUnitText.gameObject.SetActive(true);
             moveText.gameObject.SetActive(true);
             attackText.gameObject.SetActive(false);
             hasActive();
-            print("Movestate");
 
-            if (!TurnStateMachine.Instance.currentTurnInfo.CanMove() || selectedCharacter.hasMoved)
-            {
-                moveButton.interactable = false;
-            }
-            else moveButton.interactable = true;
+            moveButton.interactable = !selectedCharacter.hasMoved &&
+                                       TurnStateMachine.Instance.currentTurnInfo.CanMove();
         }
-
-        if(TurnStateMachine.Instance.currentState is AttackPlanTurnState)
-        { 
-           
+        else if (TurnStateMachine.Instance.currentState is AttackPlanTurnState)
+        {
             buttonsUIHolder.SetActive(true);
             attackButton.gameObject.SetActive(true);
-            if (TurnStateMachine.Instance.currentState is AttackPlanTurnState && TurnStateMachine.Instance.currentTurnInfo.CanAttack())
-            attackUnitText.gameObject.SetActive(true);
+            moveButton.gameObject.SetActive(false); 
+            if (TurnStateMachine.Instance.currentTurnInfo.CanAttack())
+                attackUnitText.gameObject.SetActive(true);
             attackText.gameObject.SetActive(true);
             moveText.gameObject.SetActive(false);
-            print("AttackState");
             hasActive();
 
-            if (!TurnStateMachine.Instance.currentTurnInfo.CanAttack() || selectedCharacter.hasAttacked) attackButton.interactable = false;
-            else attackButton.interactable = true;
-
+            attackButton.interactable = !selectedCharacter.hasAttacked &&
+                                         TurnStateMachine.Instance.currentTurnInfo.CanAttack();
         }
         else if (TurnStateMachine.Instance.currentState is StandbyTurnState)
         {
@@ -195,8 +191,6 @@ public class UIActions : MonoBehaviour
             endTurnUnitText.gameObject.SetActive(false);
             standbyText.gameObject.SetActive(true);
         }
-
-
     }
     public void ShowStandbyText()
     {
