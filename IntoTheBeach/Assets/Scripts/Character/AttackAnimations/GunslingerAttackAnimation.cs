@@ -26,7 +26,7 @@ public class GunslingerAttackAnimation : AttackAnimation
         {
             
             onComplete?.Invoke();
-            gameObject.transform.localScale= Vector3.zero;
+            lineRenderer.positionCount = 0;
         });
         LeanTween.delayedCall(10f, () => {Destroy(gameObject); });
     }
