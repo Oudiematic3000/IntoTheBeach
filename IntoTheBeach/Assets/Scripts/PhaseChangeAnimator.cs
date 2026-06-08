@@ -8,7 +8,7 @@ public class PhaseChangeAnimator : MonoBehaviour
     [SerializeField] float lingerDuration = 0.5f;
 
     private RectTransform rectTransform;
-    private Vector2 restPosition;      
+    private Vector2 restPosition;
     private Vector2 offscreenLeft;
     private Vector2 centerScreen;
 
@@ -19,6 +19,8 @@ public class PhaseChangeAnimator : MonoBehaviour
     [SerializeField] float speed;
     int currentFrame = 0;
 
+    private int animationTweenId = -1;
+
     private void Awake()
     {
         rectTransform = GetComponent<RectTransform>();
@@ -28,7 +30,11 @@ public class PhaseChangeAnimator : MonoBehaviour
 
         MovePlanTurnState.OnMovePlanStart += AnimateMovePhase;
         AttackPlanTurnState.OnAttackPlanStart += AnimateAttackPhase;
+    }
 
+    private void Start()
+    {
+        // Deactivate in Start instead of Awake to prevent initialization race conditions
         gameObject.SetActive(false);
     }
 
@@ -36,65 +42,87 @@ public class PhaseChangeAnimator : MonoBehaviour
     {
         MovePlanTurnState.OnMovePlanStart -= AnimateMovePhase;
         AttackPlanTurnState.OnAttackPlanStart -= AnimateAttackPhase;
-    }
 
+        // Clean up any remaining tweens if the object is destroyed
+        ResetAnimationState();
+    }
 
     void AnimateMovePhase()
     {
         if (!movePhase) return;
-        //movePhase = false;
+
+        ResetAnimationState(); // Safely clear anything currently running
         gameObject.SetActive(true);
         PlayAnimationAnnounce();
-        AudioManager.instance.PlaySFX(announceSound);
 
+        if (AudioManager.instance != null && announceSound != null)
+            AudioManager.instance.PlaySFX(announceSound);
     }
 
     void AnimateAttackPhase()
     {
         if (movePhase) return;
-        //movePhase = true;
+
+        ResetAnimationState(); // Safely clear anything currently running
         gameObject.SetActive(true);
         PlayAnimationAnnounce();
     }
+
     public void PlayAnimationAnnounce()
     {
         announceImage.gameObject.SetActive(true);
         currentFrame = 0;
         AdvanceFrame();
     }
+
     private void AdvanceFrame()
     {
-        if (animationFrames == null || animationFrames.Length == 0) return;
+        if (animationFrames == null || animationFrames.Length == 0)
+        {
+            EndAnimation();
+            return;
+        }
 
         announceImage.sprite = animationFrames[currentFrame];
-        if(currentFrame==6 &&!movePhase) AudioManager.instance.PlaySFX(announceSound);
+
+        // Frame-specific SFX check
+        if (currentFrame == 6 && !movePhase && AudioManager.instance != null && announceSound != null)
+        {
+            AudioManager.instance.PlaySFX(announceSound);
+        }
 
         currentFrame++;
-        
+
         if (currentFrame < animationFrames.Length)
-            LeanTween.delayedCall(speed, AdvanceFrame);
+        {
+            // Clear the previous ID before creating the next delayed call
+            animationTweenId = LeanTween.delayedCall(gameObject, speed, AdvanceFrame).id;
+        }
         else
         {
-            announceImage.gameObject.SetActive(false);
-            // PlayAnimation();
-            rectTransform.anchoredPosition = restPosition;
+            EndAnimation();
         }
-            
-
     }
-    void PlayAnimation()
+
+    /// <summary>
+    /// Forces the animation to stop, clears LeanTween IDs, and resets UI positions safely.
+    /// </summary>
+    private void ResetAnimationState()
     {
-        Debug.Log("PlayAnimation");
-        rectTransform.anchoredPosition = offscreenLeft;
-        LeanTween.move(rectTransform, centerScreen, slideDuration)
-            .setEase(LeanTweenType.easeInOutQuad)
-            .setOnComplete(() =>
-            {
-                LeanTween.delayedCall(lingerDuration, () =>
-                {
-                    LeanTween.move(rectTransform, restPosition, slideDuration)
-                        .setEase(LeanTweenType.easeInOutQuad);
-                });
-            });
+        // Cancel all tweens on this specific GameObject to kill orphaned loops
+        LeanTween.cancel(gameObject);
+        animationTweenId = -1;
+
+        if (announceImage != null)
+            announceImage.gameObject.SetActive(false);
+
+        if (rectTransform != null)
+            rectTransform.anchoredPosition = restPosition;
+    }
+
+    private void EndAnimation()
+    {
+        ResetAnimationState();
+        gameObject.SetActive(false); // Disable the parent handler once completely finished
     }
 }

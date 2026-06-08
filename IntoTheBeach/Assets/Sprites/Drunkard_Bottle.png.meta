@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: c7e56f9b248f0db419ff5a78a8277eec
+guid: 7e30274b13e3dbf4e9a728f46938f357
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 4874024831070438742
-    second: Drunkard_UpRight_Attack_0
+      213: 4802574817310405689
+    second: Drunkard_Bottle_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -49,8 +49,8 @@ TextureImporter:
   spriteMode: 1
   spriteExtrude: 1
   spriteMeshType: 1
-  alignment: 9
-  spritePivot: {x: 0.46875, y: -0.234375}
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
   spritePixelsToUnits: 64
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
@@ -96,40 +96,27 @@ TextureImporter:
     ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
-  - serializedVersion: 4
-    buildTarget: WindowsStoreApps
-    maxTextureSize: 2048
-    resizeAlgorithm: 0
-    textureFormat: -1
-    textureCompression: 0
-    compressionQuality: 50
-    crunchedCompression: 0
-    allowsAlphaSplitting: 0
-    overridden: 0
-    ignorePlatformSupport: 0
-    androidETC2FallbackOverride: 0
-    forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Drunkard_UpRight_Attack_0
+      name: Drunkard_Bottle_0
       rect:
         serializedVersion: 2
-        x: 15
-        y: 0
-        width: 35
-        height: 61
+        x: 12
+        y: 7
+        width: 9
+        height: 19
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 655036a92c304a340800000000000000
-      internalID: 4874024831070438742
+      spriteID: 934f509e95c26a240800000000000000
+      internalID: 4802574817310405689
       vertices: []
       indices: 
       edges: []
@@ -139,7 +126,7 @@ TextureImporter:
     physicsShape: []
     bones: []
     spriteID: 5e97eb03825dee720800000000000000
-    internalID: 1537655665
+    internalID: 0
     vertices: []
     indices: 
     edges: []
@@ -148,7 +135,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      Drunkard_UpRight_Attack_0: 4874024831070438742
+      Drunkard_Bottle_0: 4802574817310405689
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

@@ -5,7 +5,6 @@ using Unity.Netcode;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Tilemaps;
-using static UnityEditor.PlayerSettings;
 
 
 public class CharacterVisual : MonoBehaviour, Iinteractable
@@ -392,9 +391,10 @@ public class CharacterVisual : MonoBehaviour, Iinteractable
     }
     public void SpawnDamageNumber(int damage)
     {
-        var dnGo = Instantiate(damageNumber);
+        Canvas canvas = GameObject.Find("Canvas").GetComponent<Canvas>();
+        var dnGo = Instantiate(damageNumber, canvas.transform);
         var dn = dnGo.GetComponent<DamageNumber>();
-        dn.Animate(damage);
+        dn.Animate(damage, transform.position);
     }
     public void ShowAttackOwner()
     {
