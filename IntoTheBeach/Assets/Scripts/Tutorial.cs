@@ -10,6 +10,7 @@ public class Tutorial : MonoBehaviour
     [SerializeField] GameObject selectATileToAttackText, moveAttackUI, HowToCancelText;
     [SerializeField] GameObject moveButton, endPhaseButton, attackButton;
     [SerializeField] GameObject board;
+    [SerializeField] GameObject textUnitHover, textPause, textPlan, textPlayerTurn, pip1, pip2;
     private void OnEnable()
     {
         tempSortingGroups.Clear();
@@ -22,7 +23,11 @@ public class Tutorial : MonoBehaviour
         AttackPlanTurnState.OnAttackPlanStart += RunSelectUnitTwo;
         CharacterVisual.OnClick += RunViewAttackRange;
         UIActions.OnAttack += RunLockInAttack;
-        GridVisual.OnUnitAttacked += EndTutorial;
+        GridVisual.OnUnitAttacked += FinalNotes;
+        CharacterVisual.OnClick += HideOnUnitHover;
+        StandbyTurnState.OnStandbyStart += EndTutorial;
+        InputManager.Pause += HideOnPause;
+
     }
     private void OnDisable()
     {
@@ -34,9 +39,10 @@ public class Tutorial : MonoBehaviour
         AttackPlanTurnState.OnAttackPlanStart -= RunSelectUnitTwo;
         CharacterVisual.OnClick -= RunViewAttackRange;
         UIActions.OnAttack -= RunLockInAttack;
-        GridVisual.OnUnitAttacked -= EndTutorial;
-
-
+        GridVisual.OnUnitAttacked -= FinalNotes;
+        CharacterVisual.OnClick -= HideOnUnitHover;
+        StandbyTurnState.OnStandbyStart -= EndTutorial;
+        InputManager.Pause -= HideOnPause;
 
 
     }
@@ -54,6 +60,7 @@ public class Tutorial : MonoBehaviour
         SelectAUnit2,
         ViewAttackRange,
         LockInAttack,
+        FinalNotes,
     }
 
     public TutorialPhases currentPhase = TutorialPhases.None;
@@ -92,6 +99,9 @@ public class Tutorial : MonoBehaviour
         HighlightGameObject(InputManager.Instance.GetCurrentSelection().gameObject);
         HighlightGameObject(board);
         HighlightUI(selectAtileToMoveToText);
+        HighlightUI(textPlan);
+        HighlightUI(pip1);
+        HighlightUI(pip2);
         LeanTween.delayedCall(0f, () =>
         {
             HighlightGameObject(InputManager.Instance.GetCurrentSelection().ghost.gameObject);
@@ -103,17 +113,25 @@ public class Tutorial : MonoBehaviour
     {
         if (currentPhase != TutorialPhases.SelectTileToMoveTo) return;
         ResetAllHighlights();
+        textPlan.SetActive(false);
+        HighlightUI(textUnitHover);
         blackScreen?.SetActive(false);
     }
     void EndPhaseHighlight()
     {
         if (currentPhase != TutorialPhases.SelectTileToMoveTo) return;
         ResetAllHighlights();
+        textUnitHover.SetActive(false);
         blackScreen?.SetActive(true);
         endPhaseButton.SetActive(true);
         HighlightUI(endPhaseButton);
         HighlightUI(EndPhaseText);
         currentPhase = TutorialPhases.EndPhase;
+    }
+    void HideOnUnitHover(CharacterVisual character)
+    {
+        if (currentPhase != TutorialPhases.SelectTileToMoveTo) return;
+        textUnitHover.SetActive(false);
     }
     void RunSelectUnitTwo()
     {
@@ -148,6 +166,7 @@ public class Tutorial : MonoBehaviour
         HighlightGameObject(InputManager.Instance.GetCurrentSelection().gameObject);
         LeanTween.delayedCall(0f, () =>
         {
+            if(InputManager.Instance.GetCurrentSelection().ghost.gameObject!=null)
             HighlightGameObject(InputManager.Instance.GetCurrentSelection().ghost.gameObject);
         });
         HighlightGameObject(board);
@@ -155,10 +174,27 @@ public class Tutorial : MonoBehaviour
         currentPhase = TutorialPhases.LockInAttack;
 
     }
-    void EndTutorial()
+    void FinalNotes()
     {
         if (currentPhase != TutorialPhases.LockInAttack) return;
         ResetAllHighlights();
+        blackScreen.SetActive(false);
+        HighlightUI(textPause);
+        HighlightUI(textPlayerTurn);
+        currentPhase = TutorialPhases.FinalNotes;
+    }
+    void HideOnPause()
+    {
+        if(currentPhase!=TutorialPhases.FinalNotes) return;
+        textPause.SetActive(false);
+        textPlayerTurn.SetActive(false);
+    }
+    void EndTutorial()
+    {
+        if (currentPhase != TutorialPhases.FinalNotes) return;
+        ResetAllHighlights();
+        textPlayerTurn.SetActive(false);
+        textPause.SetActive(false);
         Destroy(gameObject);
     }
     void TryRaiseUnits()
@@ -221,6 +257,8 @@ public class Tutorial : MonoBehaviour
     }
     public void HighlightUI(GameObject uiElement)
     {
+        if(uiElement!=pip1 || uiElement!=pip2)
+        uiElement.SetActive(true);
         LeanTween.delayedCall(0f, () => {
 
             Canvas canvas = uiElement.GetComponent<Canvas>();

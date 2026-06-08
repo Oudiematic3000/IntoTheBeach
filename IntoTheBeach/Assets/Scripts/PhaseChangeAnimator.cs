@@ -34,7 +34,6 @@ public class PhaseChangeAnimator : MonoBehaviour
 
     private void Start()
     {
-        // Deactivate in Start instead of Awake to prevent initialization race conditions
         gameObject.SetActive(false);
     }
 
@@ -43,7 +42,6 @@ public class PhaseChangeAnimator : MonoBehaviour
         MovePlanTurnState.OnMovePlanStart -= AnimateMovePhase;
         AttackPlanTurnState.OnAttackPlanStart -= AnimateAttackPhase;
 
-        // Clean up any remaining tweens if the object is destroyed
         ResetAnimationState();
     }
 
@@ -51,7 +49,7 @@ public class PhaseChangeAnimator : MonoBehaviour
     {
         if (!movePhase) return;
 
-        ResetAnimationState(); // Safely clear anything currently running
+        ResetAnimationState();
         gameObject.SetActive(true);
         PlayAnimationAnnounce();
 
@@ -63,7 +61,7 @@ public class PhaseChangeAnimator : MonoBehaviour
     {
         if (movePhase) return;
 
-        ResetAnimationState(); // Safely clear anything currently running
+        ResetAnimationState();
         gameObject.SetActive(true);
         PlayAnimationAnnounce();
     }
@@ -85,7 +83,6 @@ public class PhaseChangeAnimator : MonoBehaviour
 
         announceImage.sprite = animationFrames[currentFrame];
 
-        // Frame-specific SFX check
         if (currentFrame == 6 && !movePhase && AudioManager.instance != null && announceSound != null)
         {
             AudioManager.instance.PlaySFX(announceSound);
@@ -95,7 +92,6 @@ public class PhaseChangeAnimator : MonoBehaviour
 
         if (currentFrame < animationFrames.Length)
         {
-            // Clear the previous ID before creating the next delayed call
             animationTweenId = LeanTween.delayedCall(gameObject, speed, AdvanceFrame).id;
         }
         else
@@ -104,12 +100,9 @@ public class PhaseChangeAnimator : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// Forces the animation to stop, clears LeanTween IDs, and resets UI positions safely.
-    /// </summary>
+  
     private void ResetAnimationState()
     {
-        // Cancel all tweens on this specific GameObject to kill orphaned loops
         LeanTween.cancel(gameObject);
         animationTweenId = -1;
 
@@ -123,6 +116,6 @@ public class PhaseChangeAnimator : MonoBehaviour
     private void EndAnimation()
     {
         ResetAnimationState();
-        gameObject.SetActive(false); // Disable the parent handler once completely finished
+        gameObject.SetActive(false);
     }
 }
