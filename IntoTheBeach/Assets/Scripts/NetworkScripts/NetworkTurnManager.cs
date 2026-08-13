@@ -179,6 +179,8 @@ public struct NetUnitResult : INetworkSerializable
     public int damageTaken;
     public NetVector3Int[] reactedTiles;
     public bool isDead;
+
+    public NetVector3Int[] hitTiles;
     public void NetworkSerialize<T>(BufferSerializer<T> s) where T : IReaderWriter
     {
         s.SerializeValue(ref unitID);
@@ -196,13 +198,20 @@ public struct NetUnitResult : INetworkSerializable
         int reactedCount = reactedTiles?.Length ?? 0;
         s.SerializeValue(ref reactedCount);
         if (s.IsReader) reactedTiles = new NetVector3Int[reactedCount];
+        int hitCount = hitTiles?.Length ?? 0;
+        s.SerializeValue(ref hitCount);
+        if (s.IsReader) hitTiles = new NetVector3Int[hitCount];
+        for (int i = 0; i < hitCount; i++)
+            s.SerializeNetworkSerializable(ref hitTiles[i]);
         for (int i = 0; i < reactedCount; i++)
             s.SerializeNetworkSerializable(ref reactedTiles[i]);
         s.SerializeValue(ref isDead);
+
     }
 
-    public static NetUnitResult From(int id, MoveAction moveAction, AttackAction attackAction = null, int damageTaken = 0, NetVector3Int[] reactedTiles = null, bool isDead = false) => new NetUnitResult
+    public static NetUnitResult From(int id, MoveAction moveAction, AttackAction attackAction = null, int damageTaken = 0, NetVector3Int[] reactedTiles = null, bool isDead = false, NetVector3Int[] hitTiles = null) => new NetUnitResult
     {
+
         unitID = id,
         startPos = NetVector3Int.From(moveAction.startPos),
         finalPos = NetVector3Int.From(moveAction.resultant),
@@ -211,8 +220,8 @@ public struct NetUnitResult : INetworkSerializable
         attackAction = attackAction != null ? NetAttackAction.From(attackAction) : default,
         damageTaken = damageTaken,
         reactedTiles = reactedTiles ?? Array.Empty<NetVector3Int>(),
-        isDead = isDead
-
+        isDead = isDead,
+        hitTiles = hitTiles ?? Array.Empty<NetVector3Int>(),
     };
 
     public MoveAction ToMoveAction(GridState gridstate=null, Tilemap floorTilemap = null)

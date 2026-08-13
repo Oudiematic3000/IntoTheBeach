@@ -67,6 +67,7 @@ public class UnitAnimator : MonoBehaviour
         var attackResults = results
             .Where(r => r.hasAttackAction && unitMap.ContainsKey(r.unitID))
             .ToList();
+        var damageAppliedThisTurn = new HashSet<int>();
 
         var allHitTiles = new List<Vector3Int>();
 
@@ -81,8 +82,7 @@ public class UnitAnimator : MonoBehaviour
             Vector3Int attackerPos = result.finalPos.ToVector3Int();
             cameraEdgePanner.PanToTile(attackerPos, saloonTiles);
 
-            List<Vector3Int> hitTiles = attack.attackPattern.GetHitTiles(
-                GameManager.Instance.GridState, attackerPos, attack.direction);
+            List<Vector3Int> hitTiles = result.hitTiles.Select(t => t.ToVector3Int()).ToList();
 
             var visual = GameManager.Instance.GetVisual(result.unitID);
             if (visual != null) visual.direction = attack.direction;
@@ -156,9 +156,9 @@ public class UnitAnimator : MonoBehaviour
                 {
                     foreach (var res in targetResults)
                     {
-                        if (res.damageTaken > 0 && unitMap.TryGetValue(res.unitID, out var unit)
-                            && unit != null)
-                        {
+                        if (res.damageTaken > 0 && damageAppliedThisTurn.Add(res.unitID)
+                                && unitMap.TryGetValue(res.unitID, out var unit) && unit != null)
+                            {
                             unit.TakeDamage(res.damageTaken);
                             unit.SpawnDamageNumber(res.damageTaken);
                             AudioManager.instance.PlayHitSound(volume: 0.3f);
@@ -167,6 +167,7 @@ public class UnitAnimator : MonoBehaviour
                             {
                                 AudioManager.instance.PlayRandomDeathSound(volume: 0.3f);
                                 unitMap.Remove(res.unitID);
+                                GameManager.Instance.RemoveUnit(res.unitID);
                                 Destroy(unit.gameObject);
                                 continue;
                             }

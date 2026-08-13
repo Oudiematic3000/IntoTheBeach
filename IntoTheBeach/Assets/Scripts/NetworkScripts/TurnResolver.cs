@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -6,7 +7,8 @@ public class TurnResolver
 {
     private GridState gridState;
     Dictionary<int,int> pendingDamage = new Dictionary<int, int>();
-    private List<Vector3Int> reactedTiles = new(); 
+    private List<Vector3Int> reactedTiles = new();
+    Dictionary<int, List<Vector3Int>> attackerHitTiles = new();
     public TurnResolver(GridState gridState)
     {
         this.gridState = gridState;
@@ -31,12 +33,14 @@ public class TurnResolver
                 workingAttacks[plan.unitID] = plan.ToAttackAction();
         }
 
+
         foreach (int unitID in gridState.GetAllUnitIDs())
         {
+            if (gridState.IsDead(unitID)) continue;
             if (!workingMoves.ContainsKey(unitID))
             {
                 Vector3Int currentPos = gridState.GetUnitPosition(unitID) ?? Vector3Int.zero;
-                workingMoves[unitID] = new MoveAction(currentPos, currentPos, gridState,GameManager.Instance.FloorTilemap);
+                workingMoves[unitID] = new MoveAction(currentPos, currentPos, gridState, GameManager.Instance.FloorTilemap);
             }
         }
 
@@ -48,6 +52,11 @@ public class TurnResolver
         {
             bool dead = gridState.IsDead(kvp.Key);
             int dmg = pendingDamage.TryGetValue(kvp.Key, out int d) ? d : 0;
+
+            var hits = attackerHitTiles.TryGetValue(kvp.Key, out var h)
+                ? h.Select(t => NetVector3Int.From(t)).ToArray()
+                : Array.Empty<NetVector3Int>();
+
             Debug.Log($"[Server] Building result for unit {kvp.Key} — dmg: {dmg}, health: {gridState.GetHealth(kvp.Key)}, isDead: {dead}");
             return NetUnitResult.From(
                 kvp.Key,
@@ -55,7 +64,8 @@ public class TurnResolver
                 workingAttacks.TryGetValue(kvp.Key, out var attack) ? attack : null,
                 dmg,
                 reactedTiles.Select(t => NetVector3Int.From(t)).ToArray(),
-                dead
+                dead,
+                hits 
             );
         }).ToArray();
     }
@@ -70,6 +80,7 @@ public class TurnResolver
     {
         pendingDamage.Clear();
         reactedTiles.Clear();
+        attackerHitTiles.Clear();
 
         foreach (var kvp in attacks)
         {
@@ -77,6 +88,7 @@ public class TurnResolver
             AttackAction attack = kvp.Value;
             Vector3Int attackerPos = moves[attackerID].resultant;
             List<Vector3Int> hitTiles = attack.attackPattern.GetHitTiles(gridState, attackerPos, attack.direction);
+            attackerHitTiles[attackerID] = hitTiles;
 
             foreach (var tile in hitTiles)
             {

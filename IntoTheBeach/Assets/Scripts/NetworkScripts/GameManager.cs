@@ -332,7 +332,7 @@ public class GridState
     public void RemoveDeadUnit(int unitID)
     {
         Vector3Int? pos = GetUnitPosition(unitID);
-        if (pos.HasValue)
-            unitPositions.Remove(pos.Value);
+        if (pos.HasValue) unitPositions.Remove(pos.Value);
+        unitHealth.Remove(unitID);
     }
 }
